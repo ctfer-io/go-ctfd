@@ -6,83 +6,52 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 )
 
-// HTTPClient defines what the sub-client must implement for this
-// wrapper to work.
-// It enables inter-operability of implementations, like giving a
-// compliant circuit-breaker implementation.
-type HTTPClient interface {
-	Do(*http.Request) (*http.Response, error)
-}
-
-var _ HTTPClient = (*http.Client)(nil)
-
-// AuthProvider defines a source of authentication the client will
-// use when calling the API.
-type AuthProvider interface {
-	Authenticate(*http.Request)
-}
-
-// APIProvider is a kind of AuthProvider that uses the API Key, as
-// documented by CTFd.
-type APIProvider struct {
-	ApiKey string
-}
-
-var _ AuthProvider = (*APIProvider)(nil)
-
-func (pv *APIProvider) Authenticate(req *http.Request) {
-	req.Header.Set("Authorization", "Token "+pv.ApiKey) // XXX the "Token" value should be properly documented in API
-}
-
-// FormProvider is a kind of AuthProvider that uses the Session cookie
-// and CSRF/Nonce value, behaving such as an authenticated user.
-// This is not documented despite being a possibility.
-// For instance, you could use this one to setup the CTFd, create an API
-// key and then turn to the APIProvider.
-type FormProvider struct {
-	Session, Nonce string
-}
-
-var _ AuthProvider = (*FormProvider)(nil)
-
-func (pv *FormProvider) Authenticate(req *http.Request) {
-	req.Header.Set("Cookie", "session="+pv.Session)
-	req.Header.Set("CSRF-Token", pv.Nonce)
-}
-
 // NewClient creates a fresh *Client.
-func NewClient(sub HTTPClient, pv AuthProvider, url string) *Client {
+// It automatically handles the session and its updates (login, logout...).
+func NewClient(url, session, nonce, apiKey string) *Client {
+	jar, _ := cookiejar.New(nil)
 	return &Client{
-		sub: sub,
-		pv:  pv,
-		url: url,
+		sub: &http.Client{
+			Jar: jar,
+			// Don't follow redirections
+			CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
+				return http.ErrUseLastResponse
+			},
+		},
+		url:     url,
+		session: session,
+		nonce:   nonce,
+		apiKey:  apiKey,
 	}
 }
 
 // Client is in charge of interacting with a CTFd instance.
 type Client struct {
-	sub HTTPClient
-	pv  AuthProvider
+	sub *http.Client
 	url string
+
+	// Used for authentication, apiKey first, session&nonce else
+	session string
+	nonce   string
+	apiKey  string
 }
 
-// SetAuthProvider enables you to change authentication provider
-// on the fly, for instance when turning from FormProvider to APIProvider.
-func (client *Client) SetAuthProvider(pv AuthProvider) {
-	client.pv = pv
+// SetAPIKey enables you to set a mandatory API key, or reset it
+// by setting an empty one.
+func (client *Client) SetAPIKey(apiKey string) {
+	client.apiKey = apiKey
 }
-
-var _ HTTPClient = (*Client)(nil)
 
 func (client *Client) Do(req *http.Request) (*http.Response, error) {
 	// Set base URL
-	newUrl, err := url.Parse(client.url + "/api/v1" + req.URL.String())
+	newUrl, err := url.Parse(client.url + req.URL.String())
 	if err != nil {
 		return nil, err
 	}
@@ -92,12 +61,17 @@ func (client *Client) Do(req *http.Request) (*http.Response, error) {
 	if req.Header.Get("Content-Type") == "" {
 		req.Header.Set("Content-Type", "application/json") // XXX this is necessary for GET method but should not, when call uses the APIProvider behaviour
 	}
-	client.pv.Authenticate(req)
+	if client.apiKey != "" {
+		req.Header.Set("Authorization", "Token "+client.apiKey) // XXX the "Token" value should be properly documented in API
+	} else {
+		req.Header.Set("Cookie", "session="+client.session)
+		req.Header.Set("CSRF-Token", client.nonce)
+	}
 
 	return client.sub.Do(req)
 }
 
-type option interface {
+type Option interface {
 	apply(*options)
 }
 
@@ -113,7 +87,7 @@ func (opt ctxOption) apply(opts *options) {
 	opts.Ctx = opt.Ctx
 }
 
-func WithContext(ctx context.Context) option {
+func WithContext(ctx context.Context) Option {
 	return &ctxOption{
 		Ctx: ctx,
 	}
@@ -121,7 +95,7 @@ func WithContext(ctx context.Context) option {
 
 // call is in charge of handling common CTFd API behaviours,
 // like dealing with status codes and JSON errors.
-func call(client *Client, req *http.Request, dst any, opts ...option) error {
+func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 	reqopts := &options{
 		Ctx: context.Background(),
 	}
@@ -129,6 +103,13 @@ func call(client *Client, req *http.Request, dst any, opts ...option) error {
 		opt.apply(reqopts)
 	}
 	req = req.WithContext(reqopts.Ctx)
+
+	// Set API base URL
+	newUrl, err := url.Parse("/api/v1" + req.URL.String())
+	if err != nil {
+		return err
+	}
+	req.URL = newUrl
 
 	// Issue HTTP request
 	res, err := client.Do(req)
@@ -138,12 +119,7 @@ func call(client *Client, req *http.Request, dst any, opts ...option) error {
 	defer res.Body.Close()
 
 	// Decode response
-	type ctfdResponse struct {
-		Success bool     `json:"success"`
-		Data    any      `json:"data,omitempty"`
-		Errors  []string `json:"errors,omitempty"`
-	}
-	resp := ctfdResponse{
+	resp := Response{
 		Data: dst,
 	}
 	if err := json.NewDecoder(res.Body).Decode(&resp); err != nil {
@@ -162,7 +138,13 @@ func call(client *Client, req *http.Request, dst any, opts ...option) error {
 	return nil
 }
 
-func get(client *Client, edp string, params any, dst any, opts ...option) error {
+type Response struct {
+	Success bool     `json:"success"`
+	Data    any      `json:"data,omitempty"`
+	Errors  []string `json:"errors,omitempty"`
+}
+
+func get(client *Client, edp string, params any, dst any, opts ...Option) error {
 	req, _ := http.NewRequest(http.MethodGet, edp, nil)
 
 	// Encode URL parameters
@@ -177,7 +159,7 @@ func get(client *Client, edp string, params any, dst any, opts ...option) error 
 	return call(client, req, dst)
 }
 
-func post(client *Client, edp string, params any, dst any, opts ...option) error {
+func post(client *Client, edp string, params any, dst any, opts ...Option) error {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return err
@@ -187,7 +169,7 @@ func post(client *Client, edp string, params any, dst any, opts ...option) error
 	return call(client, req, dst)
 }
 
-func patch(client *Client, edp string, params any, dst any, opts ...option) error {
+func patch(client *Client, edp string, params any, dst any, opts ...Option) error {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return err
@@ -197,7 +179,7 @@ func patch(client *Client, edp string, params any, dst any, opts ...option) erro
 	return call(client, req, dst)
 }
 
-func delete(client *Client, edp string, params any, dst any, opts ...option) (err error) {
+func delete(client *Client, edp string, params any, dst any, opts ...Option) (err error) {
 	var body []byte
 	if params != nil {
 		body, err = json.Marshal(params)

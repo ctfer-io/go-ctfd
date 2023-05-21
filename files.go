@@ -16,7 +16,7 @@ type GetFilesParams struct {
 	Field    *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetFiles(params *GetFilesParams, opts ...option) ([]*File, error) {
+func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File, error) {
 	files := []*File{}
 	if err := get(client, "/files", params, &files, opts...); err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ type PostFilesParams struct {
 	Challenge int    // TODO May be additional i.e. pages don't need it
 }
 
-func (client *Client) PostFiles(params *PostFilesParams, opts ...option) ([]*File, error) {
+func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, error) {
 	// Maps parameters to values
 	b, ct, err := encodeMultipart(map[string]any{
 		"file":      params.File,
@@ -53,7 +53,7 @@ func (client *Client) PostFiles(params *PostFilesParams, opts ...option) ([]*Fil
 	return files, nil
 }
 
-func (client *Client) GetFile(id string, opts ...option) (*File, error) {
+func (client *Client) GetFile(id string, opts ...Option) (*File, error) {
 	file := &File{}
 	if err := get(client, "/files/"+id, nil, &file, opts...); err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (client *Client) GetFile(id string, opts ...option) (*File, error) {
 	return file, nil
 }
 
-func (client *Client) DeleteFile(id string, opts ...option) error {
+func (client *Client) DeleteFile(id string, opts ...Option) error {
 	return delete(client, "/files/"+id, nil, nil, opts...)
 }
 

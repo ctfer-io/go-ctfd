@@ -9,7 +9,7 @@ type GetUnlocksParams struct {
 	Field  *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetUnlocks(params *GetUnlocksParams, opts ...option) ([]*Unlock, error) {
+func (client *Client) GetUnlocks(params *GetUnlocksParams, opts ...Option) ([]*Unlock, error) {
 	unlocks := []*Unlock{}
 	if err := get(client, "/unlocks", params, &unlocks, opts...); err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ type PostUnlocksParams struct {
 	Type   string `json:"type"`
 }
 
-func (client *Client) PostUnlocks(params *PostUnlocksParams, opts ...option) (*Unlock, error) {
+func (client *Client) PostUnlocks(params *PostUnlocksParams, opts ...Option) (*Unlock, error) {
 	unlock := &Unlock{}
 	if err := post(client, "/unlocks", params, &unlock, opts...); err != nil {
 		return nil, err

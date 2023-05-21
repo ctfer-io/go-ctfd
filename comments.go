@@ -11,7 +11,7 @@ type GetCommentsParams struct {
 	Field       *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetComments(params *GetCommentsParams, opts ...option) ([]*Comment, error) {
+func (client *Client) GetComments(params *GetCommentsParams, opts ...Option) ([]*Comment, error) {
 	comments := []*Comment{}
 	if err := get(client, "/comments", params, &comments, opts...); err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ type PostCommentsParams struct {
 	Type    string `json:"type"`
 }
 
-func (client *Client) PostComments(params *PostCommentsParams, opts ...option) (*Comment, error) {
+func (client *Client) PostComments(params *PostCommentsParams, opts ...Option) (*Comment, error) {
 	comment := &Comment{}
 	if err := post(client, "/comments", params, &comment, opts...); err != nil {
 		return nil, err
@@ -33,6 +33,6 @@ func (client *Client) PostComments(params *PostCommentsParams, opts ...option) (
 	return comment, nil
 }
 
-func (client *Client) DeleteComment(id int, opts ...option) error {
+func (client *Client) DeleteComment(id int, opts ...Option) error {
 	return delete(client, fmt.Sprintf("/comments/%d", id), nil, nil, opts...)
 }

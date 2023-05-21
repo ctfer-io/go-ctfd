@@ -20,7 +20,7 @@ type GetNotificationsParams struct {
 	SinceID *int    `schema:"since_id,omitempty"`
 }
 
-func (client *Client) GetNotifications(params *GetNotificationsParams, opts ...option) ([]*Notification, error) {
+func (client *Client) GetNotifications(params *GetNotificationsParams, opts ...Option) ([]*Notification, error) {
 	notifs := []*Notification{}
 	if err := get(client, "/notifications", params, &notifs, opts...); err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ type PostNotificationsParams struct {
 	Type    string `json:"type"`
 }
 
-func (client *Client) PostNotifications(params *PostNotificationsParams, opts ...option) (*Notification, error) {
+func (client *Client) PostNotifications(params *PostNotificationsParams, opts ...Option) (*Notification, error) {
 	notif := &Notification{}
 	if err := post(client, "/notifications", params, &notif, opts...); err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ type HeadNotificationsParams struct {
 }
 
 // XXX does not need to be authenticated
-func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ...option) (int, error) {
+func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ...Option) (int, error) {
 	req, _ := http.NewRequest(http.MethodHead, "/notifications", nil)
 
 	// Encode URL parameters
@@ -90,7 +90,7 @@ func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ..
 	return strconv.Atoi(res.Header.Get("Result-Count"))
 }
 
-func (client *Client) GetNotification(id string, opts ...option) (*Notification, error) {
+func (client *Client) GetNotification(id string, opts ...Option) (*Notification, error) {
 	notif := &Notification{}
 	if err := get(client, "/notifications/"+id, nil, &notif, opts...); err != nil {
 		return nil, err
@@ -98,6 +98,6 @@ func (client *Client) GetNotification(id string, opts ...option) (*Notification,
 	return notif, nil
 }
 
-func (client *Client) DeleteNotification(id string, opts ...option) error {
+func (client *Client) DeleteNotification(id string, opts ...Option) error {
 	return delete(client, "/notifications/"+id, nil, nil, opts...)
 }

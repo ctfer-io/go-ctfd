@@ -11,7 +11,7 @@ type GetUsersParams struct {
 }
 
 // TODO handle pagination, but don't seem supported by CTFd API
-func (client *Client) GetUsers(params *GetUsersParams, opts ...option) ([]*User, error) {
+func (client *Client) GetUsers(params *GetUsersParams, opts ...Option) ([]*User, error) {
 	users := []*User{}
 	if err := get(client, "/users", params, &users, opts...); err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ type PostUsersParams struct {
 	Fields   []string `json:"fields"`
 }
 
-func (client *Client) PostUsers(params *PostUsersParams, opts ...option) (*User, error) {
+func (client *Client) PostUsers(params *PostUsersParams, opts ...Option) (*User, error) {
 	user := &User{}
 	if err := post(client, "/users", params, &user, opts...); err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func (client *Client) PostUsers(params *PostUsersParams, opts ...option) (*User,
 	return user, nil
 }
 
-func (client *Client) GetUsersMe(opts ...option) (*User, error) {
+func (client *Client) GetUsersMe(opts ...Option) (*User, error) {
 	user := &User{}
 	if err := get(client, "/users/me", nil, &user, opts...); err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ type PatchUsersParams struct {
 	Fields      []Field `json:"fields"`
 }
 
-func (client *Client) PatchUsersMe(params *PatchUsersParams, opts ...option) (*User, error) {
+func (client *Client) PatchUsersMe(params *PatchUsersParams, opts ...Option) (*User, error) {
 	user := &User{}
 	if err := patch(client, "/users/me", params, &user, opts...); err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (client *Client) PatchUsersMe(params *PatchUsersParams, opts ...option) (*U
 	return user, nil
 }
 
-func (client *Client) GetUsersMeAwards(opts ...option) ([]*Award, error) {
+func (client *Client) GetUsersMeAwards(opts ...Option) ([]*Award, error) {
 	awards := []*Award{}
 	if err := get(client, "/users/me/awards", nil, &awards, opts...); err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (client *Client) GetUsersMeAwards(opts ...option) ([]*Award, error) {
 	return awards, nil
 }
 
-func (client *Client) GetUsersMeFails(opts ...option) ([]*Submission, error) {
+func (client *Client) GetUsersMeFails(opts ...Option) ([]*Submission, error) {
 	submissions := []*Submission{}
 	if err := get(client, "/users/me/fails", nil, &submissions, opts...); err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func (client *Client) GetUsersMeFails(opts ...option) ([]*Submission, error) {
 	return submissions, nil
 }
 
-func (client *Client) GetUsersMeSolves(opts ...option) ([]*Submission, error) {
+func (client *Client) GetUsersMeSolves(opts ...Option) ([]*Submission, error) {
 	submissions := []*Submission{}
 	if err := get(client, "/users/me/solves", nil, &submissions, opts...); err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (client *Client) GetUsersMeSolves(opts ...option) ([]*Submission, error) {
 	return submissions, nil
 }
 
-func (client *Client) GetUser(id int, opts ...option) (*User, error) {
+func (client *Client) GetUser(id int, opts ...Option) (*User, error) {
 	user := &User{}
 	if err := get(client, fmt.Sprintf("/users/%d", id), nil, &user, opts...); err != nil {
 		return nil, err
@@ -93,11 +93,11 @@ func (client *Client) GetUser(id int, opts ...option) (*User, error) {
 	return user, nil
 }
 
-func (client *Client) DeleteUser(id int, opts ...option) error {
+func (client *Client) DeleteUser(id int, opts ...Option) error {
 	return delete(client, fmt.Sprintf("/users/%d", id), nil, nil, opts...)
 }
 
-func (client *Client) PatchUser(id int, params *PatchUsersParams, opts ...option) (*User, error) {
+func (client *Client) PatchUser(id int, params *PatchUsersParams, opts ...Option) (*User, error) {
 	user := &User{}
 	if err := patch(client, fmt.Sprintf("/users/%d", id), params, &user, opts...); err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (client *Client) PatchUser(id int, params *PatchUsersParams, opts ...option
 	return user, nil
 }
 
-func (client *Client) GetUserAwards(id int, opts ...option) ([]*Award, error) {
+func (client *Client) GetUserAwards(id int, opts ...Option) ([]*Award, error) {
 	awards := []*Award{}
 	if err := get(client, fmt.Sprintf("/users/%d/awards", id), nil, &awards, opts...); err != nil {
 		return nil, err
@@ -118,7 +118,7 @@ type PostUserMailParams struct {
 }
 
 // TODO find model when email turned on
-func (client *Client) PostUserMail(params *PostUserMailParams, id int, opts ...option) (any, error) {
+func (client *Client) PostUserMail(params *PostUserMailParams, id int, opts ...Option) (any, error) {
 	var res any
 	if err := post(client, fmt.Sprintf("/users/%d/email", id), params, &res, opts...); err != nil {
 		return nil, err
@@ -126,7 +126,7 @@ func (client *Client) PostUserMail(params *PostUserMailParams, id int, opts ...o
 	return res, nil
 }
 
-func (client *Client) GetUserFails(id int, opts ...option) ([]*Submission, error) {
+func (client *Client) GetUserFails(id int, opts ...Option) ([]*Submission, error) {
 	submisions := []*Submission{}
 	if err := get(client, fmt.Sprintf("/users/%d/fails", id), nil, &submisions, opts...); err != nil {
 		return nil, err
@@ -134,7 +134,7 @@ func (client *Client) GetUserFails(id int, opts ...option) ([]*Submission, error
 	return submisions, nil
 }
 
-func (client *Client) GetUserSolves(id int, opts ...option) ([]*Submission, error) {
+func (client *Client) GetUserSolves(id int, opts ...Option) ([]*Submission, error) {
 	submisions := []*Submission{}
 	if err := get(client, fmt.Sprintf("/users/%d/solves", id), nil, &submisions, opts...); err != nil {
 		return nil, err

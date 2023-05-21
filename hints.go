@@ -9,7 +9,7 @@ type GetHintsParams struct {
 	Field       *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetHints(params *GetHintsParams, opts ...option) ([]*Hint, error) {
+func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint, error) {
 	hints := []*Hint{}
 	if err := get(client, "/hints", params, &hints, opts...); err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ type PostHintsParams struct {
 	Requirements Requirements `json:"requirements"`
 }
 
-func (client *Client) PostHints(params *PostHintsParams, opts ...option) (*Hint, error) {
+func (client *Client) PostHints(params *PostHintsParams, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
 	if err := post(client, "/hints", params, &hint, opts...); err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (client *Client) PostHints(params *PostHintsParams, opts ...option) (*Hint,
 	return hint, nil
 }
 
-func (client *Client) GetHint(id string, opts ...option) (*Hint, error) {
+func (client *Client) GetHint(id string, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
 	if err := get(client, "/hints/"+id, nil, &hint, opts...); err != nil {
 		return nil, err
@@ -47,11 +47,11 @@ type PatchHintsParams struct {
 	Requirements Requirements `json:"requirements"`
 }
 
-func (client *Client) DeleteHint(id string, opts ...option) error {
+func (client *Client) DeleteHint(id string, opts ...Option) error {
 	return delete(client, "/hints/"+id, nil, nil, opts...)
 }
 
-func (client *Client) PatchHint(id string, params *PatchHintsParams, opts ...option) (*Hint, error) {
+func (client *Client) PatchHint(id string, params *PatchHintsParams, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
 	if err := patch(client, "/hints/"+id, params, &hint, opts...); err != nil {
 		return nil, err

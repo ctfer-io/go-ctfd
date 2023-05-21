@@ -10,7 +10,7 @@ type GetTeamsParams struct {
 	Field       *string `schema:"field"`
 }
 
-func (client *Client) GetTeams(params *GetTeamsParams, opts ...option) ([]*Team, error) {
+func (client *Client) GetTeams(params *GetTeamsParams, opts ...Option) ([]*Team, error) {
 	teams := []*Team{}
 	if err := get(client, "/teams", params, &teams, opts...); err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ type PostTeamsParams struct {
 	Fields   []string `json:"fields"`
 }
 
-func (client *Client) PostTeams(params *PostTeamsParams, opts ...option) (*Team, error) {
+func (client *Client) PostTeams(params *PostTeamsParams, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := post(client, "/teams", params, &team, opts...); err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ func (client *Client) PostTeams(params *PostTeamsParams, opts ...option) (*Team,
 	return team, nil
 }
 
-func (client *Client) GetTeamsMe(opts ...option) (*Team, error) {
+func (client *Client) GetTeamsMe(opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := get(client, "/teams/me", nil, &team, opts...); err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (client *Client) GetTeamsMe(opts ...option) (*Team, error) {
 	return team, nil
 }
 
-func (client *Client) DeleteTeamsMe(opts ...option) error {
+func (client *Client) DeleteTeamsMe(opts ...Option) error {
 	return delete(client, "/teams/me", nil, nil, opts...)
 }
 
@@ -55,7 +55,7 @@ type PatchTeamsParams struct {
 	Name      *string `json:"name,omitempty"`
 }
 
-func (client *Client) PatchTeamsMe(params *PatchTeamsParams, opts ...option) (*Team, error) {
+func (client *Client) PatchTeamsMe(params *PatchTeamsParams, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := patch(client, "/teams/me", params, &team, opts...); err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ type PostTeamsMembers struct {
 	UserID int `json:"user_id"`
 }
 
-func (client *Client) PostTeamsMeMembers(params *PostTeamsMembers, opts ...option) (*Team, error) {
+func (client *Client) PostTeamsMeMembers(params *PostTeamsMembers, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := post(client, "/teams/me/members", params, &team, opts...); err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (client *Client) PostTeamsMeMembers(params *PostTeamsMembers, opts ...optio
 	return team, nil
 }
 
-func (client *Client) GetTeamsMeAwards(opts ...option) ([]*Award, error) {
+func (client *Client) GetTeamsMeAwards(opts ...Option) ([]*Award, error) {
 	awards := []*Award{}
 	if err := get(client, "/teams/me/awards", nil, &awards, opts...); err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func (client *Client) GetTeamsMeAwards(opts ...option) ([]*Award, error) {
 	return awards, nil
 }
 
-func (client *Client) GetTeamsMeFails(opts ...option) ([]*Submission, error) {
+func (client *Client) GetTeamsMeFails(opts ...Option) ([]*Submission, error) {
 	submission := []*Submission{}
 	if err := get(client, "/teams/me/fails", nil, &submission, opts...); err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ func (client *Client) GetTeamsMeFails(opts ...option) ([]*Submission, error) {
 	return submission, nil
 }
 
-func (client *Client) GetTeamsMeSolves(opts ...option) ([]*Submission, error) {
+func (client *Client) GetTeamsMeSolves(opts ...Option) ([]*Submission, error) {
 	submission := []*Submission{}
 	if err := get(client, "/teams/me/solves", nil, &submission, opts...); err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ func (client *Client) GetTeamsMeSolves(opts ...option) ([]*Submission, error) {
 	return submission, nil
 }
 
-func (client *Client) GetTeam(id int, opts ...option) (*Team, error) {
+func (client *Client) GetTeam(id int, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := get(client, fmt.Sprintf("/teams/%d", id), nil, &team, opts...); err != nil {
 		return nil, err
@@ -107,11 +107,11 @@ func (client *Client) GetTeam(id int, opts ...option) (*Team, error) {
 	return team, nil
 }
 
-func (client *Client) DeleteTeam(id int, opts ...option) error {
+func (client *Client) DeleteTeam(id int, opts ...Option) error {
 	return delete(client, fmt.Sprintf("/teams/%d", id), nil, nil, opts...)
 }
 
-func (client *Client) PatchTeam(id int, params *PatchTeamsParams, opts ...option) (*Team, error) {
+func (client *Client) PatchTeam(id int, params *PatchTeamsParams, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := patch(client, fmt.Sprintf("/teams/%d", id), params, &team, opts...); err != nil {
 		return nil, err
@@ -126,7 +126,7 @@ type DeleteTeamMembersParams struct {
 }
 
 // XXX mixture of DELETE and body for control should be cleaned
-func (client *Client) DeleteTeamMembers(id int, params *DeleteTeamMembersParams, opts ...option) ([]int, error) {
+func (client *Client) DeleteTeamMembers(id int, params *DeleteTeamMembersParams, opts ...Option) ([]int, error) {
 	v := []int{}
 	if err := delete(client, fmt.Sprintf("/teams/%d/members", id), params, &v, opts...); err != nil {
 		return nil, err
@@ -134,7 +134,7 @@ func (client *Client) DeleteTeamMembers(id int, params *DeleteTeamMembersParams,
 	return v, nil
 }
 
-func (client *Client) PostTeamMembers(id int, params *PostTeamsMembers, opts ...option) (*Team, error) {
+func (client *Client) PostTeamMembers(id int, params *PostTeamsMembers, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := post(client, fmt.Sprintf("/teams/%d/members", id), params, &team, opts...); err != nil {
 		return nil, err
@@ -142,7 +142,7 @@ func (client *Client) PostTeamMembers(id int, params *PostTeamsMembers, opts ...
 	return team, nil
 }
 
-func (client *Client) GetTeamAwards(id int, opts ...option) ([]*Award, error) {
+func (client *Client) GetTeamAwards(id int, opts ...Option) ([]*Award, error) {
 	awards := []*Award{}
 	if err := get(client, fmt.Sprintf("/teams/%d/awards", id), nil, &awards, opts...); err != nil {
 		return nil, err
@@ -150,7 +150,7 @@ func (client *Client) GetTeamAwards(id int, opts ...option) ([]*Award, error) {
 	return awards, nil
 }
 
-func (client *Client) GetTeamFails(id int, opts ...option) ([]*Submission, error) {
+func (client *Client) GetTeamFails(id int, opts ...Option) ([]*Submission, error) {
 	submission := []*Submission{}
 	if err := get(client, fmt.Sprintf("/teams/%d/fails", id), nil, &submission, opts...); err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ func (client *Client) GetTeamFails(id int, opts ...option) ([]*Submission, error
 	return submission, nil
 }
 
-func (client *Client) GetTeamMembers(id int, opts ...option) ([]int, error) {
+func (client *Client) GetTeamMembers(id int, opts ...Option) ([]int, error) {
 	members := []int{}
 	if err := get(client, fmt.Sprintf("/teams/%d/members", id), nil, &members, opts...); err != nil {
 		return nil, err
@@ -166,7 +166,7 @@ func (client *Client) GetTeamMembers(id int, opts ...option) ([]int, error) {
 	return members, nil
 }
 
-func (client *Client) GetTeamSolves(id int, opts ...option) ([]*Submission, error) {
+func (client *Client) GetTeamSolves(id int, opts ...Option) ([]*Submission, error) {
 	submission := []*Submission{}
 	if err := get(client, fmt.Sprintf("/teams/%d/solves", id), nil, &submission, opts...); err != nil {
 		return nil, err

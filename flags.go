@@ -9,7 +9,7 @@ type GetFlagsParams struct {
 	Field       *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetFlags(params *GetFlagsParams, opts ...option) ([]*Flag, error) {
+func (client *Client) GetFlags(params *GetFlagsParams, opts ...Option) ([]*Flag, error) {
 	flags := []*Flag{}
 	if err := get(client, "/flags", params, &flags, opts...); err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ type PostFlagsParams struct {
 	Type      string `json:"type"`
 }
 
-func (client *Client) PostFlags(params *PostFlagsParams, opts ...option) (*Flag, error) {
+func (client *Client) PostFlags(params *PostFlagsParams, opts ...Option) (*Flag, error) {
 	flag := &Flag{}
 	if err := post(client, "/flags", params, &flag, opts...); err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (client *Client) PostFlags(params *PostFlagsParams, opts ...option) (*Flag,
 	return flag, nil
 }
 
-func (client *Client) GetFlagsTypes(opts ...option) (map[string]*Type, error) {
+func (client *Client) GetFlagsTypes(opts ...Option) (map[string]*Type, error) {
 	types := map[string]*Type{}
 	if err := get(client, "/flags/types", nil, &types, opts...); err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (client *Client) GetFlagsTypes(opts ...option) (map[string]*Type, error) {
 	return types, nil
 }
 
-func (client *Client) GetFlagsType(typename string, opts ...option) (*Type, error) {
+func (client *Client) GetFlagsType(typename string, opts ...Option) (*Type, error) {
 	tp := &Type{}
 	if err := get(client, "/flags/types/"+typename, nil, &tp, opts...); err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (client *Client) GetFlagsType(typename string, opts ...option) (*Type, erro
 	return tp, nil
 }
 
-func (client *Client) GetFlag(id string, opts ...option) (*Flag, error) {
+func (client *Client) GetFlag(id string, opts ...Option) (*Flag, error) {
 	flag := &Flag{}
 	if err := get(client, "/flags/"+id, nil, &flag, opts...); err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (client *Client) GetFlag(id string, opts ...option) (*Flag, error) {
 	return flag, nil
 }
 
-func (client *Client) DeleteFlag(id string, opts ...option) error {
+func (client *Client) DeleteFlag(id string, opts ...Option) error {
 	return delete(client, "/flags/"+id, nil, nil, opts...)
 }
 
@@ -67,7 +67,7 @@ type PatchFlagParams struct {
 	Type    string `json:"type"`
 }
 
-func (client *Client) PatchFlag(id string, params *PatchFlagParams, opts ...option) (*Flag, error) {
+func (client *Client) PatchFlag(id string, params *PatchFlagParams, opts ...Option) (*Flag, error) {
 	flag := &Flag{}
 	if err := patch(client, "/flags/"+id, params, &flag, opts...); err != nil {
 		return nil, err

@@ -11,7 +11,7 @@ type GetPagesParams struct {
 	Field        *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetPages(params *GetPagesParams, opts ...option) ([]*Page, error) {
+func (client *Client) GetPages(params *GetPagesParams, opts ...Option) ([]*Page, error) {
 	pages := []*Page{}
 	if err := get(client, "/pages", params, &pages, opts...); err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ type PostPagesParams struct {
 }
 
 // XXX find if could use constraint error on .route to get a shell using the PIN form on sqlalchemy.exc.IntegrityError
-func (client *Client) PostPages(params *PostPagesParams, opts ...option) (*Page, error) {
+func (client *Client) PostPages(params *PostPagesParams, opts ...Option) (*Page, error) {
 	page := &Page{}
 	if err := post(client, "/pages", params, &page, opts...); err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (client *Client) PostPages(params *PostPagesParams, opts ...option) (*Page,
 	return page, nil
 }
 
-func (client *Client) GetPage(id string, opts ...option) (*Page, error) {
+func (client *Client) GetPage(id string, opts ...Option) (*Page, error) {
 	page := &Page{}
 	if err := get(client, "/pages/"+id, nil, &page, opts...); err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (client *Client) GetPage(id string, opts ...option) (*Page, error) {
 	return page, nil
 }
 
-func (client *Client) DeletePage(id string, opts ...option) error {
+func (client *Client) DeletePage(id string, opts ...Option) error {
 	return delete(client, "/pages/"+id, nil, nil, opts...)
 }
 
@@ -62,7 +62,7 @@ type PatchPageParams struct {
 	Hidden       bool   `json:"hidden"`
 }
 
-func (client *Client) PatchPage(id string, params *PatchPageParams, opts ...option) (*Page, error) {
+func (client *Client) PatchPage(id string, params *PatchPageParams, opts ...Option) (*Page, error) {
 	page := &Page{}
 	if err := patch(client, "/pages/"+id, params, &page, opts...); err != nil {
 		return nil, err

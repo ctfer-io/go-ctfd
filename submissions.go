@@ -12,7 +12,7 @@ type GetSubmissionsParams struct {
 }
 
 // TODO support pagination ? CTFd does not seem to support parameters for this
-func (client *Client) GetSubmissions(params *GetSubmissionsParams, opts ...option) ([]*Submission, error) {
+func (client *Client) GetSubmissions(params *GetSubmissionsParams, opts ...Option) ([]*Submission, error) {
 	submissions := []*Submission{}
 	if err := get(client, "/submissions", params, &submissions, opts...); err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (client *Client) GetSubmissions(params *GetSubmissionsParams, opts ...optio
 
 // XXX POST /submissions remains usable ?
 
-func (client *Client) GetSubmission(id string, opts ...option) (*Submission, error) {
+func (client *Client) GetSubmission(id string, opts ...Option) (*Submission, error) {
 	submission := &Submission{}
 	if err := get(client, "/submissions/"+id, nil, &submission, opts...); err != nil {
 		return nil, err
@@ -30,6 +30,6 @@ func (client *Client) GetSubmission(id string, opts ...option) (*Submission, err
 	return submission, nil
 }
 
-func (client *Client) DeleteSubmission(id string, opts ...option) error {
+func (client *Client) DeleteSubmission(id string, opts ...Option) error {
 	return delete(client, "/submissions/"+id, nil, nil, opts...)
 }

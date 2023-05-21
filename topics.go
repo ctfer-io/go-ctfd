@@ -6,7 +6,7 @@ type GetTopicsParams struct {
 	Field *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetTopics(params *GetTopicsParams, opts ...option) ([]*Topic, error) {
+func (client *Client) GetTopics(params *GetTopicsParams, opts ...Option) ([]*Topic, error) {
 	topics := []*Topic{}
 	if err := get(client, "/topics", params, &topics, opts...); err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ type PostTopicsParams struct {
 	Value     string `json:"value"`
 }
 
-func (client *Client) PostTopics(params *PostTopicsParams, opts ...option) (*Topic, error) {
+func (client *Client) PostTopics(params *PostTopicsParams, opts ...Option) (*Topic, error) {
 	topic := &Topic{}
 	if err := post(client, "/topics", params, &topic, opts...); err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (client *Client) PostTopics(params *PostTopicsParams, opts ...option) (*Top
 	return topic, nil
 }
 
-func (client *Client) GetTopic(id string, opts ...option) (*Topic, error) {
+func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
 	topic := &Topic{}
 	if err := get(client, "/topics/"+id, nil, &topic, opts...); err != nil {
 		return nil, err
@@ -38,6 +38,6 @@ func (client *Client) GetTopic(id string, opts ...option) (*Topic, error) {
 	return topic, nil
 }
 
-func (client *Client) DeleteTopic(id string, opts ...option) error {
+func (client *Client) DeleteTopic(id string, opts ...Option) error {
 	return delete(client, "/topics/"+id, nil, nil, opts...)
 }

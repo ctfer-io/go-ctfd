@@ -10,7 +10,7 @@ type GetChallengesParams struct {
 	Q           *string `schema:"q,omitempty"`
 }
 
-func (client *Client) GetChallenges(params *GetChallengesParams, opts ...option) ([]*Challenge, error) {
+func (client *Client) GetChallenges(params *GetChallengesParams, opts ...Option) ([]*Challenge, error) {
 	challs := []*Challenge{}
 	if err := get(client, "/challenges", params, &challs, opts...); err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ type PostChallengesParams struct {
 	Type        string `json:"type"`
 }
 
-func (client *Client) PostChallenges(params *PostChallengesParams, opts ...option) (*Challenge, error) {
+func (client *Client) PostChallenges(params *PostChallengesParams, opts ...Option) (*Challenge, error) {
 	chall := &Challenge{}
 	if err := post(client, "/challenges", params, &chall, opts...); err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ type PostChallengesAttemptParams struct {
 	Submission  string `json:"submission"`
 }
 
-func (client *Client) PostChallengesAttempt(params *PostChallengesAttemptParams, opts ...option) (*Attempt, error) {
+func (client *Client) PostChallengesAttempt(params *PostChallengesAttemptParams, opts ...Option) (*Attempt, error) {
 	attempt := &Attempt{}
 	if err := post(client, "/challenges/attempt", params, &attempt, opts...); err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (client *Client) PostChallengesAttempt(params *PostChallengesAttemptParams,
 	return attempt, nil
 }
 
-func (client *Client) GetChallengesTypes(opts ...option) (map[string]*Type, error) {
+func (client *Client) GetChallengesTypes(opts ...Option) (map[string]*Type, error) {
 	types := map[string]*Type{}
 	if err := get(client, "/challenges/types", nil, &types, opts...); err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (client *Client) GetChallengesTypes(opts ...option) (map[string]*Type, erro
 	return types, nil
 }
 
-func (client *Client) GetChallenge(id string, opts ...option) (*Challenge, error) {
+func (client *Client) GetChallenge(id string, opts ...Option) (*Challenge, error) {
 	chall := &Challenge{}
 	if err := get(client, "/challenges/"+id, nil, &chall, opts...); err != nil {
 		return nil, err
@@ -77,11 +77,11 @@ type PatchChallengeParams struct {
 	State       string `json:"state"`
 }
 
-func (client *Client) DeleteChallenge(id string, opts ...option) error {
+func (client *Client) DeleteChallenge(id string, opts ...Option) error {
 	return delete(client, "/challenges/"+id, nil, nil, opts...)
 }
 
-func (client *Client) PatchChallenge(id string, params *PatchChallengeParams, opts ...option) (*Challenge, error) {
+func (client *Client) PatchChallenge(id string, params *PatchChallengeParams, opts ...Option) (*Challenge, error) {
 	ch := &Challenge{}
 	if err := patch(client, "/challenges/"+id, params, &ch, opts...); err != nil {
 		return nil, err
@@ -89,7 +89,7 @@ func (client *Client) PatchChallenge(id string, params *PatchChallengeParams, op
 	return ch, nil
 }
 
-func (client *Client) GetChallengeFiles(id string, opts ...option) ([]*File, error) {
+func (client *Client) GetChallengeFiles(id string, opts ...Option) ([]*File, error) {
 	cf := []*File{}
 	if err := get(client, "/challenges/"+id+"/files", nil, &cf, opts...); err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (client *Client) GetChallengeFiles(id string, opts ...option) ([]*File, err
 	return cf, nil
 }
 
-func (client *Client) GetChallengeFlags(id string, opts ...option) ([]*Flag, error) {
+func (client *Client) GetChallengeFlags(id string, opts ...Option) ([]*Flag, error) {
 	cf := []*Flag{}
 	if err := get(client, "/challenges/"+id+"/flags", nil, &cf, opts...); err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (client *Client) GetChallengeFlags(id string, opts ...option) ([]*Flag, err
 	return cf, nil
 }
 
-func (client *Client) GetChallengeHints(id string, opts ...option) ([]*Hint, error) {
+func (client *Client) GetChallengeHints(id string, opts ...Option) ([]*Hint, error) {
 	ch := []*Hint{}
 	if err := get(client, "/challenges/"+id+"/hints", nil, &ch, opts...); err != nil {
 		return nil, err
@@ -113,7 +113,7 @@ func (client *Client) GetChallengeHints(id string, opts ...option) ([]*Hint, err
 	return ch, nil
 }
 
-func (client *Client) GetChallengeRequirements(id string, opts ...option) (*Requirements, error) {
+func (client *Client) GetChallengeRequirements(id string, opts ...Option) (*Requirements, error) {
 	req := &Requirements{}
 	if err := get(client, "/challenges/"+id+"/requirements", nil, &req, opts...); err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (client *Client) GetChallengeRequirements(id string, opts ...option) (*Requ
 }
 
 // TODO find content to determine model
-func (client *Client) GetChallengeSolves(id string, opts ...option) (*Challenge, error) {
+func (client *Client) GetChallengeSolves(id string, opts ...Option) (*Challenge, error) {
 	chall := &Challenge{}
 	if err := get(client, "/challenges/"+id+"/solves", nil, &chall, opts...); err != nil {
 		return nil, err
@@ -130,7 +130,7 @@ func (client *Client) GetChallengeSolves(id string, opts ...option) (*Challenge,
 	return chall, nil
 }
 
-func (client *Client) GetChallengeTags(id string, opts ...option) ([]*Tag, error) {
+func (client *Client) GetChallengeTags(id string, opts ...Option) ([]*Tag, error) {
 	ct := []*Tag{}
 	if err := get(client, "/challenges/"+id+"/tags", nil, &ct, opts...); err != nil {
 		return nil, err
@@ -138,7 +138,7 @@ func (client *Client) GetChallengeTags(id string, opts ...option) ([]*Tag, error
 	return ct, nil
 }
 
-func (client *Client) GetChallengeTopics(id string, opts ...option) ([]*Topic, error) {
+func (client *Client) GetChallengeTopics(id string, opts ...Option) ([]*Topic, error) {
 	ct := []*Topic{}
 	if err := get(client, "/challenges/"+id+"/topics", nil, &ct, opts...); err != nil {
 		return nil, err

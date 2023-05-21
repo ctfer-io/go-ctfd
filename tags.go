@@ -7,7 +7,7 @@ type GetTagsParams struct {
 	Field       *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetTags(params *GetTagsParams, opts ...option) ([]*Tag, error) {
+func (client *Client) GetTags(params *GetTagsParams, opts ...Option) ([]*Tag, error) {
 	tags := []*Tag{}
 	if err := get(client, "/tags", params, &tags, opts...); err != nil {
 		return nil, err
@@ -20,7 +20,7 @@ type PostTagsParams struct {
 	Value     string `json:"value"`
 }
 
-func (client *Client) PostTags(params *PostTagsParams, opts ...option) (*Tag, error) {
+func (client *Client) PostTags(params *PostTagsParams, opts ...Option) (*Tag, error) {
 	tag := &Tag{}
 	if err := post(client, "/tags", params, &tag, opts...); err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (client *Client) PostTags(params *PostTagsParams, opts ...option) (*Tag, er
 	return tag, nil
 }
 
-func (client *Client) GetTag(id string, opts ...option) (*Tag, error) {
+func (client *Client) GetTag(id string, opts ...Option) (*Tag, error) {
 	tag := &Tag{}
 	if err := get(client, "/tags/"+id, nil, &tag, opts...); err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (client *Client) GetTag(id string, opts ...option) (*Tag, error) {
 	return tag, nil
 }
 
-func (client *Client) DeleteTag(id string, opts ...option) error {
+func (client *Client) DeleteTag(id string, opts ...Option) error {
 	return delete(client, "/tags/"+id, nil, nil, opts...)
 }
 
@@ -44,7 +44,7 @@ type PatchTagsParams struct {
 	Value string `json:"value"`
 }
 
-func (client *Client) PatchTags(id string, params *PatchTagsParams, opts ...option) (*Tag, error) {
+func (client *Client) PatchTags(id string, params *PatchTagsParams, opts ...Option) (*Tag, error) {
 	tag := &Tag{}
 	if err := patch(client, "/tags/"+id, params, &tag, opts...); err != nil {
 		return nil, err
