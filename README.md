@@ -1,6 +1,17 @@
-# Go-CTFd
+<div align="center">
+	<h1>Go-CTFd</h1>
+	<a href="https://pkg.go.dev/github.com/pandatix/go-ctfd"><img src="https://shields.io/badge/-reference-blue?logo=go&style=for-the-badge" alt="reference"></a>
+	<a href="https://goreportcard.com/report/github.com/pandatix/go-ctfd"><img src="https://goreportcard.com/badge/github.com/pandatix/go-ctfd?style=for-the-badge" alt="go report"></a>
+	<a href="https://coveralls.io/github/pandatix/go-ctfd?branch=main"><img src="https://img.shields.io/coverallsCoverage/github/pandatix/go-ctfd?style=for-the-badge" alt="Coverage Status"></a>
+	<a href=""><img src="https://img.shields.io/github/license/pandatix/go-ctfd?style=for-the-badge" alt="License"></a>
+	<br>
+	<a href="https://github.com/pandatix/go-ctfd/actions/workflows/ci.yaml"><img src="https://img.shields.io/github/actions/workflow/status/pandatix/go-ctfd/ci.yaml?style=for-the-badge" alt="CI"></a>
+	<a href="https://github.com/pandatix/go-ctfd/actions/workflows/codeql-analysis.yaml"><img src="https://img.shields.io/github/actions/workflow/status/pandatix/go-ctfd/codeql-analysis.yaml?style=for-the-badge" alt="CodeQL"></a>
+</div>
 
 Golang client for interacting with CTFd.
+
+Last version tested on: [3.5.2](https://github.com/CTFd/CTFd/releases/tag/3.5.2).
 
 ## Feedbacks
 
