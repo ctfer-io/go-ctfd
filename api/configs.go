@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetConfigsParams struct {
 	Key   *string `schema:"key,omitempty"`

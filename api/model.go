@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type (
 	Challenge struct {

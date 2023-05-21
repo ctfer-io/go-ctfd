@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetTagsParams struct {
 	ChallengeID *int    `schema:"challenge_id,omitempty"`

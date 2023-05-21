@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetUnlocksParams struct {
 	UserID *int    `schema:"user_id,omitempty"`

@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetHintsParams struct {
 	Type        *string `schema:"type,omitempty"`

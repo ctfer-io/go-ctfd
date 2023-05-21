@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 func (client *Client) GetStatisticsChallengesSolves(opts ...Option) ([]*StatChallSubmission, error) {
 	stats := []*StatChallSubmission{}

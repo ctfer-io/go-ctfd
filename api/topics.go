@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetTopicsParams struct {
 	Value *string `schema:"value,omitempty"`

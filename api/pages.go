@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetPagesParams struct {
 	ID           *int    `schema:"id,omitempty"`

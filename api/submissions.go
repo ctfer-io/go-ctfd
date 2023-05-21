@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetSubmissionsParams struct {
 	ChallengeID *int    `schema:"challenge_id,omitempty"`

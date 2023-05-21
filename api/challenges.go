@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 type GetChallengesParams struct {
 	Name        *string `schema:"name,omitempty"`

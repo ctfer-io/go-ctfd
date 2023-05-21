@@ -1,4 +1,4 @@
-package goctfd
+package api
 
 func (client *Client) GetTokens(opts ...Option) ([]*Token, error) {
 	tokens := []*Token{}

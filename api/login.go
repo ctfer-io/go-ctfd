@@ -1,29 +1,34 @@
-package goctfd
+package api
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/pkg/errors"
 )
 
-type RegisterParams struct {
+type LoginParams struct {
 	Name     string
-	Email    string
 	Password string
 	Nonce    string // XXX this should not be part of the API
 }
 
-func (client *Client) Register(params *RegisterParams, opts ...Option) error {
+// Returns the session value or an error.
+//
+// WARNING 1: this endpoint is not officially supported.
+// WARNING 2: provided client must have a no-follow-redirect behaviour,
+// or a cookie jar. Else, it won't detect the login worked properly thus
+// won't extract and save the new session id.
+func (client *Client) Login(params *LoginParams, opts ...Option) error {
 	val := url.Values{}
 	val.Set("name", params.Name)
-	val.Set("email", params.Email)
 	val.Set("password", params.Password)
 	val.Set("nonce", params.Nonce)
 	val.Set("_submit", "Submit")
 
-	req, _ := http.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(val.Encode()))
+	req, _ := http.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(val.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	res, err := client.Do(req)
 	if err != nil {
