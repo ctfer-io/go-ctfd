@@ -22,7 +22,8 @@ type PostChallengesParams struct {
 	Name        string `json:"name"`
 	Category    string `json:"category"`
 	Description string `json:"description"`
-	Initial     int    `json:"initial"`
+	Value       *int   `json:"value,omitempty"`
+	Initial     *int   `json:"initial,omitempty"`
 	Decay       *int   `json:"decay,omitempty"`
 	Minimum     *int   `json:"minimum,omitempty"`
 	State       string `json:"state"`
@@ -67,14 +68,15 @@ func (client *Client) GetChallenge(id string, opts ...Option) (*Challenge, error
 }
 
 type PatchChallengeParams struct {
-	Name        string `json:"name"`
-	Category    string `json:"category"`
-	Description string `json:"description"`
-	Initial     string `json:"initial"`      // XXX should be int
-	Decay       string `json:"decay"`        // XXX should be int
-	Minimum     string `json:"minimum"`      // XXX should be int
-	MaxAttempts string `json:"max_attempts"` // XXX should be int
-	State       string `json:"state"`
+	Name        *string `json:"name,omitempty"`
+	Category    *string `json:"category,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Value       *int    `json:"value,omitempty"`
+	Initial     *int    `json:"initial,omitempty"`
+	Decay       *int    `json:"decay,omitempty"`
+	Minimum     *int    `json:"minimum,omitempty"`
+	MaxAttempts *int    `json:"max_attempts,omitempty"`
+	State       *string `json:"state,omitempty"`
 }
 
 func (client *Client) DeleteChallenge(id string, opts ...Option) error {

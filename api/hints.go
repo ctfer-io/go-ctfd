@@ -20,7 +20,7 @@ func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint,
 type PostHintsParams struct {
 	ChallengeID  int          `json:"challenge_id"`
 	Content      string       `json:"content"`
-	Cost         string       `json:"cost"` // XXX may be int
+	Cost         int          `json:"cost"`
 	Requirements Requirements `json:"requirements"`
 }
 
