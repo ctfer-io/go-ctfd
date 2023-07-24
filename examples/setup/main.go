@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	url := "http://127.0.0.1:4000"
+	url := "http://127.0.0.1:8080"
 
 	// Note: add /setup so won't have to follow redirect ot work
 	fmt.Println("[+] Getting initial nonce and session values")
@@ -55,7 +55,7 @@ func main() {
 		Name:        "Break The License 1/2",
 		Category:    "crypto",
 		Description: "...",
-		Initial:     500,
+		Initial:     ptr(500),
 		Decay:       ptr(17),
 		Minimum:     ptr(50),
 		State:       "visible",
