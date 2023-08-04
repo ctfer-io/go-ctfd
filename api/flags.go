@@ -1,7 +1,7 @@
 package api
 
 type GetFlagsParams struct {
-	ChallengeID *int    `schema:"challenge_id,omitempty"`
+	ChallengeID *string `schema:"challenge_id,omitempty"`
 	Type        *string `schema:"type,omitempty"`
 	Content     *string `schema:"content,omitempty"`
 	Data        *string `schema:"data,omitempty"`
@@ -18,7 +18,7 @@ func (client *Client) GetFlags(params *GetFlagsParams, opts ...Option) ([]*Flag,
 }
 
 type PostFlagsParams struct {
-	Challenge int    `json:"challenge"`
+	Challenge string `json:"challenge"`
 	Content   string `json:"content"`
 	Data      string `json:"data"`
 	Type      string `json:"type"`

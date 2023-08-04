@@ -1,7 +1,7 @@
 package api
 
 type GetTagsParams struct {
-	ChallengeID *int    `schema:"challenge_id,omitempty"`
+	ChallengeID *string `schema:"challenge_id,omitempty"`
 	Value       *string `schema:"value,omitempty"`
 	Q           *string `schema:"q,omitempty"`
 	Field       *string `schema:"field,omitempty"`
@@ -16,7 +16,7 @@ func (client *Client) GetTags(params *GetTagsParams, opts ...Option) ([]*Tag, er
 }
 
 type PostTagsParams struct {
-	Challenge int    `json:"challenge"`
+	Challenge string `json:"challenge"`
 	Value     string `json:"value"`
 }
 

@@ -1,7 +1,7 @@
 package api
 
 type GetSubmissionsParams struct {
-	ChallengeID *int    `schema:"challenge_id,omitempty"`
+	ChallengeID *string `schema:"challenge_id,omitempty"`
 	UserID      *int    `schema:"user_id,omitempty"`
 	TeamID      *int    `schema:"team_id,omitempty"`
 	IP          *string `schema:"ip,omitempty"`

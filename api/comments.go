@@ -3,7 +3,7 @@ package api
 import "fmt"
 
 type GetCommentsParams struct {
-	ChallengeID *int    `schema:"challenge_id,omitempty"`
+	ChallengeID *string `schema:"challenge_id,omitempty"`
 	UserID      *int    `schema:"user_id,omitempty"`
 	TeamID      *int    `schema:"team_id,omitempty"`
 	PageID      *int    `schema:"page_id,omitempty"`

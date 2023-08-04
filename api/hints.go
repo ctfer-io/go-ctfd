@@ -2,7 +2,7 @@ package api
 
 type GetHintsParams struct {
 	Type        *string `schema:"type,omitempty"`
-	ChallengeID *int    `schema:"challenge_id,omitempty"`
+	ChallengeID *string `schema:"challenge_id,omitempty"`
 	Content     *string `schema:"content,omitempty"`
 	Cost        *int    `schema:"cost,omitempty"`
 	Q           *string `schema:"q,omitempty"`
@@ -18,7 +18,7 @@ func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint,
 }
 
 type PostHintsParams struct {
-	ChallengeID  int          `json:"challenge_id"`
+	ChallengeID  string       `json:"challenge_id"`
 	Content      string       `json:"content"`
 	Cost         int          `json:"cost"`
 	Requirements Requirements `json:"requirements"`
@@ -41,7 +41,7 @@ func (client *Client) GetHint(id string, opts ...Option) (*Hint, error) {
 }
 
 type PatchHintsParams struct {
-	ChallengeID  int          `json:"challenge_id"`
+	ChallengeID  string       `json:"challenge_id"`
 	Content      string       `json:"content"`
 	Cost         int          `json:"cost"`
 	Requirements Requirements `json:"requirements"`

@@ -27,7 +27,7 @@ func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File,
 type PostFilesParams struct {
 	File      *InputFile
 	CSRF      string // XXX should not be part of the request
-	Challenge int    // TODO May be additional i.e. pages don't need it
+	Challenge string // TODO May be additional i.e. pages don't need it
 }
 
 func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, error) {

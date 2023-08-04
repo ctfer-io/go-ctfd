@@ -8,7 +8,7 @@ type (
 		ConnectionInfo string `json:"connection_info"`
 		NextID         int    `json:"next_id"`
 		MaxAttempts    int    `json:"max_attempts"`
-		Value          int    `json:"value"`
+		Value          *int   `json:"value,omitempty"`
 		Initial        *int   `json:"initial,omitempty"`
 		Decay          *int   `json:"decay,omitempty"`
 		Minimum        *int   `json:"minimum,omitempty"`
@@ -16,7 +16,7 @@ type (
 		Type           string `json:"type"`
 		TypeDate       *Type  `json:"type_data,omitempty"`
 		State          string `json:"state"`
-		Requirements   any    `json:"requirements"` // TODO find model
+		Requirements   any    `json:"requirements"` // TODO find model, maybe []int with others challs ID ?
 		Solves         int    `json:"solves"`
 		SolvedByMe     bool   `json:"solved_by_me"`
 	}

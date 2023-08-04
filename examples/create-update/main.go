@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
 
 	ctfd "github.com/pandatix/go-ctfd/api"
 )
@@ -32,7 +33,7 @@ func main() {
 
 	// Update challenge
 	fmt.Println("[~] Updating challenge")
-	ch, err = client.PatchChallenge(ch.ID, &ctfd.PatchChallengeParams{
+	ch, err = client.PatchChallenge(strconv.Itoa(ch.ID), &ctfd.PatchChallengeParams{
 		Category: ptr("network"),
 		Decay:    ptr(17),
 	})

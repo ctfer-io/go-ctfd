@@ -17,7 +17,7 @@ func (client *Client) GetTopics(params *GetTopicsParams, opts ...Option) ([]*Top
 // TODO support DELETE /topics
 
 type PostTopicsParams struct {
-	Challenge int    `json:"challenge"`
+	Challenge string `json:"challenge"`
 	Type      string `json:"type"`
 	Value     string `json:"value"`
 }
