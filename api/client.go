@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -96,14 +97,6 @@ func WithContext(ctx context.Context) Option {
 // call is in charge of handling common CTFd API behaviours,
 // like dealing with status codes and JSON errors.
 func call(client *Client, req *http.Request, dst any, opts ...Option) error {
-	reqopts := &options{
-		Ctx: context.Background(),
-	}
-	for _, opt := range opts {
-		opt.apply(reqopts)
-	}
-	req = req.WithContext(reqopts.Ctx)
-
 	// Set API base URL
 	newUrl, err := url.Parse("/api/v1" + req.URL.String())
 	if err != nil {
@@ -111,18 +104,16 @@ func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 	}
 	req.URL = newUrl
 
-	// Issue HTTP request
-	res, err := client.Do(req)
+	body, err := callRaw(client, req, opts...)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
 
 	// Decode response
 	resp := Response{
 		Data: dst,
 	}
-	if err := json.NewDecoder(res.Body).Decode(&resp); err != nil {
+	if err := json.Unmarshal(body, &resp); err != nil {
 		return errors.Wrap(err, "CTFd responded with invalid JSON")
 	}
 
@@ -136,6 +127,26 @@ func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 		return errors.New("CTFd responded with no success but no error")
 	}
 	return nil
+}
+
+func callRaw(client *Client, req *http.Request, opts ...Option) ([]byte, error) {
+	// Process options
+	reqopts := &options{
+		Ctx: context.Background(),
+	}
+	for _, opt := range opts {
+		opt.apply(reqopts)
+	}
+	req = req.WithContext(reqopts.Ctx)
+
+	// Issue HTTP request
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return io.ReadAll(res.Body)
 }
 
 type Response struct {

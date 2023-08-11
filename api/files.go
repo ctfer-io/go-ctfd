@@ -61,6 +61,11 @@ func (client *Client) GetFile(id string, opts ...Option) (*File, error) {
 	return file, nil
 }
 
+func (client *Client) GetFileContent(file *File, opts ...Option) ([]byte, error) {
+	req, _ := http.NewRequest(http.MethodGet, "/files/"+file.Location, nil)
+	return callRaw(client, req, opts...)
+}
+
 func (client *Client) DeleteFile(id string, opts ...Option) error {
 	return delete(client, "/files/"+id, nil, nil, opts...)
 }
