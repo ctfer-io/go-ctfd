@@ -49,11 +49,16 @@ func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
 func (client *Client) DeleteTopic(id string, opts ...Option) error {
 	req, _ := http.NewRequest(http.MethodGet, "/topics", nil)
 
-	val := url.Values{}
-	params := map[string]string{
-		"type":      "challenge",
-		"target_id": id,
+	type deleteParams struct {
+		Type     string `schema:"type"`
+		TargetID string `schema:"target_id"`
 	}
+	params := deleteParams{
+		Type:     "challenge",
+		TargetID: id,
+	}
+
+	val := url.Values{}
 	if err := schema.NewEncoder().Encode(params, val); err != nil {
 		return err
 	}
