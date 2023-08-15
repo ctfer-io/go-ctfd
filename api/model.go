@@ -62,6 +62,7 @@ type (
 	}
 
 	Requirements struct {
+		Anonymize     *bool `json:"anonymize"`
 		Prerequisites []int `json:"prerequisites"`
 	}
 
