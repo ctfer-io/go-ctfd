@@ -21,16 +21,19 @@ func (client *Client) GetChallenges(params *GetChallengesParams, opts ...Option)
 }
 
 type PostChallengesParams struct {
-	Name         string        `json:"name"`
-	Category     string        `json:"category"`
-	Description  string        `json:"description"`
-	Value        *int          `json:"value,omitempty"`
-	Initial      *int          `json:"initial,omitempty"`
-	Decay        *int          `json:"decay,omitempty"`
-	Minimum      *int          `json:"minimum,omitempty"`
-	State        string        `json:"state"`
-	Type         string        `json:"type"`
-	Requirements *Requirements `json:"requirements,omitempty"`
+	Name           string        `json:"name"`
+	Category       string        `json:"category"`
+	Description    string        `json:"description"`
+	ConnectionInfo *string       `json:"connection_info,omitempty"`
+	MaxAttempts    *int          `json:"max_attempts,omitempty"`
+	Value          *int          `json:"value,omitempty"`
+	Initial        *int          `json:"initial,omitempty"`
+	Decay          *int          `json:"decay,omitempty"`
+	Minimum        *int          `json:"minimum,omitempty"`
+	State          string        `json:"state"`
+	Type           string        `json:"type"`
+	Requirements   *Requirements `json:"requirements,omitempty"`
+	NextID         *string       `json:"next_id,omitempty"`
 }
 
 func (client *Client) PostChallenges(params *PostChallengesParams, opts ...Option) (*Challenge, error) {
@@ -71,16 +74,18 @@ func (client *Client) GetChallenge(id string, opts ...Option) (*Challenge, error
 }
 
 type PatchChallengeParams struct {
-	Name         *string       `json:"name,omitempty"`
-	Category     *string       `json:"category,omitempty"`
-	Description  *string       `json:"description,omitempty"`
-	Value        *int          `json:"value,omitempty"`
-	Initial      *int          `json:"initial,omitempty"`
-	Decay        *int          `json:"decay,omitempty"`
-	Minimum      *int          `json:"minimum,omitempty"`
-	MaxAttempts  *int          `json:"max_attempts,omitempty"`
-	State        *string       `json:"state,omitempty"`
-	Requirements *Requirements `json:"requirements,omitempty"`
+	Name           *string       `json:"name,omitempty"`
+	Category       *string       `json:"category,omitempty"`
+	Description    *string       `json:"description,omitempty"`
+	ConnectionInfo *string       `json:"connection_info,omitempty"`
+	MaxAttempts    *int          `json:"max_attempts,omitempty"`
+	Value          *int          `json:"value,omitempty"`
+	Initial        *int          `json:"initial,omitempty"`
+	Decay          *int          `json:"decay,omitempty"`
+	Minimum        *int          `json:"minimum,omitempty"`
+	State          *string       `json:"state,omitempty"`
+	Requirements   *Requirements `json:"requirements,omitempty"`
+	NextID         *string       `json:"next_id,omitempty"`
 }
 
 func (client *Client) DeleteChallenge(id string, opts ...Option) error {
