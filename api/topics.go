@@ -1,5 +1,12 @@
 package api
 
+import (
+	"net/http"
+	"net/url"
+
+	"github.com/gorilla/schema"
+)
+
 type GetTopicsParams struct {
 	Value *string `schema:"value,omitempty"`
 	Q     *string `schema:"q,omitempty"`
@@ -38,6 +45,19 @@ func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
 	return topic, nil
 }
 
+// XXX this API endpoint should be aligned with the others.
 func (client *Client) DeleteTopic(id string, opts ...Option) error {
-	return delete(client, "/topics/"+id, nil, nil, opts...)
+	req, _ := http.NewRequest(http.MethodGet, "/topics", nil)
+
+	val := url.Values{}
+	params := map[string]string{
+		"type":      "challenge",
+		"target_id": id,
+	}
+	if err := schema.NewEncoder().Encode(params, val); err != nil {
+		return err
+	}
+	req.URL.RawQuery = val.Encode()
+
+	return call(client, req, nil, opts...)
 }
