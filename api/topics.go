@@ -47,7 +47,7 @@ func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
 
 // XXX this API endpoint should be aligned with the others.
 func (client *Client) DeleteTopic(id string, opts ...Option) error {
-	req, _ := http.NewRequest(http.MethodGet, "/topics", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/topics", nil)
 
 	type deleteParams struct {
 		Type     string `schema:"type"`
