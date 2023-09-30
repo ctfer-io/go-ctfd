@@ -1,4 +1,4 @@
-module github.com/pandatix/go-ctfd
+module github.com/ctfer-io/go-ctfd
 
 go 1.20
 

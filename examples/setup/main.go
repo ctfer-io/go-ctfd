@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	ctfd "github.com/pandatix/go-ctfd/api"
+	ctfd "github.com/ctfer-io/go-ctfd/api"
 )
 
 func main() {
