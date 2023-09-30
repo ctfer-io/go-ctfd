@@ -53,7 +53,7 @@ type HeadNotificationsParams struct {
 	SinceID *int    `schema:"since_id,omitempty"`
 }
 
-// XXX does not need to be authenticated
+// XXX does not need to be authenticated. Issue #2310
 func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ...Option) (int, error) {
 	req, _ := http.NewRequest(http.MethodHead, "/notifications", nil)
 

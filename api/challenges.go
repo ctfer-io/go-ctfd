@@ -8,6 +8,7 @@ type GetChallengesParams struct {
 	Type        *string `schema:"type,omitempty"`
 	State       *string `schema:"state,omitempty"`
 	Q           *string `schema:"q,omitempty"`
+	// TODO cover "view=admin" parameter that shows hidden challenges
 }
 
 func (client *Client) GetChallenges(params *GetChallengesParams, opts ...Option) ([]*Challenge, error) {

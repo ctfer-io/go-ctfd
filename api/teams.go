@@ -119,8 +119,6 @@ func (client *Client) PatchTeam(id int, params *PatchTeamsParams, opts ...Option
 	return team, nil
 }
 
-// XXX this could cause errors easily, play with JSON variants
-
 type DeleteTeamMembersParams struct {
 	UserID int `json:"user_id"`
 }

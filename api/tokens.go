@@ -20,7 +20,7 @@ func (client *Client) PostTokens(params *PostTokensParams, opts ...Option) (*Tok
 	return token, nil
 }
 
-// XXX Using this endpoint, you could get back the token value which is not a desired behaviour !
+// XXX Using this endpoint, you could get back the token value which is not a desired behaviour ! Issue #2309
 func (client *Client) GetToken(id string, opts ...Option) (*Token, error) {
 	token := &Token{}
 	if err := get(client, "/tokens/"+id, nil, &token, opts...); err != nil {
