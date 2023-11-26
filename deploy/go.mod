@@ -9,7 +9,7 @@ require (
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.5.4
 	github.com/pulumi/pulumi-random/sdk/v4 v4.14.0
 	github.com/pulumi/pulumi/pkg/v3 v3.93.0
-	github.com/pulumi/pulumi/sdk/v3 v3.93.0
+	github.com/pulumi/pulumi/sdk/v3 v3.94.2
 	github.com/stretchr/testify v1.8.4
 )
 
