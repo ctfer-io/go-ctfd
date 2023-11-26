@@ -19,22 +19,28 @@ func main() {
 
 	// Setup CTFd
 	fmt.Println("[+] Setting up CTFd")
-	client := ctfd.NewClient(url, session, nonce, "")
+	client := ctfd.NewClient(url, nonce, session, "")
 	if err := client.Setup(&ctfd.SetupParams{
-		CTFName:        "24h IUT",
-		CTFDescription: "24h IUT annual Cybersecurity CTF.",
-		UserMode:       "teams",
-		Name:           "PandatiX",
-		Email:          "lucastesson@protonmail.com",
-		Password:       "password",
-		CTFLogo:        nil,
-		CTFBanner:      nil,
-		CTFSmallIcon:   nil,
-		CTFTheme:       "core",
-		ThemeColor:     "",
-		Start:          "",
-		End:            "",
-		Nonce:          nonce,
+		CTFName:                "24h IUT",
+		CTFDescription:         "24h IUT annual Cybersecurity CTF.",
+		UserMode:               "users",
+		Name:                   "PandatiX",
+		Email:                  "lucastesson@protonmail.com",
+		Password:               "password",
+		ChallengeVisibility:    "public",
+		AccountVisibility:      "public",
+		ScoreVisibility:        "public",
+		RegistrationVisibility: "public",
+		VerifyEmails:           false,
+		TeamSize:               nil,
+		CTFLogo:                nil,
+		CTFBanner:              nil,
+		CTFSmallIcon:           nil,
+		CTFTheme:               "core",
+		ThemeColor:             "",
+		Start:                  "",
+		End:                    "",
+		Nonce:                  nonce,
 	}); err != nil {
 		log.Fatalf("Setting up CTFd: %s", err)
 	}
@@ -42,7 +48,8 @@ func main() {
 	// Create API Key
 	fmt.Println("[+] Creating API Token")
 	token, err := client.PostTokens(&ctfd.PostTokensParams{
-		Expiration: "2024-05-14",
+		Expiration:  "2024-05-14",
+		Description: "Example API token.",
 	})
 	if err != nil {
 		log.Fatalf("Creating API token: %s", err)
@@ -55,6 +62,7 @@ func main() {
 		Name:        "Break The License 1/2",
 		Category:    "crypto",
 		Description: "...",
+		Function:    "logarithmic",
 		Initial:     500,
 		Decay:       ptr(17),
 		Minimum:     ptr(50),
@@ -64,7 +72,29 @@ func main() {
 	if err != nil {
 		log.Fatalf("Creating challenge: %s", err)
 	}
-	fmt.Printf("Created challenge %d\n", ch.ID)
+	fmt.Printf("    Created challenge %d\n", ch.ID)
+
+	// Add a flag to solve it
+	fmt.Println("[~] Updating challenge")
+	f, err := client.PostFlags(&ctfd.PostFlagsParams{
+		Challenge: ch.ID,
+		Content:   "24HIUT{content}",
+		Type:      "static",
+	})
+	if err != nil {
+		log.Fatalf("Creating flag: %s", err)
+	}
+
+	// Solve it
+	fmt.Println("[+] Creating attempt")
+	att, err := client.PostChallengesAttempt(&ctfd.PostChallengesAttemptParams{
+		ChallengeID: ch.ID,
+		Submission:  f.Content,
+	})
+	if err != nil {
+		log.Fatalf("Creating attempt: %s", err)
+	}
+	fmt.Printf("    Result: %s", att.Status)
 }
 
 func ptr[T any](t T) *T {
