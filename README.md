@@ -11,4 +11,4 @@
 
 Golang client for interacting with CTFd.
 
-Last version tested on: [3.5.2](https://github.com/CTFd/CTFd/releases/tag/3.5.2).
+Last version tested on: [3.6.0](https://github.com/CTFd/CTFd/releases/tag/3.6.0).

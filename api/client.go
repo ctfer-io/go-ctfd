@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"reflect"
 
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
@@ -15,7 +16,7 @@ import (
 
 // NewClient creates a fresh *Client.
 // It automatically handles the session and its updates (login, logout...).
-func NewClient(url, session, nonce, apiKey string) *Client {
+func NewClient(url, nonce, session, apiKey string) *Client {
 	jar, _ := cookiejar.New(nil)
 	return &Client{
 		sub: &http.Client{
@@ -26,8 +27,8 @@ func NewClient(url, session, nonce, apiKey string) *Client {
 			},
 		},
 		url:     url,
-		session: session,
 		nonce:   nonce,
+		session: session,
 		apiKey:  apiKey,
 	}
 }
@@ -38,8 +39,8 @@ type Client struct {
 	url string
 
 	// Used for authentication, apiKey first, session&nonce else
-	session string
 	nonce   string
+	session string
 	apiKey  string
 }
 
@@ -64,8 +65,8 @@ func (client *Client) Do(req *http.Request) (*http.Response, error) {
 	if client.apiKey != "" {
 		req.Header.Set("Authorization", "Token "+client.apiKey) // XXX the "Token" value should be properly documented in API
 	} else {
-		req.Header.Set("Cookie", "session="+client.session)
 		req.Header.Set("CSRF-Token", client.nonce)
+		req.Header.Set("Cookie", "session="+client.session)
 	}
 
 	return client.sub.Do(req)
@@ -123,7 +124,7 @@ func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 		Data: dst,
 	}
 	if err := json.NewDecoder(res.Body).Decode(&resp); err != nil {
-		return errors.Wrap(err, "CTFd responded with invalid JSON")
+		return errors.Wrapf(err, "CTFd responded with invalid JSON for content")
 	}
 
 	// Handle errors if any
@@ -133,7 +134,10 @@ func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 	if !resp.Success {
 		// This case should not happen, as status code already serves this goal
 		// and errors gives the reasons.
-		return errors.New("CTFd responded with no success but no error")
+		if resp.Message != nil {
+			return fmt.Errorf("CTFd responded with no success but no error, got message: %s", *resp.Message)
+		}
+		return errors.New("CTFd responded with no success but no error, and no message")
 	}
 	return nil
 }
@@ -142,13 +146,14 @@ type Response struct {
 	Success bool     `json:"success"`
 	Data    any      `json:"data,omitempty"`
 	Errors  []string `json:"errors,omitempty"`
+	Message *string  `json:"message,omitempty"`
 }
 
 func get(client *Client, edp string, params any, dst any, opts ...Option) error {
 	req, _ := http.NewRequest(http.MethodGet, edp, nil)
 
 	// Encode URL parameters
-	if params != nil {
+	if params != nil && !reflect.ValueOf(params).IsNil() {
 		val := url.Values{}
 		if err := schema.NewEncoder().Encode(params, val); err != nil {
 			return err

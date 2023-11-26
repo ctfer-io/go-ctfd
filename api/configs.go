@@ -35,6 +35,7 @@ type PatchConfigsParams struct {
 	IncorrectSubmissionsPerMin *string `json:"incorrect_submissions_per_min,omitempty"`
 	NameChanges                *bool   `json:"name_changes,omitempty"`
 	NumTeams                   *string `json:"num_teams,omitempty"`
+	NumUsers                   *string `json:"num_users,omitempty"`
 	TeamCreation               *bool   `json:"team_creation,omitempty"`
 	TeamDisbanding             *string `json:"team_disbanding,omitempty"`
 	TeamSize                   *string `json:"team_size,omitempty"`
@@ -59,9 +60,11 @@ type PatchConfigsParams struct {
 
 	// Security
 
+	HTMLSanitization *bool   `json:"html_sanitization,omitempty"`
 	RegistrationCode *string `json:"registration_code,omitempty"`
 
 	// Email
+	// TODO update for 3.6.0
 
 	MailPassword                       *string `json:"mail_password,omitempty"`
 	MailPort                           *string `json:"mail_port,omitempty"`

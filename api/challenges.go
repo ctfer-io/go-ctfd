@@ -23,6 +23,7 @@ type PostChallengesParams struct {
 	Name        string `json:"name"`
 	Category    string `json:"category"`
 	Description string `json:"description"`
+	Function    string `json:"function"`
 	Initial     int    `json:"initial"`
 	Decay       *int   `json:"decay,omitempty"`
 	Minimum     *int   `json:"minimum,omitempty"`
@@ -39,6 +40,7 @@ func (client *Client) PostChallenges(params *PostChallengesParams, opts ...Optio
 }
 
 type PostChallengesAttemptParams struct {
+	// TODO support parameter (e.g. "preview=true")
 	ChallengeID int    `json:"challenge_id"`
 	Submission  string `json:"submission"`
 }

@@ -255,12 +255,13 @@ type (
 	}
 
 	Token struct {
-		Expiration string  `json:"expiration"`
-		ID         int     `json:"id"`
-		Type       string  `json:"type"`
-		Value      *string `json:"value,omitempty"`
-		Created    *string `json:"created,omitempty"`
-		UserID     *int    `json:"user_id,omitempty"`
+		Expiration  string  `json:"expiration"`
+		ID          int     `json:"id"`
+		Type        string  `json:"type"`
+		Value       *string `json:"value,omitempty"`
+		Description *string `json:"description,omitempty"`
+		Created     *string `json:"created,omitempty"`
+		UserID      *int    `json:"user_id,omitempty"`
 	}
 
 	Comment struct {

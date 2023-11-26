@@ -3,46 +3,60 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 type SetupParams struct {
-	CTFName        string
-	CTFDescription string
-	UserMode       string
-	Name           string
-	Email          string
-	Password       string
-	CTFLogo        *InputFile
-	CTFBanner      *InputFile
-	CTFSmallIcon   *InputFile
-	CTFTheme       string
-	ThemeColor     string
-	Start          string
-	End            string
-	Nonce          string // XXX this should not be part of the API
+	CTFName                string
+	CTFDescription         string
+	UserMode               string
+	ChallengeVisibility    string
+	AccountVisibility      string
+	ScoreVisibility        string
+	RegistrationVisibility string
+	VerifyEmails           bool
+	TeamSize               *int
+	Name                   string
+	Email                  string
+	Password               string
+	CTFLogo                *InputFile
+	CTFBanner              *InputFile
+	CTFSmallIcon           *InputFile
+	CTFTheme               string
+	ThemeColor             string
+	Start                  string
+	End                    string
+	Nonce                  string // XXX this should not be part of the API, but is required
 }
 
-// WARNING 1: this endpoint is not officially supported.
-// WARNING 2: provided client must have a no-follow-redirect behaviour,
-// or a cookie jar. Else, it won't detect the setup worked properly.
+// WARNING: this endpoint is not officially supported.
 func (client *Client) Setup(params *SetupParams, opts ...Option) error {
-	b, ct, err := encodeMultipart(map[string]any{
-		"ctf_name":        params.CTFName,
-		"ctf_description": params.CTFDescription,
-		"user_mode":       params.UserMode,
-		"name":            params.Name,
-		"email":           params.Email,
-		"password":        params.Password,
-		"ctf_logo":        params.CTFLogo,
-		"ctf_banner":      params.CTFBanner,
-		"ctf_smallicon":   params.CTFSmallIcon,
-		"ctf_theme":       params.CTFTheme,
-		"theme_color":     params.ThemeColor,
-		"start":           params.Start,
-		"end":             params.End,
-		"_submit":         "Submit",
-		"nonce":           params.Nonce,
-	})
+	mp := map[string]any{
+		"ctf_name":                params.CTFName,
+		"ctf_description":         params.CTFDescription,
+		"user_mode":               params.UserMode,
+		"challenge_visibility":    params.ChallengeVisibility,
+		"account_visibility":      params.AccountVisibility,
+		"score_visibility":        params.ScoreVisibility,
+		"registration_visibility": params.RegistrationVisibility,
+		"verify_emails":           fmt.Sprintf("%t", params.VerifyEmails),
+		"name":                    params.Name,
+		"email":                   params.Email,
+		"password":                params.Password,
+		"ctf_logo":                params.CTFLogo,
+		"ctf_banner":              params.CTFBanner,
+		"ctf_smallicon":           params.CTFSmallIcon,
+		"ctf_theme":               params.CTFTheme,
+		"theme_color":             params.ThemeColor,
+		"start":                   params.Start,
+		"end":                     params.End,
+		"_submit":                 "Finish",
+		"nonce":                   params.Nonce,
+	}
+	if params.TeamSize != nil {
+		mp["team_size"] = strconv.Itoa(*params.TeamSize)
+	}
+	b, ct, err := encodeMultipart(mp)
 	if err != nil {
 		return err
 	}

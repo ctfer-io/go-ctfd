@@ -9,7 +9,8 @@ func (client *Client) GetTokens(opts ...Option) ([]*Token, error) {
 }
 
 type PostTokensParams struct {
-	Expiration string `json:"expiration"`
+	Description string `json:"description"`
+	Expiration  string `json:"expiration"`
 }
 
 func (client *Client) PostTokens(params *PostTokensParams, opts ...Option) (*Token, error) {
