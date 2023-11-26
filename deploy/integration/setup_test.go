@@ -132,7 +132,7 @@ func Test_F_Setup(t *testing.T) {
 			hint, err := client.PostHints(&api.PostHintsParams{
 				ChallengeID: chall.ID,
 				Content:     "C'mon dude...",
-				Cost:        "50",
+				Cost:        50,
 			})
 			if !assert.Nil(err, "got error: %s", err) {
 				return
@@ -140,7 +140,7 @@ func Test_F_Setup(t *testing.T) {
 			_, err = client.PostHints(&api.PostHintsParams{
 				ChallengeID: chall.ID,
 				Content:     "Nop.",
-				Cost:        "100",
+				Cost:        100,
 				Requirements: api.Requirements{
 					Prerequisites: []int{hint.ID},
 				},
