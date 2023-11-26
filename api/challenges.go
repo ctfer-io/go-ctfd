@@ -1,5 +1,7 @@
 package api
 
+import "fmt"
+
 type GetChallengesParams struct {
 	Name        *string `schema:"name,omitempty"`
 	MaxAttempts *int    `schema:"max_attempts,omitempty"`
@@ -20,15 +22,19 @@ func (client *Client) GetChallenges(params *GetChallengesParams, opts ...Option)
 }
 
 type PostChallengesParams struct {
-	Name        string `json:"name"`
-	Category    string `json:"category"`
-	Description string `json:"description"`
-	Function    string `json:"function"`
-	Initial     int    `json:"initial"`
-	Decay       *int   `json:"decay,omitempty"`
-	Minimum     *int   `json:"minimum,omitempty"`
-	State       string `json:"state"`
-	Type        string `json:"type"`
+	Name           string        `json:"name"`
+	Category       string        `json:"category"`
+	Description    string        `json:"description"`
+	Function       string        `json:"function"`
+	ConnectionInfo *string       `json:"connection_info,omitempty"`
+	Value          int           `json:"value"`
+	Initial        *int          `json:"initial,omitempty"`
+	Decay          *int          `json:"decay,omitempty"`
+	Minimum        *int          `json:"minimum,omitempty"`
+	MaxAttempts    *int          `json:"max_attempts,omitempty"`
+	Requirements   *Requirements `json:"requirements,omitempty"`
+	State          string        `json:"state"`
+	Type           string        `json:"type"`
 }
 
 func (client *Client) PostChallenges(params *PostChallengesParams, opts ...Option) (*Challenge, error) {
@@ -61,89 +67,96 @@ func (client *Client) GetChallengesTypes(opts ...Option) (map[string]*Type, erro
 	return types, nil
 }
 
-func (client *Client) GetChallenge(id string, opts ...Option) (*Challenge, error) {
+func (client *Client) GetChallenge(id int, opts ...Option) (*Challenge, error) {
 	chall := &Challenge{}
-	if err := get(client, "/challenges/"+id, nil, &chall, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d", id), nil, &chall, opts...); err != nil {
 		return nil, err
 	}
 	return chall, nil
 }
 
 type PatchChallengeParams struct {
-	Name        string `json:"name"`
-	Category    string `json:"category"`
-	Description string `json:"description"`
-	Initial     string `json:"initial"`      // XXX should be int
-	Decay       string `json:"decay"`        // XXX should be int
-	Minimum     string `json:"minimum"`      // XXX should be int
-	MaxAttempts string `json:"max_attempts"` // XXX should be int
-	State       string `json:"state"`
+	Name           string  `json:"name"`
+	Category       string  `json:"category"`
+	Description    string  `json:"description"`
+	Function       string  `json:"function"`
+	ConnectionInfo *string `json:"connection_info,omitempty"`
+	Initial        *int    `json:"initial,omitempty"`
+	Decay          *int    `json:"decay,omitempty"`
+	Minimum        *int    `json:"minimum,omitempty"`
+	MaxAttempts    *int    `json:"max_attempts,omitempty"`
+	// Requirements can update the challenge's behavior and prerequisites i.e.
+	// the other challenges the team/user must have solved before.
+	// WARNING: it won't return those in the response body, so updating this
+	// field requires you to do it manually through *Client.GetChallengeRequirements
+	Requirements *Requirements `json:"requirements,omitempty"`
+	State        string        `json:"state"`
 }
 
-func (client *Client) DeleteChallenge(id string, opts ...Option) error {
-	return delete(client, "/challenges/"+id, nil, nil, opts...)
+func (client *Client) DeleteChallenge(id int, opts ...Option) error {
+	return delete(client, fmt.Sprintf("/challenges/%d", id), nil, nil, opts...)
 }
 
-func (client *Client) PatchChallenge(id string, params *PatchChallengeParams, opts ...Option) (*Challenge, error) {
+func (client *Client) PatchChallenge(id int, params *PatchChallengeParams, opts ...Option) (*Challenge, error) {
 	ch := &Challenge{}
-	if err := patch(client, "/challenges/"+id, params, &ch, opts...); err != nil {
+	if err := patch(client, fmt.Sprintf("/challenges/%d", id), params, &ch, opts...); err != nil {
 		return nil, err
 	}
 	return ch, nil
 }
 
-func (client *Client) GetChallengeFiles(id string, opts ...Option) ([]*File, error) {
+func (client *Client) GetChallengeFiles(id int, opts ...Option) ([]*File, error) {
 	cf := []*File{}
-	if err := get(client, "/challenges/"+id+"/files", nil, &cf, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/files", id), nil, &cf, opts...); err != nil {
 		return nil, err
 	}
 	return cf, nil
 }
 
-func (client *Client) GetChallengeFlags(id string, opts ...Option) ([]*Flag, error) {
+func (client *Client) GetChallengeFlags(id int, opts ...Option) ([]*Flag, error) {
 	cf := []*Flag{}
-	if err := get(client, "/challenges/"+id+"/flags", nil, &cf, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/flags", id), nil, &cf, opts...); err != nil {
 		return nil, err
 	}
 	return cf, nil
 }
 
-func (client *Client) GetChallengeHints(id string, opts ...Option) ([]*Hint, error) {
+func (client *Client) GetChallengeHints(id int, opts ...Option) ([]*Hint, error) {
 	ch := []*Hint{}
-	if err := get(client, "/challenges/"+id+"/hints", nil, &ch, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/hints", id), nil, &ch, opts...); err != nil {
 		return nil, err
 	}
 	return ch, nil
 }
 
-func (client *Client) GetChallengeRequirements(id string, opts ...Option) (*Requirements, error) {
+func (client *Client) GetChallengeRequirements(id int, opts ...Option) (*Requirements, error) {
 	req := &Requirements{}
-	if err := get(client, "/challenges/"+id+"/requirements", nil, &req, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/requirements", id), nil, &req, opts...); err != nil {
 		return nil, err
 	}
 	return req, nil
 }
 
 // TODO find content to determine model
-func (client *Client) GetChallengeSolves(id string, opts ...Option) (*Challenge, error) {
+func (client *Client) GetChallengeSolves(id int, opts ...Option) (*Challenge, error) {
 	chall := &Challenge{}
-	if err := get(client, "/challenges/"+id+"/solves", nil, &chall, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/solves", id), nil, &chall, opts...); err != nil {
 		return nil, err
 	}
 	return chall, nil
 }
 
-func (client *Client) GetChallengeTags(id string, opts ...Option) ([]*Tag, error) {
+func (client *Client) GetChallengeTags(id int, opts ...Option) ([]*Tag, error) {
 	ct := []*Tag{}
-	if err := get(client, "/challenges/"+id+"/tags", nil, &ct, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/tags", id), nil, &ct, opts...); err != nil {
 		return nil, err
 	}
 	return ct, nil
 }
 
-func (client *Client) GetChallengeTopics(id string, opts ...Option) ([]*Topic, error) {
+func (client *Client) GetChallengeTopics(id int, opts ...Option) ([]*Topic, error) {
 	ct := []*Topic{}
-	if err := get(client, "/challenges/"+id+"/topics", nil, &ct, opts...); err != nil {
+	if err := get(client, fmt.Sprintf("/challenges/%d/topics", id), nil, &ct, opts...); err != nil {
 		return nil, err
 	}
 	return ct, nil

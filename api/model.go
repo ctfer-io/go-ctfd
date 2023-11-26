@@ -2,23 +2,24 @@ package api
 
 type (
 	Challenge struct {
-		ID             int    `json:"id"`
-		Name           string `json:"name"`
-		Description    string `json:"description"`
-		ConnectionInfo string `json:"connection_info"`
-		NextID         int    `json:"next_id"`
-		MaxAttempts    int    `json:"max_attempts"`
-		Value          int    `json:"value"`
-		Initial        *int   `json:"initial,omitempty"`
-		Decay          *int   `json:"decay,omitempty"`
-		Minimum        *int   `json:"minimum,omitempty"`
-		Category       string `json:"category"`
-		Type           string `json:"type"`
-		TypeDate       *Type  `json:"type_data,omitempty"`
-		State          string `json:"state"`
-		Requirements   any    `json:"requirements"` // TODO find model
-		Solves         int    `json:"solves"`
-		SolvedByMe     bool   `json:"solved_by_me"`
+		ID             int           `json:"id"`
+		Name           string        `json:"name"`
+		Description    string        `json:"description"`
+		ConnectionInfo *string       `json:"connection_info,omitempty"`
+		NextID         int           `json:"next_id"`
+		MaxAttempts    *int          `json:"max_attempts,omitempty"`
+		Function       string        `json:"function"`
+		Value          int           `json:"value"`
+		Initial        *int          `json:"initial,omitempty"`
+		Decay          *int          `json:"decay,omitempty"`
+		Minimum        *int          `json:"minimum,omitempty"`
+		Category       string        `json:"category"`
+		Type           string        `json:"type"`
+		TypeDate       *Type         `json:"type_data,omitempty"`
+		State          string        `json:"state"`
+		Requirements   *Requirements `json:"requirements"` // List of challenge IDs to complete before
+		Solves         int           `json:"solves"`
+		SolvedByMe     bool          `json:"solved_by_me"`
 	}
 
 	Type struct {
@@ -62,6 +63,15 @@ type (
 	}
 
 	Requirements struct {
+		// Anonymize control the behavior of the resource if the prerequisites are
+		// not validated:
+		//  - if `nil`, defaults to `*false`
+		//  - if `*false`, set the behavior as "hidden" (invisible until validated)
+		//  - if `*true`, set the behavior to "anonymized" (visible but not much info)
+		Anonymize *bool `json:"anonymize,omitempty"`
+
+		// Prerequisites is the list of resources' ID that need to be validated in
+		// order for the resource to meet its requirements.
 		Prerequisites []int `json:"prerequisites"`
 	}
 
