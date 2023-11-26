@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	url := "http://127.0.0.1:4000"
+	url := "http://192.168.49.2:32052"
 
 	// Note: add /setup so won't have to follow redirect ot work
 	fmt.Println("[+] Getting initial nonce and session values")
@@ -59,15 +59,17 @@ func main() {
 	// Add challenge
 	fmt.Println("[+] Creating challenge")
 	ch, err := client.PostChallenges(&ctfd.PostChallengesParams{
-		Name:        "Break The License 1/2",
-		Category:    "crypto",
-		Description: "...",
-		Function:    "logarithmic",
-		Initial:     500,
-		Decay:       ptr(17),
-		Minimum:     ptr(50),
-		State:       "visible",
-		Type:        "dynamic",
+		Name:           "Break The License 1/2",
+		Category:       "crypto",
+		Description:    "...",
+		Function:       "logarithmic",
+		ConnectionInfo: ptr("ssh -l user@crypto1.ctfer.io"),
+		MaxAttempts:    ptr(3),
+		Initial:        ptr(500),
+		Decay:          ptr(17),
+		Minimum:        ptr(50),
+		State:          "visible",
+		Type:           "dynamic",
 	})
 	if err != nil {
 		log.Fatalf("Creating challenge: %s", err)
@@ -94,7 +96,36 @@ func main() {
 	if err != nil {
 		log.Fatalf("Creating attempt: %s", err)
 	}
-	fmt.Printf("    Result: %s", att.Status)
+	fmt.Printf("    Result: %s\n", att.Status)
+
+	// Make it loop on itself, deadlock :imp:
+	fmt.Println("[~] Making the challenge require itself...")
+	ch, err = client.PatchChallenge(ch.ID, &ctfd.PatchChallengeParams{
+		Name:           ch.Name,
+		Category:       ch.Category,
+		Description:    ch.Description,
+		Function:       ch.Function,
+		ConnectionInfo: ch.ConnectionInfo,
+		Initial:        ch.Initial,
+		Decay:          ch.Decay,
+		Minimum:        ch.Minimum,
+		MaxAttempts:    ch.MaxAttempts,
+		State:          ch.State,
+		Requirements: &ctfd.Requirements{
+			Anonymize:     ptr(false),
+			Prerequisites: []int{ch.ID},
+		},
+	})
+	if err != nil {
+		log.Fatalf("   Failed: %s", err)
+	}
+	ch.Requirements, err = client.GetChallengeRequirements(ch.ID)
+	if err != nil {
+		log.Fatalf("    Failed: %s", err)
+	}
+
+	fmt.Printf("ch: %+v\n", ch)
+	fmt.Printf("ch.Requirements: %+v\n", ch.Requirements)
 }
 
 func ptr[T any](t T) *T {

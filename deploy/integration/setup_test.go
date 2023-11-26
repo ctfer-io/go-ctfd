@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"strconv"
 	"testing"
 
 	"github.com/ctfer-io/go-ctfd/api"
@@ -83,15 +82,17 @@ func Test_F_Setup(t *testing.T) {
 
 			// 2. Create a challenge
 			chall, err := client.PostChallenges(&api.PostChallengesParams{
-				Name:        "Stealing data",
-				Category:    "network",
-				Description: "The network administrator just sent you the info that some strange packets where going out of a server.\nAt first glance, it is an internal one.\nCan you tell us what it is ?",
-				Function:    "logarithmic",
-				Initial:     500,
-				Decay:       ptr(17),
-				Minimum:     ptr(50),
-				State:       "visible",
-				Type:        "dynamic",
+				Name:           "Stealing data",
+				Category:       "network",
+				Description:    "The network administrator just sent you the info that some strange packets where going out of a server.\nAt first glance, it is an internal one.\nCan you tell us what it is ?",
+				Function:       "logarithmic",
+				ConnectionInfo: ptr("ssh -l pandatix@master.pandatix.dev"),
+				MaxAttempts:    ptr(3),
+				Initial:        ptr(500),
+				Decay:          ptr(17),
+				Minimum:        ptr(50),
+				State:          "visible",
+				Type:           "dynamic",
 			})
 			assert.NotNil(chall)
 			if !assert.Nil(err, "got error: %s", err) {
@@ -113,14 +114,15 @@ func Test_F_Setup(t *testing.T) {
 
 			// 4. Update the challenge, give it hints, flags and topics
 			// XXX the strconv should not occur
-			chall, err = client.PatchChallenge(strconv.Itoa(chall.ID), &api.PatchChallengeParams{
+			chall, err = client.PatchChallenge(chall.ID, &api.PatchChallengeParams{
 				Name:        chall.Name,
 				Category:    chall.Category,
 				Description: chall.Description,
-				MaxAttempts: "3",
-				Initial:     strconv.Itoa(*chall.Initial),
-				Decay:       strconv.Itoa(*chall.Decay),
-				Minimum:     strconv.Itoa(*chall.Minimum),
+				Function:    chall.Function,
+				MaxAttempts: ptr(3),
+				Initial:     chall.Initial,
+				Decay:       chall.Decay,
+				Minimum:     chall.Minimum,
 				State:       chall.State,
 			})
 			if !assert.Nil(err, "got error: %s", err) {
@@ -190,7 +192,7 @@ func Test_F_Setup(t *testing.T) {
 
 			// 7. Delete the challenge
 			// XXX the strconv should not occur
-			err = client.DeleteChallenge(strconv.Itoa(chall.ID))
+			err = client.DeleteChallenge(chall.ID)
 			if !assert.Nil(err, "got error: %s", err) {
 				return
 			}
