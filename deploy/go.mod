@@ -6,7 +6,7 @@ go 1.21.3
 
 require (
 	github.com/ctfer-io/go-ctfd v0.2.0
-	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.5.4
+	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.5.5
 	github.com/pulumi/pulumi-random/sdk/v4 v4.14.0
 	github.com/pulumi/pulumi/pkg/v3 v3.95.0
 	github.com/pulumi/pulumi/sdk/v3 v3.95.0
