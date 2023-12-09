@@ -82,15 +82,17 @@ func (ctfd *CTFd) provision(ctx *pulumi.Context, args *CTFdArgs, opts ...pulumi.
 						corev1.ContainerArgs{
 							Name: pulumi.String("wait-for-redis"),
 							// TODO rebuild image or replace
-							Image: pulumi.String("goodsmileduck/redis-cli:latest"),
+							Image: pulumi.String("redis:7.0.10"),
 							Args: pulumi.StringArray{
 								pulumi.String("sh"), pulumi.String("-c"),
-								pulumi.All(ctfd.rd.svc.Metadata, ctfd.rd.svc.Spec).ApplyT(func(args []any) string {
-									meta := args[0].(metav1.ObjectMeta)
-									spec := args[1].(corev1.ServiceSpec)
-
-									return fmt.Sprintf("until redis-cli -h %s -p %d get hello; do echo \"Sleeping a bit\"; sleep 1; done; echo \"ready!\";", *meta.Name, spec.Ports[0].Port)
+								ctfd.rd.URL.ApplyT(func(url string) string {
+									return fmt.Sprintf("until redis-cli -u %s get hello; do echo \"Sleeping a bit\"; sleep 1; done; echo \"ready!\";", url)
 								}).(pulumi.StringOutput),
+								// pulumi.All(ctfd.rd.svc.Metadata, ctfd.rd.svc.Spec).ApplyT(func(args []any) string {
+								// 	meta := args[0].(metav1.ObjectMeta)
+								// 	spec := args[1].(corev1.ServiceSpec)
+
+								// }).(pulumi.StringOutput),
 							},
 						},
 					},

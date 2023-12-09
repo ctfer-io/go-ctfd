@@ -7,6 +7,8 @@ import (
 	"mime/multipart"
 	"net/http"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 type GetFilesParams struct {
@@ -68,6 +70,23 @@ func (client *Client) DeleteFile(id string, opts ...Option) error {
 type InputFile struct {
 	Name    string
 	Content []byte
+}
+
+// GetFileContent is a helper leveraging the CTFd API that
+// downloads a file's content given its location.
+func (client *Client) GetFileContent(file *File) ([]byte, error) {
+	if file == nil {
+		return nil, errors.New("can't get file from a nil value")
+	}
+
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/files/%s", file.Location), nil)
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return io.ReadAll(res.Body)
 }
 
 // Returns a reader ready to be part of an HTTP request body.

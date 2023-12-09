@@ -88,7 +88,7 @@ func (rd *Redis) provision(ctx *pulumi.Context, args *RedisArgs, opts ...pulumi.
 		meta := args[1].(metav1.ObjectMeta)
 		spec := args[2].(corev1.ServiceSpec)
 
-		return fmt.Sprintf("redis://default:%s@%s:%d", rand, *meta.Name, spec.Ports[0].Port)
+		return fmt.Sprintf("redis://:%s@%s:%d", rand, *meta.Name, spec.Ports[0].Port)
 	}).(pulumi.StringOutput)
 
 	// => Secret

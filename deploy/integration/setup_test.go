@@ -112,6 +112,11 @@ func Test_F_Setup(t *testing.T) {
 				return
 			}
 
+			// Check it has been properly pushed
+			c, err := client.GetFileContent(files[0])
+			assert.NotEmpty(c)
+			assert.Nil(err)
+
 			// 4. Update the challenge, give it hints, flags and topics
 			// XXX the strconv should not occur
 			chall, err = client.PatchChallenge(chall.ID, &api.PatchChallengeParams{
