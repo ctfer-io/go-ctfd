@@ -94,16 +94,24 @@ func WithContext(ctx context.Context) Option {
 	}
 }
 
-// call is in charge of handling common CTFd API behaviours,
-// like dealing with status codes and JSON errors.
-func call(client *Client, req *http.Request, dst any, opts ...Option) error {
+func applyOpts(req *http.Request, opts ...Option) *http.Request {
 	reqopts := &options{
 		Ctx: context.Background(),
 	}
+
 	for _, opt := range opts {
 		opt.apply(reqopts)
 	}
+
 	req = req.WithContext(reqopts.Ctx)
+
+	return req
+}
+
+// call is in charge of handling common CTFd API behaviours,
+// like dealing with status codes and JSON errors.
+func call(client *Client, req *http.Request, dst any, opts ...Option) error {
+	req = applyOpts(req, opts...)
 
 	// Set API base URL
 	newUrl, err := url.Parse("/api/v1" + req.URL.String())

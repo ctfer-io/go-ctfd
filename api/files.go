@@ -74,12 +74,13 @@ type InputFile struct {
 
 // GetFileContent is a helper leveraging the CTFd API that
 // downloads a file's content given its location.
-func (client *Client) GetFileContent(file *File) ([]byte, error) {
+func (client *Client) GetFileContent(file *File, opts ...Option) ([]byte, error) {
 	if file == nil {
 		return nil, errors.New("can't get file from a nil value")
 	}
 
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/files/%s", file.Location), nil)
+	req = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, err
