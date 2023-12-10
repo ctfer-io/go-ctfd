@@ -1,6 +1,6 @@
 module github.com/ctfer-io/go-ctfd/deploy
 
-go 1.21.3
+go 1.21
 
 // TODO find how to pass this properly to Pulumi
 // replace github.com/ctfer-io/go-ctfd => ../
