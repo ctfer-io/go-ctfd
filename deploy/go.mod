@@ -2,10 +2,11 @@ module github.com/ctfer-io/go-ctfd/deploy
 
 go 1.21.3
 
+// TODO find how to pass this properly to Pulumi
 // replace github.com/ctfer-io/go-ctfd => ../
 
 require (
-	github.com/ctfer-io/go-ctfd v0.2.0
+	github.com/ctfer-io/go-ctfd v0.3.3
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.5.5
 	github.com/pulumi/pulumi-random/sdk/v4 v4.14.0
 	github.com/pulumi/pulumi/pkg/v3 v3.95.0
@@ -90,7 +91,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
 	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
-	github.com/gorilla/schema v1.2.0 // indirect
+	github.com/gorilla/schema v1.2.1 // indirect
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
