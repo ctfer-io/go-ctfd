@@ -6,7 +6,7 @@ go 1.21
 // replace github.com/ctfer-io/go-ctfd => ../
 
 require (
-	github.com/ctfer-io/go-ctfd v0.3.3
+	github.com/ctfer-io/go-ctfd v0.3.5
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.6.1
 	github.com/pulumi/pulumi-random/sdk/v4 v4.15.0
 	github.com/pulumi/pulumi/pkg/v3 v3.99.0
