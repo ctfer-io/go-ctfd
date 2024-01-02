@@ -1,5 +1,12 @@
 package api
 
+import (
+	"net/http"
+	"net/url"
+
+	"github.com/gorilla/schema"
+)
+
 type GetTopicsParams struct {
 	Value *string `schema:"value,omitempty"`
 	Q     *string `schema:"q,omitempty"`
@@ -13,8 +20,6 @@ func (client *Client) GetTopics(params *GetTopicsParams, opts ...Option) ([]*Top
 	}
 	return topics, nil
 }
-
-// TODO support DELETE /topics
 
 type PostTopicsParams struct {
 	Challenge int    `json:"challenge"`
@@ -38,6 +43,24 @@ func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
 	return topic, nil
 }
 
-func (client *Client) DeleteTopic(id string, opts ...Option) error {
-	return delete(client, "/topics/"+id, nil, nil, opts...)
+type DeleteTopicArgs struct {
+	ID   string `schema:"target_id"`
+	Type string `schema:"type"`
+}
+
+// TODO fix this endpoint API instability, should reconsider using a DELETE method with a JSON body rather that URL-encoded parameters as for all other endpoints
+func (client *Client) DeleteTopic(params *DeleteTopicArgs, opts ...Option) error {
+	// Build request
+	req, _ := http.NewRequest(http.MethodDelete, "/topics", nil)
+	req = applyOpts(req, opts...)
+
+	// Encode parameters
+	val := url.Values{}
+	if err := schema.NewEncoder().Encode(params, val); err != nil {
+		return err
+	}
+	req.URL.RawQuery = val.Encode()
+
+	// Throw it to CTFd
+	return call(client, req, nil)
 }

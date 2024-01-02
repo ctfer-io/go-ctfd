@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strconv"
 	"testing"
 
 	"github.com/ctfer-io/go-ctfd/api"
@@ -161,7 +162,7 @@ func Test_F_Setup(t *testing.T) {
 			if !assert.Nil(err, "got error: %s", err) {
 				return
 			}
-			_, err = client.PostTopics(&api.PostTopicsParams{
+			topic, err := client.PostTopics(&api.PostTopicsParams{
 				Challenge: chall.ID,
 				Type:      "challenge", // required as the resource can't be determined by CTFd
 				Value:     "Inspection",
@@ -197,6 +198,13 @@ func Test_F_Setup(t *testing.T) {
 
 			// 7. Delete the challenge
 			// XXX the strconv should not occur
+			err = client.DeleteTopic(&api.DeleteTopicArgs{
+				ID:   strconv.Itoa(topic.ID),
+				Type: "challenge",
+			})
+			if !assert.Nil(err, "got error: %s", err) {
+				return
+			}
 			err = client.DeleteChallenge(chall.ID)
 			if !assert.Nil(err, "got error: %s", err) {
 				return
