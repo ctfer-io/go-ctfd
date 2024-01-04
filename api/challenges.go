@@ -81,6 +81,7 @@ type PatchChallengeParams struct {
 	Description    string  `json:"description"`
 	Function       string  `json:"function"`
 	ConnectionInfo *string `json:"connection_info,omitempty"`
+	Value          *int    `json:"value,omitempty"`
 	Initial        *int    `json:"initial,omitempty"`
 	Decay          *int    `json:"decay,omitempty"`
 	Minimum        *int    `json:"minimum,omitempty"`
