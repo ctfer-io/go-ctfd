@@ -6,7 +6,7 @@ type (
 		Name           string        `json:"name"`
 		Description    string        `json:"description"`
 		ConnectionInfo *string       `json:"connection_info,omitempty"`
-		NextID         int           `json:"next_id"`
+		NextID         *int          `json:"next_id"`
 		MaxAttempts    *int          `json:"max_attempts,omitempty"`
 		Function       string        `json:"function"`
 		Value          int           `json:"value"`
@@ -46,7 +46,7 @@ type (
 		ID          int    `json:"id"`
 		ChallengeID int    `json:"challenge_id"`
 		Content     string `json:"content"`
-		Data        any    `json:"data"` // TODO find an example
+		Data        string `json:"data"`
 		Type        string `json:"type"`
 		Challenge   int    `json:"challenge"` // XXX may be duplicated with ChallengeID ?
 	}
