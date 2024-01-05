@@ -1,0 +1,3 @@
+# produced by CI
+*.out
+gotest.json
