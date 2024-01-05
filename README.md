@@ -11,6 +11,6 @@
 	<a href="https://securityscorecards.dev/viewer/?uri=github.com/ctfer-io/go-ctfd"><img src="https://img.shields.io/ossf-scorecard/github.com/ctfer-io/go-ctfd?label=openssf%20scorecard&style=for-the-badge" alt="OpenSSF Scoreboard"></a>
 </div>
 
-Golang client for interacting with CTFd.
+Golang client for interacting with [CTFd](https://ctfd.io/).
 
 Last version tested on: [3.6.1](https://github.com/CTFd/CTFd/releases/tag/3.6.1).
