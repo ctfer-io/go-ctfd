@@ -1,3 +1,0 @@
-name: go-ctfd-iac
-runtime: go
-description: Infrastructure to locally test the go-ctfd API client

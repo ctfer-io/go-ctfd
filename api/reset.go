@@ -1,23 +1,24 @@
 package api
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 
+	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 )
 
 type ResetParams struct {
-	Accounts      *string `json:"accounts,omitempty"`
-	Submissions   *string `json:"submissions,omitempty"`
-	Challenges    *string `json:"challenges,omitempty"`
-	Pages         *string `json:"pages,omitempty"`
-	Notifications *string `json:"notifications,omitempty"`
+	Accounts      *string `schema:"accounts,omitempty"`
+	Submissions   *string `schema:"submissions,omitempty"`
+	Challenges    *string `schema:"challenges,omitempty"`
+	Pages         *string `schema:"pages,omitempty"`
+	Notifications *string `schema:"notifications,omitempty"`
 	// Nonce is autofilled by the API wrapper.
 	// XXX the "nonce" should not be part of the API call but rather be extracted from HTTP headers.
-	Nonce string `json:"nonce"`
+	Nonce string `schema:"nonce"`
 }
 
 func (client *Client) Reset(params *ResetParams, opts ...Option) error {
@@ -27,11 +28,16 @@ func (client *Client) Reset(params *ResetParams, opts ...Option) error {
 	}
 
 	// Build request
-	body, err := json.Marshal(params)
-	if err != nil {
-		return errors.Wrap(err, "during JSON marshalling")
+	str := ""
+	if params != nil {
+		val := url.Values{}
+		if err := schema.NewEncoder().Encode(params, val); err != nil {
+			return err
+		}
+		str = val.Encode()
 	}
-	req, _ := http.NewRequest(http.MethodPost, "/admin/reset", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPost, "/admin/reset", strings.NewReader(str))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	res, err := client.Do(req)
 	if err != nil {
