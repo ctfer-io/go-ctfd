@@ -1455,10 +1455,10 @@ github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.6.1 h1:cYXkIqTYnBs0GPtD2klB6WxntKL
 github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.6.1/go.mod h1:gOra09BSUHSonOkNc22WgbWBzktgOd17GwhiXXfurw4=
 github.com/pulumi/pulumi-random/sdk/v4 v4.15.0 h1:27R/+lbQDoidnAg8Rv4TV7R+YHS79CqNyvnP07WVaKA=
 github.com/pulumi/pulumi-random/sdk/v4 v4.15.0/go.mod h1:sJzrR8vWqiAkKFoMn/KTLEHS7HaLgGpzjXT4vaYLYo8=
-github.com/pulumi/pulumi/pkg/v3 v3.99.0 h1:Mal/ncVw16RBw+0M7jwX4mDlma/X324PXotuHJHDa7s=
-github.com/pulumi/pulumi/pkg/v3 v3.99.0/go.mod h1:Gk/N8qblqKI6+fTORH7oJi2SSWaOVTDhNwTrazoQPao=
-github.com/pulumi/pulumi/sdk/v3 v3.99.0 h1:vsFoEEdweYg3Hm6/Jlj1sE2cLtauzoqAdVbLMcC7Cw8=
-github.com/pulumi/pulumi/sdk/v3 v3.99.0/go.mod h1:wFM/6iAMlidgLDSF9QU+p3P+B+vg/xloFyVeZrVwA1w=
+github.com/pulumi/pulumi/pkg/v3 v3.98.0 h1:lQyjy31az5bMfTmsyqeeAEQMKjrLyx8IL+C27D6b+x4=
+github.com/pulumi/pulumi/pkg/v3 v3.98.0/go.mod h1:aeQmrCMwvMOIz1s6qOk+vg1oCWff5hmeRrg1vYv8eRU=
+github.com/pulumi/pulumi/sdk/v3 v3.98.0 h1:H18eCWKiv7oXy7n/dni3JxFfwvY3UEjAzjeqtaaZT+I=
+github.com/pulumi/pulumi/sdk/v3 v3.98.0/go.mod h1:/bHwzPhsCJCjzY0STmvZ7DzV5gZN6iDSXQ/gitEAyws=
 github.com/rakyll/embedmd v0.0.0-20171029212350-c8060a0752a2/go.mod h1:7jOTMgqac46PZcF54q6l2hkLEG8op93fZu61KmxWDV4=
 github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
 github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=

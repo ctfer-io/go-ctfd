@@ -115,7 +115,6 @@ github.com/cncf/xds/go v0.0.0-20230607035331-e9ce68804cb4/go.mod h1:eXthEFrGJvWH
 github.com/creack/pty v1.1.17 h1:QeVUsEDNrLBW4tMgZHvxy18sKtr6VI492kBhUfhDJNI=
 github.com/creack/pty v1.1.17/go.mod h1:MOBLtS5ELjhRRrroQr9kyvTxUAFNvYEK993ew/Vr4O4=
 github.com/creack/pty v1.1.18/go.mod h1:MOBLtS5ELjhRRrroQr9kyvTxUAFNvYEK993ew/Vr4O4=
-github.com/ctfer-io/go-ctfd v0.3.3/go.mod h1:GnWhEdXMI2PEpGZXsADzBvnU1e9MbuWQiBnSSNOY3cs=
 github.com/dlclark/regexp2 v1.4.0/go.mod h1:2pZnwuY/m+8K6iRw6wQdMtk+rH5tNGR1i55kozfMjCc=
 github.com/dnaeon/go-vcr v1.2.0 h1:zHCHvJYTMh1N7xnV7zf1m1GPBF9Ad0Jk/whtQ1663qI=
 github.com/dustin/go-humanize v1.0.1 h1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkpeCY=
@@ -172,7 +171,11 @@ github.com/pkg/sftp v1.13.1/go.mod h1:3HaPG6Dq1ILlpPZRO0HVMrsydcdLt6HRDccSgb87qR
 github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c/go.mod h1:OmDBASR4679mdNQnz2pUhc2G8CO2JrUAVFDRBDP/hJE=
 github.com/pulumi/pulumi-java/pkg v0.9.8/go.mod h1:c6rSw/+q4O0IImgJ9axxoC6QesbPYWBaG5gimbHouUQ=
 github.com/pulumi/pulumi-yaml v1.4.0/go.mod h1:1hwsXFnT7hm2ZeftY5fzjkngjs2eT/rv9MsPE48Leb4=
+github.com/pulumi/pulumi/pkg/v3 v3.98.0 h1:lQyjy31az5bMfTmsyqeeAEQMKjrLyx8IL+C27D6b+x4=
+github.com/pulumi/pulumi/pkg/v3 v3.98.0/go.mod h1:aeQmrCMwvMOIz1s6qOk+vg1oCWff5hmeRrg1vYv8eRU=
 github.com/pulumi/pulumi/sdk/v3 v3.88.1-0.20231010213836-fd8c4dd81928/go.mod h1:M2j1xLl93+NYHtyprVK9Tdyxbnjs4AivPuAKqm5goCo=
+github.com/pulumi/pulumi/sdk/v3 v3.98.0 h1:H18eCWKiv7oXy7n/dni3JxFfwvY3UEjAzjeqtaaZT+I=
+github.com/pulumi/pulumi/sdk/v3 v3.98.0/go.mod h1:/bHwzPhsCJCjzY0STmvZ7DzV5gZN6iDSXQ/gitEAyws=
 github.com/rogpeppe/go-charset v0.0.0-20180617210344-2471d30d28b4/go.mod h1:qgYeAmZ5ZIpBWTGllZSQnw97Dj+woV0toclVaRGI8pc=
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
