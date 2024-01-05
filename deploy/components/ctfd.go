@@ -99,7 +99,7 @@ func (ctfd *CTFd) provision(ctx *pulumi.Context, args *CTFdArgs, opts ...pulumi.
 					Containers: corev1.ContainerArray{
 						corev1.ContainerArgs{
 							Name:  pulumi.String("ctfd"),
-							Image: pulumi.String("ctfd/ctfd:3.6.0"),
+							Image: pulumi.String("ctfd/ctfd:3.6.1"),
 							Ports: corev1.ContainerPortArray{
 								corev1.ContainerPortArgs{
 									ContainerPort: pulumi.Int(8000),
