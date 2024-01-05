@@ -172,7 +172,7 @@ func (rd *Redis) provision(ctx *pulumi.Context, args *RedisArgs, opts ...pulumi.
 						AccessModes: pulumi.ToStringArray([]string{
 							"ReadWriteOnce",
 						}),
-						Resources: corev1.ResourceRequirementsArgs{
+						Resources: corev1.VolumeResourceRequirementsArgs{
 							Requests: pulumi.ToStringMap(map[string]string{
 								"storage": "1Gi",
 							}),
