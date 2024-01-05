@@ -6,7 +6,6 @@ type (
 		Name           string        `json:"name"`
 		Description    string        `json:"description"`
 		ConnectionInfo *string       `json:"connection_info,omitempty"`
-		NextID         *int          `json:"next_id"`
 		MaxAttempts    *int          `json:"max_attempts,omitempty"`
 		Function       string        `json:"function"`
 		Value          int           `json:"value"`
@@ -17,6 +16,7 @@ type (
 		Type           string        `json:"type"`
 		TypeDate       *Type         `json:"type_data,omitempty"`
 		State          string        `json:"state"`
+		NextID         *int          `json:"next_id"`
 		Requirements   *Requirements `json:"requirements"` // List of challenge IDs to complete before
 		Solves         int           `json:"solves"`
 		SolvedByMe     bool          `json:"solved_by_me"`
