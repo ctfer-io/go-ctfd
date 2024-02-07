@@ -317,3 +317,132 @@ func Test_F_AdvancedSetup(t *testing.T) {
 		return
 	}
 }
+
+func Test_F_UsersAndTeams(t *testing.T) {
+	// Scenario:
+	//
+	// As an Ops, your job is to import all the registered users and teams
+	// before the event such that at the very beginning you are sure no one
+	// is lost.
+
+	assert := assert.New(t)
+
+	// 1a. Get nonce and session to mock a browser first
+	nonce, session, err := api.GetNonceAndSession(CTFD_URL)
+	if !assert.Nil(err, "got error: %s", err) {
+		return
+	}
+	client := api.NewClient(CTFD_URL, nonce, session, "")
+
+	t.Cleanup(func() {
+		_ = client.Reset(&api.ResetParams{
+			Accounts:      ptr("y"),
+			Submissions:   ptr("y"),
+			Challenges:    ptr("y"),
+			Pages:         ptr("y"),
+			Notifications: ptr("y"),
+		})
+	})
+
+	// 1b. Configure the CTF
+	err = client.Setup(&api.SetupParams{
+		CTFName:                "CTFer",
+		CTFDescription:         "Ephemeral CTFd running for API tests purposes.",
+		UserMode:               "teams",
+		Name:                   "ctfer",
+		Email:                  "ctfer-io@protonmail.com",
+		Password:               "password", // This is not real, don't bother trying x)
+		ChallengeVisibility:    "admins",
+		AccountVisibility:      "private",
+		ScoreVisibility:        "hidden",
+		RegistrationVisibility: "mlc",
+		VerifyEmails:           false,
+		TeamSize:               ptr(4),
+		CTFLogo:                nil,
+		CTFBanner:              nil,
+		CTFSmallIcon:           nil,
+		CTFTheme:               "core",
+		ThemeColor:             "",
+		Start:                  "",
+		End:                    "",
+		Nonce:                  nonce,
+	})
+	if !assert.Nil(err, "got error: %s", err) {
+		return
+	}
+
+	// 1c. Create an API Key to avoid session/nonce+cookies dance
+	token, err := client.PostTokens(&api.PostTokensParams{
+		Expiration:  "2222-01-01",
+		Description: "Example API token.",
+	})
+	if !assert.Nil(err, "got error: %s", err) {
+		return
+	}
+	client.SetAPIKey(*token.Value)
+
+	// Define all users and teams
+	type User struct {
+		name, email, password string
+	}
+	type Team struct {
+		name, email, password string
+		users                 []User
+	}
+	var teams = []Team{
+		{
+			name:     "MILF CTF Team",
+			email:    "milfctf@example.com",
+			password: "password",
+			users: []User{
+				{
+					name:     "hashp4",
+					email:    "hashp4@example.com",
+					password: "password",
+				},
+				// ...
+			},
+		},
+	}
+
+	// 2. Create all the users and their teams
+	for _, team := range teams {
+		// 2a. Create team
+		tm, err := client.PostTeams(&api.PostTeamsParams{
+			Name:     team.name,
+			Email:    team.email,
+			Password: team.password,
+			Banned:   false,
+			Hidden:   false,
+			Fields:   []api.Field{},
+		})
+		if !assert.Nil(err, "got error: %s", err) {
+			return
+		}
+
+		for _, user := range team.users {
+			// 2b. Create user
+			usr, err := client.PostUsers(&api.PostUsersParams{
+				Name:     user.name,
+				Email:    user.email,
+				Password: user.password,
+				Type:     "user",
+				Verified: false,
+				Hidden:   false,
+				Banned:   false,
+				Fields:   []api.Field{},
+			})
+			if !assert.Nil(err, "got error: %s", err) {
+				return
+			}
+
+			// 2c. Join user to team
+			_, err = client.PostTeamMembers(tm.ID, &api.PostTeamsMembers{
+				UserID: usr.ID,
+			})
+			if !assert.Nil(err, "got error: %s", err) {
+				return
+			}
+		}
+	}
+}

@@ -136,7 +136,7 @@ func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 	}
 
 	// Handle errors if any
-	if len(resp.Errors) != 0 {
+	if resp.Errors != nil {
 		return fmt.Errorf("CTFd responded with errors: %v", resp.Errors)
 	}
 	if !resp.Success {
@@ -151,10 +151,10 @@ func call(client *Client, req *http.Request, dst any, opts ...Option) error {
 }
 
 type Response struct {
-	Success bool     `json:"success"`
-	Data    any      `json:"data,omitempty"`
-	Errors  []string `json:"errors,omitempty"`
-	Message *string  `json:"message,omitempty"`
+	Success bool    `json:"success"`
+	Data    any     `json:"data,omitempty"`
+	Errors  any     `json:"errors,omitempty"` // can't type it to []string due to API model instabilities
+	Message *string `json:"message,omitempty"`
 }
 
 func get(client *Client, edp string, params any, dst any, opts ...Option) error {

@@ -149,23 +149,23 @@ type (
 	}
 
 	Team struct {
-		Bracket     *string `json:"bracket"`
-		Members     []int   `json:"members,omitempty"`
-		ID          int     `json:"id"`
-		Created     string  `json:"created"`
-		Country     *string `json:"country"`
-		Email       *string `json:"email"`
-		Affiliation *string `json:"affiliation"`
-		CaptainID   *int    `json:"captain_id"`
-		Fields      []Field `json:"fields"`
-		Banned      bool    `json:"banned"`
-		Website     *string `json:"website"`
-		Hidden      bool    `json:"hidden"`
-		Secret      *bool   `json:"secret"`
-		Name        string  `json:"name"`
-		OauthID     *string `json:"oauth_id"`
-		Place       *string `json:"place,omitempty"`
-		Score       *int    `json:"score,omitempty"`
+		Bracket     *string  `json:"bracket"`
+		Members     []int    `json:"members,omitempty"`
+		ID          int      `json:"id"`
+		Created     string   `json:"created"`
+		Country     *string  `json:"country"`
+		Email       *string  `json:"email"`
+		Affiliation *string  `json:"affiliation"`
+		CaptainID   *int     `json:"captain_id"`
+		Fields      []string `json:"fields"`
+		Banned      bool     `json:"banned"`
+		Website     *string  `json:"website"`
+		Hidden      bool     `json:"hidden"`
+		Secret      *bool    `json:"secret"`
+		Name        string   `json:"name"`
+		OauthID     *string  `json:"oauth_id"`
+		Place       *string  `json:"place,omitempty"`
+		Score       *int     `json:"score,omitempty"`
 	}
 
 	User struct {

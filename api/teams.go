@@ -19,12 +19,15 @@ func (client *Client) GetTeams(params *GetTeamsParams, opts ...Option) ([]*Team,
 }
 
 type PostTeamsParams struct {
-	Name     string   `json:"name"`
-	Password string   `json:"password"`
-	Email    string   `json:"email"`
-	Banned   bool     `json:"banned"`
-	Hidden   bool     `json:"hidden"`
-	Fields   []string `json:"fields"`
+	Name        string  `json:"name"`
+	Email       string  `json:"email"`
+	Password    string  `json:"password"`
+	Website     *string `json:"website,omitempty"`
+	Affiliation *string `json:"affiliation,omitempty"`
+	Country     *string `json:"country,omitempty"`
+	Banned      bool    `json:"banned"`
+	Hidden      bool    `json:"hidden"`
+	Fields      []Field `json:"fields"`
 }
 
 func (client *Client) PostTeams(params *PostTeamsParams, opts ...Option) (*Team, error) {
@@ -48,11 +51,16 @@ func (client *Client) DeleteTeamsMe(opts ...Option) error {
 }
 
 type PatchTeamsParams struct {
-	CaptainID *int    `json:"captain_id,omitempty"`
-	Banned    *bool   `json:"banned,omitempty"`
-	Fields    []Field `json:"fields,omitempty"`
-	Hidden    *bool   `json:"hidden,omitempty"`
-	Name      *string `json:"name,omitempty"`
+	CaptainID   *int    `json:"captain_id,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Email       *string `json:"email,omitempty"`
+	Password    *string `json:"password,omitempty"`
+	Website     *string `json:"website,omitempty"`
+	Affiliation *string `json:"affiliation,omitempty"`
+	Country     *string `json:"country,omitempty"`
+	Banned      *bool   `json:"banned,omitempty"`
+	Hidden      *bool   `json:"hidden,omitempty"`
+	Fields      []Field `json:"fields"`
 }
 
 func (client *Client) PatchTeamsMe(params *PatchTeamsParams, opts ...Option) (*Team, error) {
@@ -132,12 +140,13 @@ func (client *Client) DeleteTeamMembers(id int, params *DeleteTeamMembersParams,
 	return v, nil
 }
 
-func (client *Client) PostTeamMembers(id int, params *PostTeamsMembers, opts ...Option) (*Team, error) {
-	team := &Team{}
+func (client *Client) PostTeamMembers(id int, params *PostTeamsMembers, opts ...Option) (int, error) {
+	// Use slice as a workaround due to API instabilities
+	var team []int
 	if err := post(client, fmt.Sprintf("/teams/%d/members", id), params, &team, opts...); err != nil {
-		return nil, err
+		return 0, err
 	}
-	return team, nil
+	return team[0], nil
 }
 
 func (client *Client) GetTeamAwards(id int, opts ...Option) ([]*Award, error) {

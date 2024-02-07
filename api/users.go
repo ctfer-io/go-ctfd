@@ -20,14 +20,18 @@ func (client *Client) GetUsers(params *GetUsersParams, opts ...Option) ([]*User,
 }
 
 type PostUsersParams struct {
-	Name     string   `json:"name"`
-	Password string   `json:"password"`
-	Email    string   `json:"email"`
-	Type     string   `json:"type"`
-	Banned   bool     `json:"banned"`
-	Hidden   bool     `json:"hidden"`
-	Verified bool     `json:"verified"`
-	Fields   []string `json:"fields"`
+	Name        string  `json:"name"`
+	Email       string  `json:"email"`
+	Language    *string `json:"language,omitempty"`
+	Password    string  `json:"password"`
+	Website     *string `json:"website,omitempty"`
+	Affiliation *string `json:"affiliation,omitempty"`
+	Country     *string `json:"country,omitempty"`
+	Type        string  `json:"type"` // "user" or "admin"
+	Verified    bool    `json:"verified"`
+	Hidden      bool    `json:"hidden"`
+	Banned      bool    `json:"banned"`
+	Fields      []Field `json:"fields"`
 }
 
 func (client *Client) PostUsers(params *PostUsersParams, opts ...Option) (*User, error) {
@@ -49,7 +53,15 @@ func (client *Client) GetUsersMe(opts ...Option) (*User, error) {
 type PatchUsersParams struct {
 	Name        string  `json:"name"`
 	Email       string  `json:"email"`
-	Affiliation string  `json:"affiliation"`
+	Language    *string `json:"language,omitempty"`
+	Password    *string `json:"password,omitempty"`
+	Website     *string `json:"website,omitempty"`
+	Affiliation *string `json:"affiliation,omitempty"`
+	Country     *string `json:"country,omitempty"`
+	Type        string  `json:"type"`
+	Verified    bool    `json:"verified"`
+	Hidden      bool    `json:"hidden"`
+	Banned      bool    `json:"banned"`
 	Fields      []Field `json:"fields"`
 }
 
