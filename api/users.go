@@ -58,10 +58,10 @@ type PatchUsersParams struct {
 	Website     *string `json:"website,omitempty"`
 	Affiliation *string `json:"affiliation,omitempty"`
 	Country     *string `json:"country,omitempty"`
-	Type        string  `json:"type"`
-	Verified    bool    `json:"verified"`
-	Hidden      bool    `json:"hidden"`
-	Banned      bool    `json:"banned"`
+	Type        *string `json:"type,omitempty"`
+	Verified    *bool   `json:"verified,omitempty"`
+	Hidden      *bool   `json:"hidden,omitempty"`
+	Banned      *bool   `json:"banned,omitempty"`
 	Fields      []Field `json:"fields"`
 }
 

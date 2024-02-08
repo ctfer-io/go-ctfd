@@ -25,7 +25,7 @@ type PostAwardsParams struct {
 	Category    string `json:"category"`
 	Icon        string `json:"icon"`
 	UserID      int    `json:"user_id"`
-	Value       string `json:"value"`
+	Value       int    `json:"value"`
 }
 
 func (client *Client) PostAwards(params *PostAwardsParams, opts ...Option) (*Award, error) {
