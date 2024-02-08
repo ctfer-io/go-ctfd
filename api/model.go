@@ -149,21 +149,21 @@ type (
 	}
 
 	Team struct {
-		Bracket     *string  `json:"bracket"`
+		Bracket     *string  `json:"bracket,omitempty"`
 		Members     []int    `json:"members,omitempty"`
 		ID          int      `json:"id"`
 		Created     string   `json:"created"`
-		Country     *string  `json:"country"`
-		Email       *string  `json:"email"`
-		Affiliation *string  `json:"affiliation"`
-		CaptainID   *int     `json:"captain_id"`
+		Country     *string  `json:"country,omitempty"`
+		Email       *string  `json:"email,omitempty"`
+		Affiliation *string  `json:"affiliation,omitempty"`
+		CaptainID   *int     `json:"captain_id,omitempty"`
 		Fields      []string `json:"fields"`
 		Banned      bool     `json:"banned"`
-		Website     *string  `json:"website"`
+		Website     *string  `json:"website,omitempty"`
 		Hidden      bool     `json:"hidden"`
-		Secret      *bool    `json:"secret"`
+		Secret      *bool    `json:"secret,omitempty"`
 		Name        string   `json:"name"`
-		OauthID     *string  `json:"oauth_id"`
+		OauthID     *string  `json:"oauth_id,omitempty"`
 		Place       *string  `json:"place,omitempty"`
 		Score       *int     `json:"score,omitempty"`
 	}
@@ -171,14 +171,15 @@ type (
 	User struct {
 		Bracket     *string `json:"bracket"`
 		ID          int     `json:"id"`
-		TeamID      *int    `json:"team_id"`
-		Country     *string `json:"country"`
-		Affiliation *string `json:"affiliation"`
+		TeamID      *int    `json:"team_id,omitempty"`
+		Country     *string `json:"country,omitempty"`
+		Language    *string `json:"language,omitempty"`
+		Affiliation *string `json:"affiliation,omitempty"`
 		Fields      []Field `json:"fields"`
-		Website     *string `json:"website"`
+		Website     *string `json:"website,omitempty"`
 		Name        string  `json:"name"`
 		Email       *string `json:"email,omitempty"`
-		OauthID     *string `json:"oauth_id"`
+		OauthID     *string `json:"oauth_id,omitempty"`
 		Verified    *bool   `json:"verified,omitempty"`
 		Banned      *bool   `json:"banned,omitempty"`
 		Hidden      *bool   `json:"hidden,omitempty"`
