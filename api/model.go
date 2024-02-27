@@ -40,6 +40,7 @@ type (
 		ID       int    `json:"id"`
 		Type     string `json:"type"`
 		Location string `json:"location"`
+		SHA1sum  string `json:"sha1sum"`
 	}
 
 	Flag struct {
@@ -146,6 +147,8 @@ type (
 			Name    string `json:"name"`
 			Score   int    `json:"score"`
 		} `json:"members"`
+		BracketID   *string `json:"bracket_id"`
+		BracketName *string `json:"bracket_name"`
 	}
 
 	Team struct {

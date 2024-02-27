@@ -30,16 +30,21 @@ type PostFilesParams struct {
 	File      *InputFile
 	CSRF      string // XXX should not be part of the request
 	Challenge int    // TODO May be additional i.e. pages don't need it
+	Location  *string
 }
 
 func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, error) {
 	// Maps parameters to values
-	b, ct, err := encodeMultipart(map[string]any{
+	mp := map[string]any{
 		"file":      params.File,
 		"nonce":     params.CSRF,
 		"challenge": params.Challenge,
 		"type":      "challenge",
-	})
+	}
+	if params.Location != nil {
+		mp["location"] = *params.Location
+	}
+	b, ct, err := encodeMultipart(mp)
 	if err != nil {
 		return nil, err
 	}
