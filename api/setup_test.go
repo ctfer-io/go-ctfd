@@ -97,9 +97,11 @@ func Test_F_Setup(t *testing.T) {
 
 	// 3. Push a file
 	files, err := client.PostFiles(&api.PostFilesParams{
-		File: &api.InputFile{
-			Name:    "icmp.pcap",
-			Content: []byte("bla bla bla CTFER{flag} bip boop"),
+		Files: []*api.InputFile{
+			{
+				Name:    "icmp.pcap",
+				Content: []byte("bla bla bla CTFER{flag} bip boop"),
+			},
 		},
 		Challenge: chall.ID,
 	})

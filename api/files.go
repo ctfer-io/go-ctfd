@@ -27,17 +27,16 @@ func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File,
 }
 
 type PostFilesParams struct {
-	File      *InputFile
-	CSRF      string // XXX should not be part of the request
-	Challenge int    // TODO May be additional i.e. pages don't need it
+	Files     []*InputFile // XXX backend code shows it could be a list, but not the doc
+	Challenge int          // TODO May be additional i.e. pages don't need it
 	Location  *string
 }
 
 func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, error) {
 	// Maps parameters to values
 	mp := map[string]any{
-		"file":      params.File,
-		"nonce":     params.CSRF,
+		"file":      params.Files,
+		"nonce":     client.nonce,
 		"challenge": params.Challenge,
 		"type":      "challenge",
 	}
@@ -124,6 +123,20 @@ func encodeMultipart(values map[string]any) (io.Reader, string, error) {
 					return nil, "", err
 				}
 				content = file.Content
+			}
+		} else if files, ok := v.([]*InputFile); ok {
+			if files == nil {
+				if fw, err = w.CreateFormFile(k, ""); err != nil {
+					return nil, "", err
+				}
+				content = []byte{}
+			} else {
+				for _, file := range files {
+					if fw, err = w.CreateFormFile(k, file.Name); err != nil {
+						return nil, "", err
+					}
+					content = file.Content
+				}
 			}
 		} else {
 			if fw, err = w.CreateFormField(k); err != nil {

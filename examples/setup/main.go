@@ -76,6 +76,24 @@ func main() {
 	}
 	fmt.Printf("    Created challenge %d\n", ch.ID)
 
+	// Add files to it
+	files, err := client.PostFiles(&ctfd.PostFilesParams{
+		Files: []*ctfd.InputFile{
+			{
+				Name:    "file1",
+				Content: []byte(`toto 1`),
+			}, {
+				Name:    "file2",
+				Content: []byte(`toto 2`),
+			},
+		},
+		Challenge: ch.ID,
+	})
+	if err != nil {
+		log.Fatalf("Creating files: %s", err)
+	}
+	fmt.Printf("    Created %d files\n", len(files))
+
 	// Add a flag to solve it
 	fmt.Println("[~] Updating challenge")
 	f, err := client.PostFlags(&ctfd.PostFlagsParams{
