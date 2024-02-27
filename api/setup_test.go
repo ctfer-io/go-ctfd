@@ -437,7 +437,7 @@ func Test_F_UsersAndTeams(t *testing.T) {
 			}
 
 			// 2c. Join user to team
-			_, err = client.PostTeamMembers(tm.ID, &api.PostTeamsMembers{
+			_, err = client.PostTeamMembers(tm.ID, &api.PostTeamsMembersParams{
 				UserID: usr.ID,
 			})
 			if !assert.Nil(err, "got error: %s", err) {

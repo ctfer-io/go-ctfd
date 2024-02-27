@@ -71,11 +71,11 @@ func (client *Client) PatchTeamsMe(params *PatchTeamsParams, opts ...Option) (*T
 	return team, nil
 }
 
-type PostTeamsMembers struct {
+type PostTeamsMembersParams struct {
 	UserID int `json:"user_id"`
 }
 
-func (client *Client) PostTeamsMeMembers(params *PostTeamsMembers, opts ...Option) (*Team, error) {
+func (client *Client) PostTeamsMeMembers(params *PostTeamsMembersParams, opts ...Option) (*Team, error) {
 	team := &Team{}
 	if err := post(client, "/teams/me/members", params, &team, opts...); err != nil {
 		return nil, err
@@ -140,7 +140,7 @@ func (client *Client) DeleteTeamMembers(id int, params *DeleteTeamMembersParams,
 	return v, nil
 }
 
-func (client *Client) PostTeamMembers(id int, params *PostTeamsMembers, opts ...Option) (int, error) {
+func (client *Client) PostTeamMembers(id int, params *PostTeamsMembersParams, opts ...Option) (int, error) {
 	// Use slice as a workaround due to API instabilities
 	var team []int
 	if err := post(client, fmt.Sprintf("/teams/%d/members", id), params, &team, opts...); err != nil {
