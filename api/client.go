@@ -63,7 +63,7 @@ func (client *Client) Do(req *http.Request) (*http.Response, error) {
 		req.Header.Set("Content-Type", "application/json") // XXX this is necessary for GET method but should not, when call uses the APIProvider behaviour
 	}
 	if client.apiKey != "" {
-		req.Header.Set("Authorization", "Token "+client.apiKey) // XXX the "Token" value should be properly documented in API
+		req.Header.Set("Authorization", "Token "+client.apiKey)
 	} else {
 		req.Header.Set("CSRF-Token", client.nonce)
 		req.Header.Set("Cookie", "session="+client.session)
