@@ -26,7 +26,6 @@ type SetupParams struct {
 	ThemeColor             string
 	Start                  string
 	End                    string
-	Nonce                  string // XXX this should not be part of the API, but is required
 }
 
 // WARNING: this endpoint is not officially supported.
@@ -51,7 +50,7 @@ func (client *Client) Setup(params *SetupParams, opts ...Option) error {
 		"start":                   params.Start,
 		"end":                     params.End,
 		"_submit":                 "Finish",
-		"nonce":                   params.Nonce,
+		"nonce":                   client.nonce,
 	}
 	if params.TeamSize != nil {
 		mp["team_size"] = strconv.Itoa(*params.TeamSize)

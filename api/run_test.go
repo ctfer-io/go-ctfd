@@ -62,7 +62,6 @@ func Test_F_CTF(t *testing.T) {
 		ThemeColor:             "",
 		Start:                  "",
 		End:                    "",
-		Nonce:                  nonce,
 	})
 	if !assert.Nil(err, "got error: %s", err) {
 		return

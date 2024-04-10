@@ -60,7 +60,6 @@ func Test_F_Setup(t *testing.T) {
 		ThemeColor:             "",
 		Start:                  "",
 		End:                    "",
-		Nonce:                  nonce,
 	})
 	if !assert.Nil(err, "got error: %s", err) {
 		return
@@ -263,7 +262,6 @@ func Test_F_AdvancedSetup(t *testing.T) {
 		ThemeColor:             "",
 		Start:                  "",
 		End:                    "",
-		Nonce:                  nonce,
 	})
 	if !assert.Nil(err, "got error: %s", err) {
 		return
@@ -367,7 +365,6 @@ func Test_F_UsersAndTeams(t *testing.T) {
 		ThemeColor:             "",
 		Start:                  "",
 		End:                    "",
-		Nonce:                  nonce,
 	})
 	if !assert.Nil(err, "got error: %s", err) {
 		return
