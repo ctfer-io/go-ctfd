@@ -169,7 +169,7 @@ func get(client *Client, edp string, params any, dst any, opts ...Option) error 
 		req.URL.RawQuery = val.Encode()
 	}
 
-	return call(client, req, dst)
+	return call(client, req, dst, opts...)
 }
 
 func post(client *Client, edp string, params any, dst any, opts ...Option) error {
@@ -179,7 +179,7 @@ func post(client *Client, edp string, params any, dst any, opts ...Option) error
 	}
 	req, _ := http.NewRequest(http.MethodPost, edp, bytes.NewBuffer(body))
 
-	return call(client, req, dst)
+	return call(client, req, dst, opts...)
 }
 
 func patch(client *Client, edp string, params any, dst any, opts ...Option) error {
@@ -189,7 +189,7 @@ func patch(client *Client, edp string, params any, dst any, opts ...Option) erro
 	}
 	req, _ := http.NewRequest(http.MethodPatch, edp, bytes.NewBuffer(body))
 
-	return call(client, req, dst)
+	return call(client, req, dst, opts...)
 }
 
 func delete(client *Client, edp string, params any, dst any, opts ...Option) (err error) {
@@ -202,5 +202,5 @@ func delete(client *Client, edp string, params any, dst any, opts ...Option) (er
 	}
 	req, _ := http.NewRequest(http.MethodDelete, edp, bytes.NewBuffer(body))
 
-	return call(client, req, dst)
+	return call(client, req, dst, opts...)
 }
