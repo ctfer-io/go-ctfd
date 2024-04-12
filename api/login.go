@@ -12,7 +12,6 @@ import (
 type LoginParams struct {
 	Name     string
 	Password string
-	Nonce    string // XXX this should not be part of the API
 }
 
 // Returns the session value or an error.
@@ -25,7 +24,7 @@ func (client *Client) Login(params *LoginParams, opts ...Option) error {
 	val := url.Values{}
 	val.Set("name", params.Name)
 	val.Set("password", params.Password)
-	val.Set("nonce", params.Nonce)
+	val.Set("nonce", client.nonce)
 	val.Set("_submit", "Submit")
 
 	req, _ := http.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(val.Encode()))
