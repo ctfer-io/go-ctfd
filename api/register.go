@@ -2,7 +2,6 @@ package api
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -30,22 +29,11 @@ func (client *Client) Register(params *RegisterParams, opts ...Option) error {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusFound {
+	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("CTFd responded with status code %d, which could be due to email reuse", res.StatusCode)
 	}
 
 	// Update session to track user then fetch nonce for later API calls
-	cookieFound := false
-	for _, cookie := range res.Cookies() {
-		if cookie.Name == "session" {
-			client.session = cookie.Value
-			cookieFound = true
-			break
-		}
-	}
-	if !cookieFound {
-		return errors.New("session cookie not found, may be due to server misconfiguration (not setup yet) or API instability")
-	}
 	req, _ = http.NewRequest(http.MethodGet, "/", nil)
 	res, err = client.Do(req)
 	if err != nil {

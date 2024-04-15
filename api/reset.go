@@ -45,7 +45,7 @@ func (client *Client) Reset(params *ResetParams, opts ...Option) error {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusFound {
+	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("CTFd responded with status code %d", res.StatusCode)
 	}
 

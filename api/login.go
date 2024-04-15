@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-
-	"github.com/pkg/errors"
 )
 
 type LoginParams struct {
@@ -35,7 +33,7 @@ func (client *Client) Login(params *LoginParams, opts ...Option) error {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusFound {
+	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("CTFd responded with status code %d", res.StatusCode)
 	}
 
@@ -45,12 +43,5 @@ func (client *Client) Login(params *LoginParams, opts ...Option) error {
 		return err
 	}
 	client.nonce = nonce
-
-	for _, cookie := range res.Cookies() {
-		if cookie.Name == "session" {
-			client.session = cookie.Value
-			return nil
-		}
-	}
-	return errors.New("session cookie not found")
+	return nil
 }

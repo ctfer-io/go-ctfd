@@ -3,8 +3,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 func (client *Client) Logout(opts ...Option) error {
@@ -15,7 +13,7 @@ func (client *Client) Logout(opts ...Option) error {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusFound {
+	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("CTFd responded with status code %d", res.StatusCode)
 	}
 
@@ -25,12 +23,5 @@ func (client *Client) Logout(opts ...Option) error {
 		return err
 	}
 	client.nonce = nonce
-
-	for _, cookie := range res.Cookies() {
-		if cookie.Name == "session" {
-			client.session = cookie.Value
-			break
-		}
-	}
-	return errors.New("session cookie not found")
+	return nil
 }

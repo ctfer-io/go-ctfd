@@ -21,10 +21,10 @@ func NewClient(url, nonce, session, apiKey string) *Client {
 	return &Client{
 		sub: &http.Client{
 			Jar: jar,
-			// Don't follow redirections
-			CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
-				return http.ErrUseLastResponse
-			},
+			// // Don't follow redirections
+			// CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
+			// 	return http.ErrUseLastResponse
+			// },
 		},
 		url:     url,
 		nonce:   nonce,

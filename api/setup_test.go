@@ -75,6 +75,21 @@ func Test_F_Setup(t *testing.T) {
 	}
 	client.SetAPIKey(*token.Value)
 
+	// 1d. Logout because we don't know what could happen with a mouse on the UI
+	err = client.Logout()
+	if !assert.Nil(err, "got error: %s", err) {
+		return
+	}
+
+	// 1e. Relog :)
+	err = client.Login(&api.LoginParams{
+		Name:     "ctfer",
+		Password: "password",
+	})
+	if !assert.Nil(err, "got error: %s", err) {
+		return
+	}
+
 	// 2. Create a challenge
 	chall, err := client.PostChallenges(&api.PostChallengesParams{
 		Name:           "Stealing data",
