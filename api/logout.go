@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 func (client *Client) Logout(opts ...Option) error {
@@ -23,5 +24,15 @@ func (client *Client) Logout(opts ...Option) error {
 		return err
 	}
 	client.nonce = nonce
+
+	u, _ := url.Parse(client.url)
+	hds := client.sub.Jar.Cookies(u)
+	for _, hd := range hds {
+		if hd.Name == "session" {
+			client.session = hd.Value
+			break
+		}
+	}
+
 	return nil
 }

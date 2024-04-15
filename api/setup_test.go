@@ -81,7 +81,7 @@ func Test_F_Setup(t *testing.T) {
 		return
 	}
 
-	// 1e. Relog :)
+	// 1e. Relog, and drop the use of the API token because... why not ¯\_(ツ)_/¯
 	err = client.Login(&api.LoginParams{
 		Name:     "ctfer",
 		Password: "password",
@@ -89,6 +89,7 @@ func Test_F_Setup(t *testing.T) {
 	if !assert.Nil(err, "got error: %s", err) {
 		return
 	}
+	client.SetAPIKey("")
 
 	// 2. Create a challenge
 	chall, err := client.PostChallenges(&api.PostChallengesParams{
