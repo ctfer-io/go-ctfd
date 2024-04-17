@@ -247,6 +247,12 @@ type (
 		Value   string `json:"value"` // seems could be int/bool/string, let CTFd interfer type
 	}
 
+	ThemeImage struct {
+		ID    int     `json:"id"`
+		Key   string  `json:"key"`
+		Value *string `json:"value"`
+	}
+
 	Page struct {
 		Files        []any   `json:"files"` // XXX find model
 		ID           int     `json:"id"`
