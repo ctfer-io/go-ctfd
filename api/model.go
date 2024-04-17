@@ -22,6 +22,13 @@ type (
 		SolvedByMe     bool          `json:"solved_by_me"`
 	}
 
+	Bracket struct {
+		ID          int    `json:"id"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Type        string `json:"type"`
+	}
+
 	Type struct {
 		ID        *string `json:"id,omitempty"`
 		Name      string  `json:"name"`
