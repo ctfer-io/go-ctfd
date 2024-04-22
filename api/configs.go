@@ -71,7 +71,7 @@ type PatchConfigsParams struct {
 	MailTLS                            *bool   `json:"mail_tls,omitempty"`
 	MailUseAuth                        *bool   `json:"mail_useauth,omitempty"`
 	MailUsername                       *string `json:"mail_username,omitempty"`
-	PasswordChangelertBody             *string `json:"password_change_alert_body,omitempty"`
+	PasswordChangeAlertBody            *string `json:"password_change_alert_body,omitempty"`
 	PasswordChangeAlertSubject         *string `json:"password_change_alert_subject,omitempty"`
 	PasswordResetBody                  *string `json:"password_reset_body,omitempty"`
 	PasswordResetSubject               *string `json:"password_reset_subject,omitempty"`
