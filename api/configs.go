@@ -31,13 +31,13 @@ type PatchConfigsParams struct {
 	// Accounts
 
 	DomainWhitelist            *string `json:"domain_whitelist,omitempty"`
-	IncorrectSubmissionsPerMin *string `json:"incorrect_submissions_per_min,omitempty"`
+	IncorrectSubmissionsPerMin *int    `json:"incorrect_submissions_per_min,omitempty"`
 	NameChanges                *bool   `json:"name_changes,omitempty"`
-	NumTeams                   *string `json:"num_teams,omitempty"`
-	NumUsers                   *string `json:"num_users,omitempty"`
+	NumTeams                   *int    `json:"num_teams,omitempty"`
+	NumUsers                   *int    `json:"num_users,omitempty"`
 	TeamCreation               *bool   `json:"team_creation,omitempty"`
 	TeamDisbanding             *string `json:"team_disbanding,omitempty"`
-	TeamSize                   *string `json:"team_size,omitempty"`
+	TeamSize                   *int    `json:"team_size,omitempty"`
 	VerifyEmails               *bool   `json:"verify_emails,omitempty"`
 
 	// Pages
