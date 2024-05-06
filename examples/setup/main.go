@@ -86,7 +86,7 @@ func main() {
 				Content: []byte(`toto 2`),
 			},
 		},
-		Challenge: ch.ID,
+		Challenge: &ch.ID,
 	})
 	if err != nil {
 		log.Fatalf("Creating files: %s", err)

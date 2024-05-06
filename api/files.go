@@ -28,17 +28,19 @@ func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File,
 
 type PostFilesParams struct {
 	Files     []*InputFile // XXX backend code shows it could be a list, but not the doc
-	Challenge int          // TODO May be additional i.e. pages don't need it
+	Challenge *int
 	Location  *string
 }
 
 func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, error) {
 	// Maps parameters to values
 	mp := map[string]any{
-		"file":      params.Files,
-		"nonce":     client.nonce,
-		"challenge": params.Challenge,
-		"type":      "challenge",
+		"file":  params.Files,
+		"nonce": client.nonce,
+		"type":  "challenge",
+	}
+	if params.Challenge != nil {
+		mp["challenge"] = *params.Challenge
 	}
 	if params.Location != nil {
 		mp["location"] = *params.Location

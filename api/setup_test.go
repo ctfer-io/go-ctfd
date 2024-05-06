@@ -118,7 +118,7 @@ func Test_F_Setup(t *testing.T) {
 				Content: []byte("bla bla bla CTFER{flag} bip boop"),
 			},
 		},
-		Challenge: chall.ID,
+		Challenge: &chall.ID,
 	})
 	assert.NotEmpty(files)
 	if !assert.Nil(err, "got error: %s", err) {
