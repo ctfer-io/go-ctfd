@@ -47,7 +47,7 @@ func main() {
 	// Create API Key
 	fmt.Println("[+] Creating API Token")
 	token, err := client.PostTokens(&ctfd.PostTokensParams{
-		Expiration:  "2024-05-14",
+		Expiration:  "2222-02-02",
 		Description: "Example API token.",
 	})
 	if err != nil {
@@ -143,6 +143,19 @@ func main() {
 
 	fmt.Printf("ch: %+v\n", ch)
 	fmt.Printf("ch.Requirements: %+v\n", ch.Requirements)
+
+	// Export challenges
+	fmt.Println("[+] Exporting table \"challenges\"")
+	b, err := client.ExportRaw(&ctfd.ExportRawParams{
+		Type: "csv",
+		Args: ctfd.ExportRawArgsParams{
+			Table: ptr("challenges"),
+		},
+	})
+	if err != nil {
+		log.Fatalf("    Failed: %s", err)
+	}
+	fmt.Printf("b: %s\n", b)
 }
 
 func ptr[T any](t T) *T {

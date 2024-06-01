@@ -120,7 +120,9 @@ type (
 		TeamID      int    `json:"team_id"` // XXX may be duplicated with team.id ?
 		IP          string `json:"ip"`
 		ChallengeID int    `json:"challenge_id"`
-		UserID      int    `json:"user_id"` // XXX may be duplicated with user.id ?
+		AccountID   int    `json:"account_id"` // XXX introducted in 3.7.1, clearly a duplication of user_id...
+		UserID      int    `json:"user_id"`    // XXX may be duplicated with user.id ?
+		Value       int    `json:"value"`
 		Team        struct {
 			ID   int    `json:"id"`
 			Name string `json:"name"`
@@ -141,6 +143,7 @@ type (
 	}
 
 	Scoreboard struct {
+		ID          int    `json:"id"`
 		Pos         int    `json:"pos"`
 		AccountId   int    `json:"account_id"`
 		AccountURL  string `json:"account_url"`
@@ -154,8 +157,9 @@ type (
 			Name    string `json:"name"`
 			Score   int    `json:"score"`
 		} `json:"members"`
-		BracketID   *string `json:"bracket_id"`
-		BracketName *string `json:"bracket_name"`
+		Solves      []*Submission `json:"solves"`
+		BracketID   *string       `json:"bracket_id"`
+		BracketName *string       `json:"bracket_name"`
 	}
 
 	Team struct {
