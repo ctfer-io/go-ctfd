@@ -37,10 +37,11 @@ func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*Fil
 	mp := map[string]any{
 		"file":  params.Files,
 		"nonce": client.nonce,
-		"type":  "challenge",
+		"type":  "standard",
 	}
 	if params.Challenge != nil {
 		mp["challenge"] = *params.Challenge
+		mp["type"] = "challenge"
 	}
 	if params.Location != nil {
 		mp["location"] = *params.Location
