@@ -28,6 +28,10 @@ type PatchConfigsParams struct {
 	ThemeHeader   *string `json:"theme_header,omitempty"`
 	ThemeSettings *string `json:"theme_settings,omitempty"`
 
+	// Localization
+
+	DefaultLocale *string `json:"default_locale,omitempty"`
+
 	// Accounts
 
 	DomainWhitelist            *string `json:"domain_whitelist,omitempty"`
