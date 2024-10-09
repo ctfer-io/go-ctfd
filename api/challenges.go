@@ -26,6 +26,7 @@ type PostChallengesParams struct {
 	Name           string        `json:"name"`
 	Category       string        `json:"category"`
 	Description    string        `json:"description"`
+	Attribution    *string       `json:"attribution,omitempty"`
 	Function       string        `json:"function"`
 	ConnectionInfo *string       `json:"connection_info,omitempty"`
 	Value          int           `json:"value"`
@@ -81,6 +82,7 @@ type PatchChallengeParams struct {
 	Name           string  `json:"name"`
 	Category       string  `json:"category"`
 	Description    string  `json:"description"`
+	Attribution    *string `json:"attribution,omitempty"`
 	Function       string  `json:"function"`
 	ConnectionInfo *string `json:"connection_info,omitempty"`
 	Value          *int    `json:"value,omitempty"`
