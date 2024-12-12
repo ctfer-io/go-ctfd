@@ -96,7 +96,7 @@ func Test_F_Setup(t *testing.T) {
 		Name:           "Stealing data",
 		Category:       "network",
 		Description:    "The network administrator just sent you the info that some strange packets where going out of a server.\nAt first glance, it is an internal one.\nCan you tell us what it is ?",
-		Function:       "logarithmic",
+		Function:       ptr("logarithmic"),
 		ConnectionInfo: ptr("ssh -l pandatix@master.pandatix.dev"),
 		MaxAttempts:    ptr(3),
 		Initial:        ptr(500),
