@@ -8,7 +8,7 @@ type (
 		Attribution    *string       `json:"attribution"`
 		ConnectionInfo *string       `json:"connection_info,omitempty"`
 		MaxAttempts    *int          `json:"max_attempts,omitempty"`
-		Function       string        `json:"function"`
+		Function       *string       `json:"function,omitempty"`
 		Value          int           `json:"value"`
 		Initial        *int          `json:"initial,omitempty"`
 		Decay          *int          `json:"decay,omitempty"`

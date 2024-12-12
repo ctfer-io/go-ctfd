@@ -62,7 +62,7 @@ func main() {
 		Category:       "crypto",
 		Description:    "...",
 		Attribution:    ptr("pandatix"),
-		Function:       "logarithmic",
+		Function:       ptr("logarithmic"),
 		ConnectionInfo: ptr("ssh -l user@crypto1.ctfer.io"),
 		MaxAttempts:    ptr(3),
 		Initial:        ptr(500),
