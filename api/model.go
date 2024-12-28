@@ -5,7 +5,7 @@ type (
 		ID             int           `json:"id"`
 		Name           string        `json:"name"`
 		Description    string        `json:"description"`
-		Attribution    *string       `json:"attribution"`
+		Attribution    *string       `json:"attribution,omitempty"`
 		ConnectionInfo *string       `json:"connection_info,omitempty"`
 		MaxAttempts    *int          `json:"max_attempts,omitempty"`
 		Function       *string       `json:"function,omitempty"`
