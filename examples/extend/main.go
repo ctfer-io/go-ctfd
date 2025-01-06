@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/ctfer-io/go-ctfd/api"
 )
@@ -20,7 +17,7 @@ func main() {
 	ctx := context.Background()
 	cli := api.NewClient(url, "", "", apiKey)
 
-	chall, err := PostChallenges(cli, ctx, &MyPluginPostChallengeParams{
+	chall, err := PostChallenges(cli, &PluginPostChallengesParams{
 		PostChallengesParams: api.PostChallengesParams{
 			Name:        "My challenge",
 			Description: "Super duper description",
@@ -33,7 +30,7 @@ func main() {
 			"one": true,
 			"two": false,
 		},
-	})
+	}, api.WithContext(ctx))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +38,7 @@ func main() {
 	fmt.Printf("[%d] new_field3: %v\n", chall.ID, chall.NewField3)
 }
 
-type MyPluginPostChallengeParams struct {
+type PluginPostChallengesParams struct {
 	api.PostChallengesParams
 
 	NewField1 string          `json:"new_field1"`
@@ -58,37 +55,16 @@ type MyPluginChallenge struct {
 	NewField3 int             `json:"new_field3"`
 }
 
-func PostChallenges(client *api.Client, ctx context.Context, params *MyPluginPostChallengeParams) (*MyPluginChallenge, error) {
+func PostChallenges(client *api.Client, params *PluginPostChallengesParams, opts ...api.Option) (*MyPluginChallenge, error) {
 	if params == nil {
-		params = &MyPluginPostChallengeParams{}
+		params = &PluginPostChallengesParams{}
 	}
 	// ... default any value if required, check values (e.g. integer boundaries)
 
-	// Create your API object
 	chall := &MyPluginChallenge{}
-
-	// Make the call
-	buf := &bytes.Buffer{}
-	if err := json.NewEncoder(buf).Encode(params); err != nil {
+	if err := client.Post("/plugins/my_plugin/challenges", params, chall, opts...); err != nil {
 		return nil, err
 	}
-	req, _ := http.NewRequestWithContext(ctx, http.MethodPost, "/api/v1/plugins/my_plugin/challenges", nil)
-	res, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	// Decode the response
-	resp := api.Response{
-		Data: chall,
-	}
-	if err := json.NewDecoder(res.Body).Decode(&resp); err != nil {
-		return nil, err
-	}
-
-	// ... do any API check you would like to
-
 	return chall, nil
 }
 
