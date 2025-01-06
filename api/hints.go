@@ -11,7 +11,7 @@ type GetHintsParams struct {
 
 func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint, error) {
 	hints := []*Hint{}
-	if err := get(client, "/hints", params, &hints, opts...); err != nil {
+	if err := client.Get("/hints", params, &hints, opts...); err != nil {
 		return nil, err
 	}
 	return hints, nil
@@ -26,7 +26,7 @@ type PostHintsParams struct {
 
 func (client *Client) PostHints(params *PostHintsParams, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
-	if err := post(client, "/hints", params, &hint, opts...); err != nil {
+	if err := client.Post("/hints", params, &hint, opts...); err != nil {
 		return nil, err
 	}
 	return hint, nil
@@ -34,7 +34,7 @@ func (client *Client) PostHints(params *PostHintsParams, opts ...Option) (*Hint,
 
 func (client *Client) GetHint(id string, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
-	if err := get(client, "/hints/"+id, nil, &hint, opts...); err != nil {
+	if err := client.Get("/hints/"+id, nil, &hint, opts...); err != nil {
 		return nil, err
 	}
 	return hint, nil
@@ -48,12 +48,12 @@ type PatchHintsParams struct {
 }
 
 func (client *Client) DeleteHint(id string, opts ...Option) error {
-	return delete(client, "/hints/"+id, nil, nil, opts...)
+	return client.Delete("/hints/"+id, nil, nil, opts...)
 }
 
 func (client *Client) PatchHint(id string, params *PatchHintsParams, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
-	if err := patch(client, "/hints/"+id, params, &hint, opts...); err != nil {
+	if err := client.Patch("/hints/"+id, params, &hint, opts...); err != nil {
 		return nil, err
 	}
 	return hint, nil

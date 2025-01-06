@@ -15,7 +15,7 @@ type GetTopicsParams struct {
 
 func (client *Client) GetTopics(params *GetTopicsParams, opts ...Option) ([]*Topic, error) {
 	topics := []*Topic{}
-	if err := get(client, "/topics", params, &topics, opts...); err != nil {
+	if err := client.Get("/topics", params, &topics, opts...); err != nil {
 		return nil, err
 	}
 	return topics, nil
@@ -29,7 +29,7 @@ type PostTopicsParams struct {
 
 func (client *Client) PostTopics(params *PostTopicsParams, opts ...Option) (*Topic, error) {
 	topic := &Topic{}
-	if err := post(client, "/topics", params, &topic, opts...); err != nil {
+	if err := client.Post("/topics", params, &topic, opts...); err != nil {
 		return nil, err
 	}
 	return topic, nil
@@ -37,7 +37,7 @@ func (client *Client) PostTopics(params *PostTopicsParams, opts ...Option) (*Top
 
 func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
 	topic := &Topic{}
-	if err := get(client, "/topics/"+id, nil, &topic, opts...); err != nil {
+	if err := client.Get("/topics/"+id, nil, &topic, opts...); err != nil {
 		return nil, err
 	}
 	return topic, nil
@@ -62,5 +62,5 @@ func (client *Client) DeleteTopic(params *DeleteTopicArgs, opts ...Option) error
 	req.URL.RawQuery = val.Encode()
 
 	// Throw it to CTFd
-	return call(client, req, nil)
+	return client.Call(req, nil)
 }

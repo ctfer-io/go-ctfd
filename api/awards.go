@@ -13,7 +13,7 @@ type GetAwardsParams struct {
 
 func (client *Client) GetAwards(params *GetAwardsParams, opts ...Option) ([]*Award, error) {
 	awards := []*Award{}
-	if err := get(client, "/awards", params, &awards, opts...); err != nil {
+	if err := client.Get("/awards", params, &awards, opts...); err != nil {
 		return nil, err
 	}
 	return awards, nil
@@ -30,7 +30,7 @@ type PostAwardsParams struct {
 
 func (client *Client) PostAwards(params *PostAwardsParams, opts ...Option) (*Award, error) {
 	award := &Award{}
-	if err := post(client, "/awards", params, &award, opts...); err != nil {
+	if err := client.Post("/awards", params, &award, opts...); err != nil {
 		return nil, err
 	}
 	return award, nil
@@ -38,12 +38,12 @@ func (client *Client) PostAwards(params *PostAwardsParams, opts ...Option) (*Awa
 
 func (client *Client) GetAward(id string, opts ...Option) (*Award, error) {
 	award := &Award{}
-	if err := get(client, "/awards/"+id, nil, &award, opts...); err != nil {
+	if err := client.Get("/awards/"+id, nil, &award, opts...); err != nil {
 		return nil, err
 	}
 	return award, nil
 }
 
 func (client *Client) DeleteAward(id string, opts ...Option) error {
-	return delete(client, "/awards/"+id, nil, nil, opts...)
+	return client.Delete("/awards/"+id, nil, nil, opts...)
 }

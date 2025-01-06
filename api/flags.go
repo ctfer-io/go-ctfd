@@ -11,7 +11,7 @@ type GetFlagsParams struct {
 
 func (client *Client) GetFlags(params *GetFlagsParams, opts ...Option) ([]*Flag, error) {
 	flags := []*Flag{}
-	if err := get(client, "/flags", params, &flags, opts...); err != nil {
+	if err := client.Get("/flags", params, &flags, opts...); err != nil {
 		return nil, err
 	}
 	return flags, nil
@@ -26,7 +26,7 @@ type PostFlagsParams struct {
 
 func (client *Client) PostFlags(params *PostFlagsParams, opts ...Option) (*Flag, error) {
 	flag := &Flag{}
-	if err := post(client, "/flags", params, &flag, opts...); err != nil {
+	if err := client.Post("/flags", params, &flag, opts...); err != nil {
 		return nil, err
 	}
 	return flag, nil
@@ -34,7 +34,7 @@ func (client *Client) PostFlags(params *PostFlagsParams, opts ...Option) (*Flag,
 
 func (client *Client) GetFlagsTypes(opts ...Option) (map[string]*Type, error) {
 	types := map[string]*Type{}
-	if err := get(client, "/flags/types", nil, &types, opts...); err != nil {
+	if err := client.Get("/flags/types", nil, &types, opts...); err != nil {
 		return nil, err
 	}
 	return types, nil
@@ -42,7 +42,7 @@ func (client *Client) GetFlagsTypes(opts ...Option) (map[string]*Type, error) {
 
 func (client *Client) GetFlagsType(typename string, opts ...Option) (*Type, error) {
 	tp := &Type{}
-	if err := get(client, "/flags/types/"+typename, nil, &tp, opts...); err != nil {
+	if err := client.Get("/flags/types/"+typename, nil, &tp, opts...); err != nil {
 		return nil, err
 	}
 	return tp, nil
@@ -50,14 +50,14 @@ func (client *Client) GetFlagsType(typename string, opts ...Option) (*Type, erro
 
 func (client *Client) GetFlag(id string, opts ...Option) (*Flag, error) {
 	flag := &Flag{}
-	if err := get(client, "/flags/"+id, nil, &flag, opts...); err != nil {
+	if err := client.Get("/flags/"+id, nil, &flag, opts...); err != nil {
 		return nil, err
 	}
 	return flag, nil
 }
 
 func (client *Client) DeleteFlag(id string, opts ...Option) error {
-	return delete(client, "/flags/"+id, nil, nil, opts...)
+	return client.Delete("/flags/"+id, nil, nil, opts...)
 }
 
 type PatchFlagParams struct {
@@ -69,7 +69,7 @@ type PatchFlagParams struct {
 
 func (client *Client) PatchFlag(id string, params *PatchFlagParams, opts ...Option) (*Flag, error) {
 	flag := &Flag{}
-	if err := patch(client, "/flags/"+id, params, &flag, opts...); err != nil {
+	if err := client.Patch("/flags/"+id, params, &flag, opts...); err != nil {
 		return nil, err
 	}
 	return flag, nil

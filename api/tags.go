@@ -9,7 +9,7 @@ type GetTagsParams struct {
 
 func (client *Client) GetTags(params *GetTagsParams, opts ...Option) ([]*Tag, error) {
 	tags := []*Tag{}
-	if err := get(client, "/tags", params, &tags, opts...); err != nil {
+	if err := client.Get("/tags", params, &tags, opts...); err != nil {
 		return nil, err
 	}
 	return tags, nil
@@ -22,7 +22,7 @@ type PostTagsParams struct {
 
 func (client *Client) PostTags(params *PostTagsParams, opts ...Option) (*Tag, error) {
 	tag := &Tag{}
-	if err := post(client, "/tags", params, &tag, opts...); err != nil {
+	if err := client.Post("/tags", params, &tag, opts...); err != nil {
 		return nil, err
 	}
 	return tag, nil
@@ -30,14 +30,14 @@ func (client *Client) PostTags(params *PostTagsParams, opts ...Option) (*Tag, er
 
 func (client *Client) GetTag(id string, opts ...Option) (*Tag, error) {
 	tag := &Tag{}
-	if err := get(client, "/tags/"+id, nil, &tag, opts...); err != nil {
+	if err := client.Get("/tags/"+id, nil, &tag, opts...); err != nil {
 		return nil, err
 	}
 	return tag, nil
 }
 
 func (client *Client) DeleteTag(id string, opts ...Option) error {
-	return delete(client, "/tags/"+id, nil, nil, opts...)
+	return client.Delete("/tags/"+id, nil, nil, opts...)
 }
 
 type PatchTagsParams struct {
@@ -46,7 +46,7 @@ type PatchTagsParams struct {
 
 func (client *Client) PatchTags(id string, params *PatchTagsParams, opts ...Option) (*Tag, error) {
 	tag := &Tag{}
-	if err := patch(client, "/tags/"+id, params, &tag, opts...); err != nil {
+	if err := client.Patch("/tags/"+id, params, &tag, opts...); err != nil {
 		return nil, err
 	}
 	return tag, nil
