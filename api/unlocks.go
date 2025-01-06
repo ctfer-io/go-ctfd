@@ -11,7 +11,7 @@ type GetUnlocksParams struct {
 
 func (client *Client) GetUnlocks(params *GetUnlocksParams, opts ...Option) ([]*Unlock, error) {
 	unlocks := []*Unlock{}
-	if err := get(client, "/unlocks", params, &unlocks, opts...); err != nil {
+	if err := client.Get("/unlocks", params, &unlocks, opts...); err != nil {
 		return nil, err
 	}
 	return unlocks, nil
@@ -24,7 +24,7 @@ type PostUnlocksParams struct {
 
 func (client *Client) PostUnlocks(params *PostUnlocksParams, opts ...Option) (*Unlock, error) {
 	unlock := &Unlock{}
-	if err := post(client, "/unlocks", params, &unlock, opts...); err != nil {
+	if err := client.Post("/unlocks", params, &unlock, opts...); err != nil {
 		return nil, err
 	}
 	return unlock, nil

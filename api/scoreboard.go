@@ -4,7 +4,7 @@ import "fmt"
 
 func (client *Client) GetScoreboard(opts ...Option) ([]*Scoreboard, error) {
 	sb := []*Scoreboard{}
-	if err := get(client, "/scoreboard", nil, &sb, opts...); err != nil {
+	if err := client.Get("/scoreboard", nil, &sb, opts...); err != nil {
 		return nil, err
 	}
 	return sb, nil
@@ -23,7 +23,7 @@ type GetScoreboardTopParams struct {
 // of the rank by the entry.
 func (client *Client) GetScoreboardTop(params *GetScoreboardTopParams, opts ...Option) (map[string]*Scoreboard, error) {
 	sb := map[string]*Scoreboard{}
-	if err := get(client, fmt.Sprintf("/scoreboard/top/%d", params.Count), params, &sb, opts...); err != nil {
+	if err := client.Get(fmt.Sprintf("/scoreboard/top/%d", params.Count), params, &sb, opts...); err != nil {
 		return nil, err
 	}
 	return sb, nil

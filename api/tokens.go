@@ -2,7 +2,7 @@ package api
 
 func (client *Client) GetTokens(opts ...Option) ([]*Token, error) {
 	tokens := []*Token{}
-	if err := get(client, "/tokens", nil, &tokens, opts...); err != nil {
+	if err := client.Get("/tokens", nil, &tokens, opts...); err != nil {
 		return nil, err
 	}
 	return tokens, nil
@@ -15,7 +15,7 @@ type PostTokensParams struct {
 
 func (client *Client) PostTokens(params *PostTokensParams, opts ...Option) (*Token, error) {
 	token := &Token{}
-	if err := post(client, "/tokens", params, &token, opts...); err != nil {
+	if err := client.Post("/tokens", params, &token, opts...); err != nil {
 		return nil, err
 	}
 	return token, nil
@@ -24,12 +24,12 @@ func (client *Client) PostTokens(params *PostTokensParams, opts ...Option) (*Tok
 // XXX Using this endpoint, you could get back the token value which is not a desired behaviour ! Issue #2309
 func (client *Client) GetToken(id string, opts ...Option) (*Token, error) {
 	token := &Token{}
-	if err := get(client, "/tokens/"+id, nil, &token, opts...); err != nil {
+	if err := client.Get("/tokens/"+id, nil, &token, opts...); err != nil {
 		return nil, err
 	}
 	return token, nil
 }
 
 func (client *Client) DeleteToken(id string, opts ...Option) error {
-	return delete(client, "/tokens/"+id, nil, nil, opts...)
+	return client.Delete("/tokens/"+id, nil, nil, opts...)
 }

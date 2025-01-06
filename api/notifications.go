@@ -22,7 +22,7 @@ type GetNotificationsParams struct {
 
 func (client *Client) GetNotifications(params *GetNotificationsParams, opts ...Option) ([]*Notification, error) {
 	notifs := []*Notification{}
-	if err := get(client, "/notifications", params, &notifs, opts...); err != nil {
+	if err := client.Get("/notifications", params, &notifs, opts...); err != nil {
 		return nil, err
 	}
 	return notifs, nil
@@ -37,7 +37,7 @@ type PostNotificationsParams struct {
 
 func (client *Client) PostNotifications(params *PostNotificationsParams, opts ...Option) (*Notification, error) {
 	notif := &Notification{}
-	if err := post(client, "/notifications", params, &notif, opts...); err != nil {
+	if err := client.Post("/notifications", params, &notif, opts...); err != nil {
 		return nil, err
 	}
 	return notif, nil
@@ -92,12 +92,12 @@ func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ..
 
 func (client *Client) GetNotification(id string, opts ...Option) (*Notification, error) {
 	notif := &Notification{}
-	if err := get(client, "/notifications/"+id, nil, &notif, opts...); err != nil {
+	if err := client.Get("/notifications/"+id, nil, &notif, opts...); err != nil {
 		return nil, err
 	}
 	return notif, nil
 }
 
 func (client *Client) DeleteNotification(id string, opts ...Option) error {
-	return delete(client, "/notifications/"+id, nil, nil, opts...)
+	return client.Delete("/notifications/"+id, nil, nil, opts...)
 }

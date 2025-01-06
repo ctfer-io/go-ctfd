@@ -72,6 +72,7 @@ func (client *Client) Do(req *http.Request) (*http.Response, error) {
 	return client.sub.Do(req)
 }
 
+// Option represents a functional option.
 type Option interface {
 	apply(*options)
 }
@@ -88,6 +89,8 @@ func (opt ctxOption) apply(opts *options) {
 	opts.Ctx = opt.Ctx
 }
 
+// WithContext enable providing a context to the HTTP client
+// during requests.
 func WithContext(ctx context.Context) Option {
 	return &ctxOption{
 		Ctx: ctx,
@@ -108,9 +111,11 @@ func applyOpts(req *http.Request, opts ...Option) *http.Request {
 	return req
 }
 
-// call is in charge of handling common CTFd API behaviours,
+// Call is in charge of handling common CTFd API behaviours,
 // like dealing with status codes and JSON errors.
-func call(client *Client, req *http.Request, dst any, opts ...Option) error {
+//
+// It automatically prepends "/api/v1" to each path.
+func (client *Client) Call(req *http.Request, dst any, opts ...Option) error {
 	req = applyOpts(req, opts...)
 
 	// Set API base URL
@@ -157,7 +162,7 @@ type Response struct {
 	Message *string `json:"message,omitempty"`
 }
 
-func get(client *Client, edp string, params any, dst any, opts ...Option) error {
+func (client *Client) Get(edp string, params any, dst any, opts ...Option) error {
 	req, _ := http.NewRequest(http.MethodGet, edp, nil)
 
 	// Encode URL parameters
@@ -169,30 +174,30 @@ func get(client *Client, edp string, params any, dst any, opts ...Option) error 
 		req.URL.RawQuery = val.Encode()
 	}
 
-	return call(client, req, dst, opts...)
+	return client.Call(req, dst, opts...)
 }
 
-func post(client *Client, edp string, params any, dst any, opts ...Option) error {
+func (client *Client) Post(edp string, params any, dst any, opts ...Option) error {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return err
 	}
 	req, _ := http.NewRequest(http.MethodPost, edp, bytes.NewBuffer(body))
 
-	return call(client, req, dst, opts...)
+	return client.Call(req, dst, opts...)
 }
 
-func patch(client *Client, edp string, params any, dst any, opts ...Option) error {
+func (client *Client) Patch(edp string, params any, dst any, opts ...Option) error {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return err
 	}
 	req, _ := http.NewRequest(http.MethodPatch, edp, bytes.NewBuffer(body))
 
-	return call(client, req, dst, opts...)
+	return client.Call(req, dst, opts...)
 }
 
-func delete(client *Client, edp string, params any, dst any, opts ...Option) (err error) {
+func (client *Client) Delete(edp string, params any, dst any, opts ...Option) (err error) {
 	var body []byte
 	if params != nil {
 		body, err = json.Marshal(params)
@@ -202,5 +207,5 @@ func delete(client *Client, edp string, params any, dst any, opts ...Option) (er
 	}
 	req, _ := http.NewRequest(http.MethodDelete, edp, bytes.NewBuffer(body))
 
-	return call(client, req, dst, opts...)
+	return client.Call(req, dst, opts...)
 }

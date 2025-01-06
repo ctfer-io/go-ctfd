@@ -20,7 +20,7 @@ type GetFilesParams struct {
 
 func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File, error) {
 	files := []*File{}
-	if err := get(client, "/files", params, &files, opts...); err != nil {
+	if err := client.Get("/files", params, &files, opts...); err != nil {
 		return nil, err
 	}
 	return files, nil
@@ -56,7 +56,7 @@ func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*Fil
 	// Process request directly, as it does not use the REST flow
 	req, _ := http.NewRequest(http.MethodPost, "/files", b)
 	req.Header.Set("Content-Type", ct)
-	if err := call(client, req, &files, opts...); err != nil {
+	if err := client.Call(req, &files, opts...); err != nil {
 		return nil, err
 	}
 	return files, nil
@@ -64,14 +64,14 @@ func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*Fil
 
 func (client *Client) GetFile(id string, opts ...Option) (*File, error) {
 	file := &File{}
-	if err := get(client, "/files/"+id, nil, &file, opts...); err != nil {
+	if err := client.Get("/files/"+id, nil, &file, opts...); err != nil {
 		return nil, err
 	}
 	return file, nil
 }
 
 func (client *Client) DeleteFile(id string, opts ...Option) error {
-	return delete(client, "/files/"+id, nil, nil, opts...)
+	return client.Delete("/files/"+id, nil, nil, opts...)
 }
 
 type InputFile struct {
