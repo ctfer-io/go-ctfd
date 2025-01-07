@@ -15,7 +15,7 @@ type (
 		Minimum        *int          `json:"minimum,omitempty"`
 		Category       string        `json:"category"`
 		Type           string        `json:"type"`
-		TypeDate       *Type         `json:"type_data,omitempty"`
+		TypeData       *Type         `json:"type_data,omitempty"`
 		State          string        `json:"state"`
 		NextID         *int          `json:"next_id"`
 		Requirements   *Requirements `json:"requirements"` // List of challenge IDs to complete before

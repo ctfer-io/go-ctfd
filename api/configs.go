@@ -206,7 +206,7 @@ func (client *Client) GetConfigsByKey(key string, opts ...Option) (any, error) {
 	return config, nil
 }
 
-// TODO confirm client.Delete( does not take parameters and returns anything
+// TODO confirm delete does not take parameters and returns anything
 func (client *Client) DeleteConfigsByKey(key string, opts ...Option) error {
 	return client.Delete("/configs/"+key, nil, nil, opts...)
 }
