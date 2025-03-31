@@ -27,7 +27,9 @@ func (client *Client) Register(params *RegisterParams, opts ...Option) error {
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("CTFd responded with status code %d, which could be due to email reuse", res.StatusCode)
@@ -39,7 +41,9 @@ func (client *Client) Register(params *RegisterParams, opts ...Option) error {
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	nonce, err := getNonce(res.Body)
 	if err != nil {

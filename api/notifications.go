@@ -80,7 +80,9 @@ func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ..
 	if err != nil {
 		return 0, err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	// Check status code
 	if res.StatusCode != http.StatusOK {
