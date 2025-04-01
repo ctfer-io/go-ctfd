@@ -38,7 +38,9 @@ func (client *Client) ExportRaw(params *ExportRawParams, opts ...Option) ([]byte
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	if res.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("CTFd responded with unexpected status code: got %d", res.StatusCode)

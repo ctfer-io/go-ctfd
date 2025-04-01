@@ -31,7 +31,9 @@ func (client *Client) Login(params *LoginParams, opts ...Option) error {
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("CTFd responded with status code %d", res.StatusCode)

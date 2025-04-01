@@ -92,7 +92,9 @@ func (client *Client) GetFileContent(file *File, opts ...Option) ([]byte, error)
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	return io.ReadAll(res.Body)
 }
@@ -112,7 +114,9 @@ func encodeMultipart(values map[string]any) (io.Reader, string, error) {
 		var content []byte
 		// Avoid closer goleak
 		if x, ok := v.(io.Closer); ok {
-			defer x.Close()
+			defer func() {
+				_ = x.Close()
+			}()
 		}
 		// Add file content or field
 		if file, ok := v.(*InputFile); ok {
@@ -152,7 +156,9 @@ func encodeMultipart(values map[string]any) (io.Reader, string, error) {
 			return nil, "", err
 		}
 	}
-	w.Close()
+	if err := w.Close(); err != nil {
+		return nil, "", err
+	}
 	return &b, w.FormDataContentType(), nil
 }
 

@@ -18,7 +18,9 @@ func GetNonceAndSession(url string, opts ...Option) (nonce string, session strin
 	if err != nil {
 		return "", "", err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	return getNonceAndSession(res)
 }

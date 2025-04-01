@@ -130,7 +130,9 @@ func (client *Client) Call(req *http.Request, dst any, opts ...Option) error {
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	// Decode response
 	resp := Response{
