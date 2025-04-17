@@ -19,6 +19,7 @@ func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint,
 
 type PostHintsParams struct {
 	ChallengeID  int          `json:"challenge_id"`
+	Title        *string      `json:"title,omitempty"`
 	Content      string       `json:"content"`
 	Cost         int          `json:"cost"`
 	Requirements Requirements `json:"requirements"`
@@ -42,6 +43,7 @@ func (client *Client) GetHint(id string, opts ...Option) (*Hint, error) {
 
 type PatchHintsParams struct {
 	ChallengeID  int          `json:"challenge_id"`
+	Title        *string      `json:"title,omitempty"`
 	Content      string       `json:"content"`
 	Cost         int          `json:"cost"`
 	Requirements Requirements `json:"requirements"`
