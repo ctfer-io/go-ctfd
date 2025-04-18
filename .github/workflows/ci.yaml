@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       ctfd:
-        image: ctfd/ctfd:3.7.6@sha256:8b424090fae7c143768be19454c707ee2f3754d421fef8122dbe42031efee7aa
+        image: ctfd/ctfd:3.7.7@sha256:9847758cdafc5ab86bdc121353dcf5a27a29ce313587270ee90a71bfbda2b910
         ports:
           - 8000:8000
     steps:

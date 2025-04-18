@@ -35,6 +35,7 @@ type PatchConfigsParams struct {
 	// Accounts
 
 	DomainWhitelist            *string `json:"domain_whitelist,omitempty"`
+	DomainBlacklist            *string `json:"domaine_blacklist,omitempty"`
 	IncorrectSubmissionsPerMin *int    `json:"incorrect_submissions_per_min,omitempty"`
 	NameChanges                *bool   `json:"name_changes,omitempty"`
 	NumTeams                   *int    `json:"num_teams,omitempty"`

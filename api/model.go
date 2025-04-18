@@ -63,6 +63,7 @@ type (
 	Hint struct {
 		ID           int           `json:"id"`
 		HTML         *string       `json:"html,omitempty"`
+		Title        *string       `json:"title,omitempty"`
 		Content      *string       `json:"content,omitempty"`
 		Cost         int           `json:"cost"`
 		Type         string        `json:"type"`
