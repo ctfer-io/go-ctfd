@@ -45,3 +45,7 @@ func (client *Client) PatchBrackets(id int, params *PatchBracketsParams, opts ..
 	}
 	return bk, nil
 }
+
+func (client *Client) DeleteBrackets(id int, opts ...Option) error {
+	return client.Delete(fmt.Sprintf("/brackets/%d", id), nil, nil, opts...)
+}
