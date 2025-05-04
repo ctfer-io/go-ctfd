@@ -165,7 +165,6 @@ type (
 	}
 
 	Team struct {
-		Bracket     *string  `json:"bracket,omitempty"`
 		Members     []int    `json:"members,omitempty"`
 		ID          int      `json:"id"`
 		Created     string   `json:"created"`
@@ -182,10 +181,10 @@ type (
 		OauthID     *string  `json:"oauth_id,omitempty"`
 		Place       *string  `json:"place,omitempty"`
 		Score       *int     `json:"score,omitempty"`
+		BracketID   *int     `json:"bracket_id,omitempty"`
 	}
 
 	User struct {
-		Bracket     *string `json:"bracket"`
 		ID          int     `json:"id"`
 		TeamID      *int    `json:"team_id,omitempty"`
 		Country     *string `json:"country,omitempty"`
@@ -202,6 +201,7 @@ type (
 		Type        *string `json:"type,omitempty"`
 		Created     *string `json:"created,omitempty"`
 		Secret      *string `json:"secret,omitempty"`
+		BracketID   *int    `json:"bracket_id,omitempty"`
 	}
 
 	StatChallSubmission struct {
