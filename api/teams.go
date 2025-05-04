@@ -28,6 +28,7 @@ type PostTeamsParams struct {
 	Banned      bool    `json:"banned"`
 	Hidden      bool    `json:"hidden"`
 	Fields      []Field `json:"fields"`
+	BracketID   *string `json:"bracket_id,omitempty"`
 }
 
 func (client *Client) PostTeams(params *PostTeamsParams, opts ...Option) (*Team, error) {
@@ -61,6 +62,7 @@ type PatchTeamsParams struct {
 	Banned      *bool   `json:"banned,omitempty"`
 	Hidden      *bool   `json:"hidden,omitempty"`
 	Fields      []Field `json:"fields"`
+	BracketID   *string `json:"bracket_id,omitempty"`
 }
 
 func (client *Client) PatchTeamsMe(params *PatchTeamsParams, opts ...Option) (*Team, error) {

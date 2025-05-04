@@ -32,6 +32,7 @@ type PostUsersParams struct {
 	Hidden      bool    `json:"hidden"`
 	Banned      bool    `json:"banned"`
 	Fields      []Field `json:"fields"`
+	BracketID   *string `json:"bracket_id,omitempty"`
 }
 
 func (client *Client) PostUsers(params *PostUsersParams, opts ...Option) (*User, error) {
@@ -63,6 +64,7 @@ type PatchUsersParams struct {
 	Hidden      *bool   `json:"hidden,omitempty"`
 	Banned      *bool   `json:"banned,omitempty"`
 	Fields      []Field `json:"fields"`
+	BracketID   *string `json:"bracket_id,omitempty"`
 }
 
 func (client *Client) PatchUsersMe(params *PatchUsersParams, opts ...Option) (*User, error) {
