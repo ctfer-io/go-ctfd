@@ -20,11 +20,8 @@ func NewClient(url, nonce, session, apiKey string) *Client {
 	jar, _ := cookiejar.New(nil)
 	return &Client{
 		sub: &http.Client{
-			Jar: jar,
-			// // Don't follow redirections
-			// CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
-			// 	return http.ErrUseLastResponse
-			// },
+			Jar:       jar,
+			Transport: http.DefaultTransport,
 		},
 		url:     url,
 		nonce:   nonce,
@@ -79,6 +76,7 @@ type Option interface {
 
 type options struct {
 	Ctx context.Context
+	Tp  http.RoundTripper
 }
 
 type ctxOption struct {
@@ -97,9 +95,28 @@ func WithContext(ctx context.Context) Option {
 	}
 }
 
-func applyOpts(req *http.Request, opts ...Option) *http.Request {
+type tpOption struct {
+	tp http.RoundTripper
+}
+
+func (opt tpOption) apply(opts *options) {
+	opts.Tp = opt.tp
+}
+
+// WithTransport specifies the Transport to use. If none set, default
+// to DefaultTransport.
+// It alters the underlying [http.Client], so if used we recommend it
+// should be used systematically to ensure no side-effects.
+func WithTransport(rt http.RoundTripper) Option {
+	return &tpOption{
+		tp: rt,
+	}
+}
+
+func applyOpts(req *http.Request, opts ...Option) (*http.Request, http.RoundTripper) {
 	reqopts := &options{
 		Ctx: context.Background(),
+		Tp:  http.DefaultTransport,
 	}
 
 	for _, opt := range opts {
@@ -108,7 +125,7 @@ func applyOpts(req *http.Request, opts ...Option) *http.Request {
 
 	req = req.WithContext(reqopts.Ctx)
 
-	return req
+	return req, reqopts.Tp
 }
 
 // Call is in charge of handling common CTFd API behaviours,
@@ -116,7 +133,7 @@ func applyOpts(req *http.Request, opts ...Option) *http.Request {
 //
 // It automatically prepends "/api/v1" to each path.
 func (client *Client) Call(req *http.Request, dst any, opts ...Option) error {
-	req = applyOpts(req, opts...)
+	req, client.sub.Transport = applyOpts(req, opts...)
 
 	// Set API base URL
 	newUrl, err := url.Parse("/api/v1" + req.URL.String())

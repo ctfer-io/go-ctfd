@@ -52,7 +52,7 @@ type DeleteTopicArgs struct {
 func (client *Client) DeleteTopic(params *DeleteTopicArgs, opts ...Option) error {
 	// Build request
 	req, _ := http.NewRequest(http.MethodDelete, "/topics", nil)
-	req = applyOpts(req, opts...)
+	req, client.sub.Transport = applyOpts(req, opts...)
 
 	// Encode parameters
 	val := url.Values{}

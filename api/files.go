@@ -87,7 +87,7 @@ func (client *Client) GetFileContent(file *File, opts ...Option) ([]byte, error)
 	}
 
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/files/%s", file.Location), nil)
-	req = applyOpts(req, opts...)
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, err
