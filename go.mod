@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/gorilla/schema v1.4.1
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
