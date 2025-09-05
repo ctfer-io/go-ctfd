@@ -98,7 +98,7 @@ func Test_F_CTF(t *testing.T) {
 		Type:           "dynamic",
 	})
 	require.NotNil(t, chall)
-	require.NotNil(t, err)
+	require.NoError(t, err)
 
 	flag, err := admin.PostFlags(&api.PostFlagsParams{
 		Challenge: chall.ID,
