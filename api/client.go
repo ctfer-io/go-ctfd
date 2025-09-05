@@ -216,6 +216,16 @@ func (client *Client) Patch(edp string, params any, dst any, opts ...Option) err
 	return client.Call(req, dst, opts...)
 }
 
+func (client *Client) Put(edp string, params any, dst any, opts ...Option) error {
+	body, err := json.Marshal(params)
+	if err != nil {
+		return err
+	}
+	req, _ := http.NewRequest(http.MethodPatch, edp, bytes.NewBuffer(body))
+
+	return client.Call(req, dst, opts...)
+}
+
 func (client *Client) Delete(edp string, params any, dst any, opts ...Option) (err error) {
 	var body []byte
 	if params != nil {

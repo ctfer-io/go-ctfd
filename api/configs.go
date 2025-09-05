@@ -43,7 +43,16 @@ type PatchConfigsParams struct {
 	TeamCreation               *bool   `json:"team_creation,omitempty"`
 	TeamDisbanding             *string `json:"team_disbanding,omitempty"`
 	TeamSize                   *int    `json:"team_size,omitempty"`
+	PasswordMinLength          *int    `json:"password_min_length,omitempty"`
 	VerifyEmails               *bool   `json:"verify_emails,omitempty"`
+
+	// Challenges
+
+	ViewSelfSubmission    bool   `json:"view_self_submissions"`
+	MaxAttemptsBehavior   string `json:"max_attempts_behavior"`
+	MaxAttemptsTimeout    int    `json:"max_attempts_timeout"`
+	HintsFreePublicAccess bool   `json:"hints_free_public_access"`
+	ChallengeRatings      string `json:"challenge_ratings"`
 
 	// Pages
 
@@ -103,7 +112,8 @@ type PatchConfigsParams struct {
 
 	// Social
 
-	SocialShares *bool `json:"social_shares,omitempty"`
+	SocialShares         *bool  `json:"social_shares,omitempty"`
+	SocialSharesTemplate string `json:"social_share_solve_template"`
 
 	// Legal
 

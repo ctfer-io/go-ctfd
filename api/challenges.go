@@ -33,6 +33,7 @@ type PostChallengesParams struct {
 	Initial        *int          `json:"initial,omitempty"`
 	Decay          *int          `json:"decay,omitempty"`
 	Minimum        *int          `json:"minimum,omitempty"`
+	Logic          string        `json:"logic"`
 	MaxAttempts    *int          `json:"max_attempts,omitempty"`
 	NextID         *int          `json:"next_id,omitempty"`
 	Requirements   *Requirements `json:"requirements,omitempty"`
@@ -89,6 +90,7 @@ type PatchChallengeParams struct {
 	Initial        *int    `json:"initial,omitempty"`
 	Decay          *int    `json:"decay,omitempty"`
 	Minimum        *int    `json:"minimum,omitempty"`
+	Logic          *string `json:"logic,omitempty"`
 	MaxAttempts    *int    `json:"max_attempts,omitempty"`
 	NextID         *int    `json:"next_id,omitempty"`
 	// Requirements can update the challenge's behavior and prerequisites i.e.
@@ -166,4 +168,25 @@ func (client *Client) GetChallengeTopics(id int, opts ...Option) ([]*Topic, erro
 		return nil, err
 	}
 	return ct, nil
+}
+
+func (client *Client) GetChallengeRatings(id int, opts ...Option) ([]*Rating, error) {
+	ratings := []*Rating{}
+	if err := client.Get(fmt.Sprintf("/challenges/%d/ratings", id), nil, &ratings, opts...); err != nil {
+		return nil, err
+	}
+	return ratings, nil
+}
+
+type PutChallengeRatingsParams struct {
+	Value  int    `json:"value"` // either 1 for thumbsup or -1 for thumbsdown
+	Review string `json:"review"`
+}
+
+func (client *Client) PutChallengeRatings(id int, params *PutChallengeRatingsParams, opts ...Option) (*Rating, error) {
+	rat := &Rating{}
+	if err := client.Put(fmt.Sprintf("/challenges/%c/ratings", id), params, rat, opts...); err != nil {
+		return nil, err
+	}
+	return rat, nil
 }

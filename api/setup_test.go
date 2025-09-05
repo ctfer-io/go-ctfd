@@ -6,6 +6,7 @@ import (
 
 	"github.com/ctfer-io/go-ctfd/api"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_F_Setup(t *testing.T) {
@@ -20,13 +21,9 @@ func Test_F_Setup(t *testing.T) {
 	// be the first in the scoreboard (for once), you will look at the scoreboard.
 	// Once done, you wipe the challenge for later tests.
 
-	assert := assert.New(t)
-
 	// 1a. Get nonce and session to mock a browser first
 	nonce, session, err := api.GetNonceAndSession(CTFD_URL)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client := api.NewClient(CTFD_URL, nonce, session, "")
 
 	t.Cleanup(func() {
@@ -61,34 +58,26 @@ func Test_F_Setup(t *testing.T) {
 		Start:                  "",
 		End:                    "",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 1c. Create an API Key to avoid session/nonce+cookies dance
 	token, err := client.PostTokens(&api.PostTokensParams{
 		Expiration:  "2222-01-01",
 		Description: "Example API token.",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client.SetAPIKey(*token.Value)
 
 	// 1d. Logout because we don't know what could happen with a mouse on the UI
 	err = client.Logout()
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 1e. Relog, and drop the use of the API token because... why not ¯\_(ツ)_/¯
 	err = client.Login(&api.LoginParams{
 		Name:     "ctfer",
 		Password: "password",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client.SetAPIKey("")
 
 	// 2. Create a challenge
@@ -105,10 +94,8 @@ func Test_F_Setup(t *testing.T) {
 		State:          "visible",
 		Type:           "dynamic",
 	})
-	assert.NotNil(chall)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	assert.NotNil(t, chall)
+	require.NoError(t, err)
 
 	// 3. Push a file
 	files, err := client.PostFiles(&api.PostFilesParams{
@@ -120,15 +107,13 @@ func Test_F_Setup(t *testing.T) {
 		},
 		Challenge: &chall.ID,
 	})
-	assert.NotEmpty(files)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	assert.NotEmpty(t, files)
+	require.NoError(t, err)
 
 	// Check it has been properly pushed
 	c, err := client.GetFileContent(files[0])
-	assert.NotEmpty(c)
-	assert.Nil(err)
+	assert.NotEmpty(t, c)
+	require.NoError(t, err)
 
 	// 4. Update the challenge, give it hints, flags and topics
 	chall, err = client.PatchChallenge(chall.ID, &api.PatchChallengeParams{
@@ -142,18 +127,16 @@ func Test_F_Setup(t *testing.T) {
 		Minimum:     chall.Minimum,
 		State:       chall.State,
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
-	assert.NotNil(chall)
+	require.NotNil(t, chall)
+	require.NoError(t, err)
+
 	hint, err := client.PostHints(&api.PostHintsParams{
 		ChallengeID: chall.ID,
 		Content:     "C'mon dude...",
 		Cost:        50,
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	_, err = client.PostHints(&api.PostHintsParams{
 		ChallengeID: chall.ID,
 		Content:     "Nop.",
@@ -162,50 +145,41 @@ func Test_F_Setup(t *testing.T) {
 			Prerequisites: []int{hint.ID},
 		},
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	_, err = client.PostFlags(&api.PostFlagsParams{
 		Challenge: chall.ID,
 		Content:   "CTFER{flag}",
 		Type:      "static",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	topic, err := client.PostTopics(&api.PostTopicsParams{
 		Challenge: chall.ID,
 		Type:      "challenge", // required as the resource can't be determined by CTFd
 		Value:     "Inspection",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 5. Solve the challenge (but first fail)
 	att1, err := client.PostChallengesAttempt(&api.PostChallengesAttemptParams{
 		ChallengeID: chall.ID,
 		Submission:  "CTFER{fla}",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
-	assert.Equal("incorrect", att1.Status)
+	assert.Equal(t, "incorrect", att1.Status)
+	require.NoError(t, err)
+
 	att2, err := client.PostChallengesAttempt(&api.PostChallengesAttemptParams{
 		ChallengeID: chall.ID,
 		Submission:  "CTFER{flag}",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
-	assert.Equal("correct", att2.Status)
+	assert.Equal(t, "correct", att2.Status)
+	require.NoError(t, err)
 
 	// 6. Get statistics
 	stats, err := client.GetStatisticsChallengesSolves()
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
-	assert.NotEmpty(stats)
+	assert.NotEmpty(t, stats)
+	require.NoError(t, err)
 
 	// 7. Delete the challenge
 	// XXX the strconv should not occur
@@ -213,20 +187,15 @@ func Test_F_Setup(t *testing.T) {
 		ID:   strconv.Itoa(topic.ID),
 		Type: "challenge",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	err = client.DeleteChallenge(chall.ID)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 8. Check no challenge remain
 	challs, err := client.GetChallenges(nil)
-	assert.Empty(challs)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	assert.Empty(t, challs)
+	require.NoError(t, err)
 }
 
 func Test_F_AdvancedSetup(t *testing.T) {
@@ -238,13 +207,9 @@ func Test_F_AdvancedSetup(t *testing.T) {
 	// This is part of a procedure that you are testing, so once your job is
 	// completed you reset the instance.
 
-	assert := assert.New(t)
-
 	// 1a. Get nonce and session to mock a browser first
 	nonce, session, err := api.GetNonceAndSession(CTFD_URL)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client := api.NewClient(CTFD_URL, nonce, session, "")
 
 	t.Cleanup(func() {
@@ -279,25 +244,19 @@ func Test_F_AdvancedSetup(t *testing.T) {
 		Start:                  "",
 		End:                    "",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 1c. Create an API Key to avoid session/nonce+cookies dance
 	token, err := client.PostTokens(&api.PostTokensParams{
 		Expiration:  "2222-01-01",
 		Description: "Example API token.",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client.SetAPIKey(*token.Value)
 
 	// 2. Fine-configuration
 	err = client.PatchConfigs(&api.PatchConfigsParams{})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 3. Add a page
 	_, err = client.PostPages(&api.PostPagesParams{
@@ -306,9 +265,7 @@ func Test_F_AdvancedSetup(t *testing.T) {
 		Format:  "markdown",
 		Content: "## Production\n\nThis CTFd is now configured, all the ChallMakers and ChallOps can work on it !\n",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 4. Send a notification
 	_, err = client.PostNotifications(&api.PostNotificationsParams{
@@ -317,9 +274,7 @@ func Test_F_AdvancedSetup(t *testing.T) {
 		Sound:   true,
 		Type:    "toast",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 5. Reset the instance
 	err = client.Reset(&api.ResetParams{
@@ -329,9 +284,7 @@ func Test_F_AdvancedSetup(t *testing.T) {
 		Pages:         ptr("y"),
 		Notifications: ptr("y"),
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 }
 
 func Test_F_UsersAndTeams(t *testing.T) {
@@ -341,13 +294,9 @@ func Test_F_UsersAndTeams(t *testing.T) {
 	// before the event such that at the very beginning you are sure no one
 	// is lost.
 
-	assert := assert.New(t)
-
 	// 1a. Get nonce and session to mock a browser first
 	nonce, session, err := api.GetNonceAndSession(CTFD_URL)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client := api.NewClient(CTFD_URL, nonce, session, "")
 
 	t.Cleanup(func() {
@@ -382,18 +331,14 @@ func Test_F_UsersAndTeams(t *testing.T) {
 		Start:                  "",
 		End:                    "",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 1c. Create an API Key to avoid session/nonce+cookies dance
 	token, err := client.PostTokens(&api.PostTokensParams{
 		Expiration:  "2222-01-01",
 		Description: "Example API token.",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	client.SetAPIKey(*token.Value)
 
 	// Define all users and teams
@@ -431,9 +376,7 @@ func Test_F_UsersAndTeams(t *testing.T) {
 			Hidden:   false,
 			Fields:   []api.Field{},
 		})
-		if !assert.Nil(err, "got error: %s", err) {
-			return
-		}
+		require.NoError(t, err)
 
 		for _, user := range team.users {
 			// 2b. Create user
@@ -447,17 +390,13 @@ func Test_F_UsersAndTeams(t *testing.T) {
 				Banned:   false,
 				Fields:   []api.Field{},
 			})
-			if !assert.Nil(err, "got error: %s", err) {
-				return
-			}
+			require.NoError(t, err)
 
 			// 2c. Join user to team
 			_, err = client.PostTeamMembers(tm.ID, &api.PostTeamsMembersParams{
 				UserID: usr.ID,
 			})
-			if !assert.Nil(err, "got error: %s", err) {
-				return
-			}
+			require.NoError(t, err)
 		}
 	}
 }
