@@ -7,6 +7,7 @@ import (
 
 	"github.com/ctfer-io/go-ctfd/api"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_F_CTF(t *testing.T) {
@@ -17,13 +18,9 @@ func Test_F_CTF(t *testing.T) {
 	// For the first blood the admin award the player, then extract the
 	// statistics and pause the event.
 
-	assert := assert.New(t)
-
 	// 1a. Get nonce and session to mock a browser first
 	nonce, session, err := api.GetNonceAndSession(CTFD_URL)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	admin := api.NewClient(CTFD_URL, nonce, session, "")
 
 	t.Cleanup(func() {
@@ -63,18 +60,14 @@ func Test_F_CTF(t *testing.T) {
 		Start:                  "",
 		End:                    "",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 1c. Create an API Key to avoid session/nonce+cookies dance
 	token, err := admin.PostTokens(&api.PostTokensParams{
 		Expiration:  "2222-01-01",
 		Description: "Example API token.",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 	admin.SetAPIKey(*token.Value)
 
 	// 2. Add a page
@@ -88,9 +81,7 @@ func Test_F_CTF(t *testing.T) {
 		Route:        "/tutorials/test",
 		Title:        "Test",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 3. Add a challenge with a flag
 	chall, err := admin.PostChallenges(&api.PostChallengesParams{
@@ -106,20 +97,17 @@ func Test_F_CTF(t *testing.T) {
 		State:          "visible",
 		Type:           "dynamic",
 	})
-	assert.NotNil(chall)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NotNil(t, chall)
+	require.NoError(t, err)
+
 	flag, err := admin.PostFlags(&api.PostFlagsParams{
 		Challenge: chall.ID,
 		Content:   "24HIUT{IcmpExfiltrationIsEasy}",
 		Data:      "case_sensitive",
 		Type:      "static",
 	})
-	assert.NotNil(flag)
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	assert.NotNil(t, flag)
+	require.NoError(t, err)
 
 	// 4. User register
 	name := "ctfer-" + randHex()
@@ -130,33 +118,34 @@ func Test_F_CTF(t *testing.T) {
 		Email:    name + "@example.com",
 		Password: "password",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	usr, err := user.GetUsersMe()
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 5a. User failed attempt
 	att, err := user.PostChallengesAttempt(&api.PostChallengesAttemptParams{
 		ChallengeID: chall.ID,
 		Submission:  "INVALID-FLAG",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
-	assert.Equal("incorrect", att.Status)
+	assert.Equal(t, "incorrect", att.Status)
+	require.NoError(t, err)
 
 	// 5b. User successfull attempt
 	att, err = user.PostChallengesAttempt(&api.PostChallengesAttemptParams{
 		ChallengeID: chall.ID,
 		Submission:  "24HIUT{IcmpExfiltrationIsEasy}",
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
-	assert.Equal("correct", att.Status)
+	assert.Equal(t, "correct", att.Status)
+	require.NoError(t, err)
+
+	// 5c. User share its work
+	sh, err := user.PostShares(&api.PostSharesParams{
+		ChallengeID: chall.ID,
+		Type:        "solve",
+	})
+	require.Nil(t, err)
+	assert.NotEmpty(t, sh.URL)
 
 	// 6. Admin gives an award for first blood
 	_, err = admin.PostAwards(&api.PostAwardsParams{
@@ -167,28 +156,22 @@ func Test_F_CTF(t *testing.T) {
 		UserID:      usr.ID,
 		Value:       50,
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// 7. Admin gets some statistics
 	_, err = admin.GetStatisticsChallengesSolves()
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	_, err = admin.GetStatisticsUsers()
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
+
 	// ...
 
 	// 8. Admin pause event
 	err = admin.PatchConfigs(&api.PatchConfigsParams{
 		Paused: ptr(true),
 	})
-	if !assert.Nil(err, "got error: %s", err) {
-		return
-	}
+	require.NoError(t, err)
 
 	// Time to open-source your challenges :)
 }

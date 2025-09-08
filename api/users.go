@@ -20,19 +20,20 @@ func (client *Client) GetUsers(params *GetUsersParams, opts ...Option) ([]*User,
 }
 
 type PostUsersParams struct {
-	Name        string  `json:"name"`
-	Email       string  `json:"email"`
-	Language    *string `json:"language,omitempty"`
-	Password    string  `json:"password"`
-	Website     *string `json:"website,omitempty"`
-	Affiliation *string `json:"affiliation,omitempty"`
-	Country     *string `json:"country,omitempty"`
-	Type        string  `json:"type"` // "user" or "admin"
-	Verified    bool    `json:"verified"`
-	Hidden      bool    `json:"hidden"`
-	Banned      bool    `json:"banned"`
-	Fields      []Field `json:"fields"`
-	BracketID   *string `json:"bracket_id,omitempty"`
+	Name           string  `json:"name"`
+	Email          string  `json:"email"`
+	Language       *string `json:"language,omitempty"`
+	Password       string  `json:"password"`
+	Website        *string `json:"website,omitempty"`
+	Affiliation    *string `json:"affiliation,omitempty"`
+	Country        *string `json:"country,omitempty"`
+	Type           string  `json:"type"` // "user" or "admin"
+	Verified       bool    `json:"verified"`
+	Hidden         bool    `json:"hidden"`
+	Banned         bool    `json:"banned"`
+	ChangePassword bool    `json:"change_password"`
+	Fields         []Field `json:"fields"`
+	BracketID      *string `json:"bracket_id,omitempty"`
 }
 
 func (client *Client) PostUsers(params *PostUsersParams, opts ...Option) (*User, error) {
@@ -52,19 +53,20 @@ func (client *Client) GetUsersMe(opts ...Option) (*User, error) {
 }
 
 type PatchUsersParams struct {
-	Name        string  `json:"name"`
-	Email       string  `json:"email"`
-	Language    *string `json:"language,omitempty"`
-	Password    *string `json:"password,omitempty"`
-	Website     *string `json:"website,omitempty"`
-	Affiliation *string `json:"affiliation,omitempty"`
-	Country     *string `json:"country,omitempty"`
-	Type        *string `json:"type,omitempty"`
-	Verified    *bool   `json:"verified,omitempty"`
-	Hidden      *bool   `json:"hidden,omitempty"`
-	Banned      *bool   `json:"banned,omitempty"`
-	Fields      []Field `json:"fields"`
-	BracketID   *string `json:"bracket_id,omitempty"`
+	Name           string  `json:"name"`
+	Email          string  `json:"email"`
+	Language       *string `json:"language,omitempty"`
+	Password       *string `json:"password,omitempty"`
+	Website        *string `json:"website,omitempty"`
+	Affiliation    *string `json:"affiliation,omitempty"`
+	Country        *string `json:"country,omitempty"`
+	Type           *string `json:"type,omitempty"`
+	Verified       *bool   `json:"verified,omitempty"`
+	Hidden         *bool   `json:"hidden,omitempty"`
+	Banned         *bool   `json:"banned,omitempty"`
+	ChangePassword *bool   `json:"change_password,omitempty"`
+	Fields         []Field `json:"fields"`
+	BracketID      *string `json:"bracket_id,omitempty"`
 }
 
 func (client *Client) PatchUsersMe(params *PatchUsersParams, opts ...Option) (*User, error) {

@@ -2,25 +2,48 @@ package api
 
 type (
 	Challenge struct {
-		ID             int           `json:"id"`
-		Name           string        `json:"name"`
-		Description    string        `json:"description"`
-		Attribution    *string       `json:"attribution,omitempty"`
-		ConnectionInfo *string       `json:"connection_info,omitempty"`
-		MaxAttempts    *int          `json:"max_attempts,omitempty"`
-		Function       *string       `json:"function,omitempty"`
-		Value          int           `json:"value"`
-		Initial        *int          `json:"initial,omitempty"`
-		Decay          *int          `json:"decay,omitempty"`
-		Minimum        *int          `json:"minimum,omitempty"`
-		Category       string        `json:"category"`
-		Type           string        `json:"type"`
-		TypeData       *Type         `json:"type_data,omitempty"`
-		State          string        `json:"state"`
-		NextID         *int          `json:"next_id"`
-		Requirements   *Requirements `json:"requirements"` // List of challenge IDs to complete before
-		Solves         int           `json:"solves"`
-		SolvedByMe     bool          `json:"solved_by_me"`
+		ID             int               `json:"id"`
+		Name           string            `json:"name"`
+		Description    string            `json:"description"`
+		Attribution    *string           `json:"attribution,omitempty"`
+		ConnectionInfo *string           `json:"connection_info,omitempty"`
+		MaxAttempts    *int              `json:"max_attempts,omitempty"`
+		Function       *string           `json:"function,omitempty"`
+		Value          int               `json:"value"`
+		Initial        *int              `json:"initial,omitempty"`
+		Decay          *int              `json:"decay,omitempty"`
+		Minimum        *int              `json:"minimum,omitempty"`
+		Logic          string            `json:"logic"`
+		Category       string            `json:"category"`
+		SolutionID     *int              `json:"solution_id,omitempty"`
+		Type           string            `json:"type"`
+		TypeData       *Type             `json:"type_data,omitempty"`
+		State          string            `json:"state"`
+		NextID         *int              `json:"next_id"`
+		Requirements   *Requirements     `json:"requirements"` // List of challenge IDs to complete before
+		Solves         int               `json:"solves"`
+		SolvedByMe     bool              `json:"solved_by_me"`
+		Rating         *Rating           `json:"rating,omitempty"`
+		Ratings        *ChallengeRatings `json:"ratings,omitempty"`
+	}
+
+	Solution struct {
+		ID          int    `json:"id"`
+		ChallengeID int    `json:"challenge_id"`
+		State       string `json:"state"`
+		Content     string `json:"content"`
+		HTML        string `json:"html"`
+	}
+
+	Rating struct {
+		ID          int        `json:"id"`
+		Date        string     `json:"date"`
+		Value       int        `json:"value"`
+		Review      string     `json:"review"`
+		UserID      int        `json:"user_id"`
+		User        *User      `json:"user"`
+		ChallengeID int        `json:"challenge_id"`
+		Challenge   *Challenge `json:"challenge"`
 	}
 
 	Bracket struct {
@@ -83,6 +106,12 @@ type (
 		// Prerequisites is the list of resources' ID that need to be validated in
 		// order for the resource to meet its requirements.
 		Prerequisites []int `json:"prerequisites"`
+	}
+
+	ChallengeRatings struct {
+		Up    int `json:"up"`
+		Down  int `json:"down"`
+		Count int `json:"count"`
 	}
 
 	Tag struct {
@@ -312,5 +341,9 @@ type (
 	Attempt struct {
 		Status  string `json:"status"`
 		Message string `json:"message"`
+	}
+
+	Shares struct {
+		URL string `json:"url"`
 	}
 )
