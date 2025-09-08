@@ -33,9 +33,15 @@ func (client *Client) PostHints(params *PostHintsParams, opts ...Option) (*Hint,
 	return hint, nil
 }
 
-func (client *Client) GetHint(id string, opts ...Option) (*Hint, error) {
+type GetHintParams struct {
+	// As per CTFd commit ed5dbb762a013800edb1c322cbe0779b25c7daec, you can only get the hint data
+	// if you are admin and specify a "preview" argument in the request
+	Preview *bool `schema:"preview,omitempty"`
+}
+
+func (client *Client) GetHint(id string, params *GetHintParams, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
-	if err := client.Get("/hints/"+id, nil, &hint, opts...); err != nil {
+	if err := client.Get("/hints/"+id, params, &hint, opts...); err != nil {
 		return nil, err
 	}
 	return hint, nil
@@ -49,14 +55,14 @@ type PatchHintsParams struct {
 	Requirements Requirements `json:"requirements"`
 }
 
-func (client *Client) DeleteHint(id string, opts ...Option) error {
-	return client.Delete("/hints/"+id, nil, nil, opts...)
-}
-
 func (client *Client) PatchHint(id string, params *PatchHintsParams, opts ...Option) (*Hint, error) {
 	hint := &Hint{}
 	if err := client.Patch("/hints/"+id, params, &hint, opts...); err != nil {
 		return nil, err
 	}
 	return hint, nil
+}
+
+func (client *Client) DeleteHint(id string, opts ...Option) error {
+	return client.Delete("/hints/"+id, nil, nil, opts...)
 }
