@@ -33,6 +33,8 @@ type PostNotificationsParams struct {
 	Sound   bool   `json:"sound"`
 	Title   string `json:"title"`
 	Type    string `json:"type"`
+	UserID  *int   `schema:"user_id,omitempty"`
+	TeamID  *int   `schema:"team_id,omitempty"`
 }
 
 func (client *Client) PostNotifications(params *PostNotificationsParams, opts ...Option) (*Notification, error) {
