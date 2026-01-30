@@ -27,6 +27,7 @@ func (client *Client) Login(params *LoginParams, opts ...Option) error {
 
 	req, _ := http.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(val.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return err

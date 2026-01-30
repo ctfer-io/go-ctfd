@@ -14,7 +14,9 @@ var nonceRegex = regexp.MustCompile(`([0-9a-f]{64})`)
 // It uses the default HTTP client under the hood.
 func GetNonceAndSession(url string, opts ...Option) (nonce string, session string, err error) {
 	req, _ := http.NewRequest(http.MethodGet, url+"/setup", nil)
-	res, err := http.DefaultClient.Do(req)
+	client := http.DefaultClient
+	req, client.Transport = applyOpts(req, opts...)
+	res, err := client.Do(req)
 	if err != nil {
 		return "", "", err
 	}

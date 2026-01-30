@@ -34,6 +34,7 @@ func (client *Client) ExportRaw(params *ExportRawParams, opts ...Option) ([]byte
 	// Build request and execute it manunally
 	req, _ := http.NewRequest(http.MethodPost, "/api/v1/exports/raw", bytes.NewBuffer(i))
 	req.Header.Set("Content-Type", "application/json")
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, err
