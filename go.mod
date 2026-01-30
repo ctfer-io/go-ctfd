@@ -1,6 +1,6 @@
 module github.com/ctfer-io/go-ctfd
 
-go 1.22
+go 1.25.4
 
 require (
 	github.com/gorilla/schema v1.4.1

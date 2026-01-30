@@ -14,9 +14,10 @@ updates:
     assignees:
       - "pandatix"
 
-  # Functional tests Go module
+  # Specific examples
   - package-ecosystem: "gomod"
-    directory: "/deploy"
+    directories:
+      - "examples/opentelemetry"
     schedule:
       interval: "weekly"
     assignees:
