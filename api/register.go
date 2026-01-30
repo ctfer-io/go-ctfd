@@ -23,6 +23,7 @@ func (client *Client) Register(params *RegisterParams, opts ...Option) error {
 
 	req, _ := http.NewRequest(http.MethodPost, "/register", bytes.NewBufferString(val.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return err
@@ -37,6 +38,7 @@ func (client *Client) Register(params *RegisterParams, opts ...Option) error {
 
 	// Update session to track user then fetch nonce for later API calls
 	req, _ = http.NewRequest(http.MethodGet, "/", nil)
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err = client.Do(req)
 	if err != nil {
 		return err

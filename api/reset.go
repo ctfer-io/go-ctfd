@@ -38,7 +38,7 @@ func (client *Client) Reset(params *ResetParams, opts ...Option) error {
 	}
 	req, _ := http.NewRequest(http.MethodPost, "/admin/reset", strings.NewReader(str))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "CTFd responded with error")

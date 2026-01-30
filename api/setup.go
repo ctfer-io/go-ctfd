@@ -70,6 +70,7 @@ func (client *Client) Setup(params *SetupParams, opts ...Option) error {
 		client.sub.CheckRedirect = oldCR
 	}()
 
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return err

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -68,16 +67,8 @@ func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ..
 		req.URL.RawQuery = val.Encode()
 	}
 
-	// Compile options
-	reqopts := &options{
-		Ctx: context.Background(),
-	}
-	for _, opt := range opts {
-		opt.apply(reqopts)
-	}
-	req = req.WithContext(reqopts.Ctx)
-
 	// Issue HTTP request
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return 0, err

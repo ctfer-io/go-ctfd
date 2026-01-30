@@ -8,6 +8,7 @@ import (
 
 func (client *Client) Logout(opts ...Option) error {
 	req, _ := http.NewRequest(http.MethodGet, "/logout", nil)
+	req, client.sub.Transport = applyOpts(req, opts...)
 	res, err := client.Do(req)
 	if err != nil {
 		return err
