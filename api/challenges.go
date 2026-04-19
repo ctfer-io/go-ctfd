@@ -35,6 +35,7 @@ type PostChallengesParams struct {
 	Minimum        *int          `json:"minimum,omitempty"`
 	Logic          string        `json:"logic"`
 	MaxAttempts    *int          `json:"max_attempts,omitempty"`
+	Position       *int          `json:"position,omitempty"`
 	NextID         *int          `json:"next_id,omitempty"`
 	Requirements   *Requirements `json:"requirements,omitempty"`
 	State          string        `json:"state"`
@@ -92,6 +93,7 @@ type PatchChallengeParams struct {
 	Minimum        *int    `json:"minimum,omitempty"`
 	Logic          *string `json:"logic,omitempty"`
 	MaxAttempts    *int    `json:"max_attempts,omitempty"`
+	Position       *int    `json:"position,omitempty"`
 	NextID         *int    `json:"next_id,omitempty"`
 	// Requirements can update the challenge's behavior and prerequisites i.e.
 	// the other challenges the team/user must have solved before.
