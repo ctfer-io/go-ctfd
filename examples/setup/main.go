@@ -131,7 +131,7 @@ func main() {
 		MaxAttempts:    ch.MaxAttempts,
 		State:          ch.State,
 		Requirements: &ctfd.Requirements{
-			Anonymize:     ptr(false),
+			Anonymize:     ptr("false"),
 			Prerequisites: []int{ch.ID},
 		},
 	})

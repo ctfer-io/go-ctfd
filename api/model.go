@@ -8,6 +8,7 @@ type (
 		Attribution    *string           `json:"attribution,omitempty"`
 		ConnectionInfo *string           `json:"connection_info,omitempty"`
 		MaxAttempts    *int              `json:"max_attempts,omitempty"`
+		Position       *int              `json:"position,omitempty"`
 		Function       *string           `json:"function,omitempty"`
 		Value          int               `json:"value"`
 		Initial        *int              `json:"initial,omitempty"`
@@ -98,10 +99,11 @@ type (
 	Requirements struct {
 		// Anonymize control the behavior of the resource if the prerequisites are
 		// not validated:
-		//  - if `nil`, defaults to `*false`
-		//  - if `*false`, set the behavior as "hidden" (invisible until validated)
-		//  - if `*true`, set the behavior to "anonymized" (visible but not much info)
-		Anonymize *bool `json:"anonymize,omitempty"`
+		//  - if `nil` or `*"false"` behave as "Hidden" (invisible until validated)
+		//  - if `*"true"` behave as "Anonymized" (visible but not much info)
+		//  - if `*"preview"` behave as "Preview" (visible but only required data for previews)
+		//  - else defaults to the "Hidden" behavior
+		Anonymize *string `json:"anonymize,omitempty"`
 
 		// Prerequisites is the list of resources' ID that need to be validated in
 		// order for the resource to meet its requirements.
@@ -251,6 +253,30 @@ type (
 	StatUsers struct {
 		Registered int `json:"registered"`
 		Confirmed  int `json:"confirmed"`
+	}
+
+	ProgressionMatrix struct {
+		Scoreboard []struct {
+			ID          string   `json:"id"`
+			Name        string   `json:"name"`
+			Score       int      `json:"score"`
+			Place       int      `json:"place"`
+			URL         string   `json:"url"`
+			BracketID   string   `json:"bracket_id"`
+			BracketName string   `json:"bracket_name"`
+			Solves      []string `json:"solves"`
+			Attempts    []string `json:"attempts"`
+			Opens       []string `json:"opens"`
+		} `json:"scoreboard"`
+		Challenges []struct {
+			ID       string `json:"id"`
+			Name     string `json:"name"`
+			Value    int    `json:"value"`
+			Position int    `json:"position"`
+			Category string `json:"category"`
+			URL      string `json:"url"`
+		} `json:"challenges"`
+		Brackets []*Bracket `json:"brackets"`
 	}
 
 	Notification struct {
