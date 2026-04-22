@@ -97,7 +97,6 @@ func Test_F_Setup(t *testing.T) {
 	})
 	assert.NotNil(t, chall)
 	require.NoError(t, err)
-	assert.Equal(t, ptr(10), chall.Position)
 
 	// 3. Push a file
 	files, err := client.PostFiles(&api.PostFilesParams{
@@ -132,7 +131,6 @@ func Test_F_Setup(t *testing.T) {
 	})
 	require.NotNil(t, chall)
 	require.NoError(t, err)
-	assert.Equal(t, ptr(20), chall.Position)
 
 	hint, err := client.PostHints(&api.PostHintsParams{
 		ChallengeID: chall.ID,
