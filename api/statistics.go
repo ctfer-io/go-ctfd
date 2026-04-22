@@ -55,3 +55,11 @@ func (client *Client) GetStatisticsUsersColumn(column string, opts ...Option) (*
 	}
 	return st, nil
 }
+
+func (client *Client) GetProgressionMatrix(opts ...Option) (*ProgressionMatrix, error) {
+	pm := &ProgressionMatrix{}
+	if err := client.Get("/statistics/progression/matrix", nil, &pm, opts...); err != nil {
+		return nil, err
+	}
+	return pm, nil
+}
