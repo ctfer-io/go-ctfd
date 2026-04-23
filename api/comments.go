@@ -11,12 +11,13 @@ type GetCommentsParams struct {
 	Field       *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetComments(params *GetCommentsParams, opts ...Option) ([]*Comment, error) {
+func (client *Client) GetComments(params *GetCommentsParams, opts ...Option) ([]*Comment, *MetaResponse, error) {
 	comments := []*Comment{}
-	if err := client.Get("/comments", params, &comments, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/comments", params, &comments, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return comments, nil
+	return comments, meta, nil
 }
 
 type PostCommentsParams struct {
@@ -25,14 +26,15 @@ type PostCommentsParams struct {
 	Type    string `json:"type"`
 }
 
-func (client *Client) PostComments(params *PostCommentsParams, opts ...Option) (*Comment, error) {
+func (client *Client) PostComments(params *PostCommentsParams, opts ...Option) (*Comment, *MetaResponse, error) {
 	comment := &Comment{}
-	if err := client.Post("/comments", params, &comment, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/comments", params, &comment, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return comment, nil
+	return comment, meta, nil
 }
 
-func (client *Client) DeleteComment(id int, opts ...Option) error {
+func (client *Client) DeleteComment(id int, opts ...Option) (*MetaResponse, error) {
 	return client.Delete(fmt.Sprintf("/comments/%d", id), nil, nil, opts...)
 }

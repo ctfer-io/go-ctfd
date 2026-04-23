@@ -11,12 +11,13 @@ type GetAwardsParams struct {
 	Field    *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetAwards(params *GetAwardsParams, opts ...Option) ([]*Award, error) {
+func (client *Client) GetAwards(params *GetAwardsParams, opts ...Option) ([]*Award, *MetaResponse, error) {
 	awards := []*Award{}
-	if err := client.Get("/awards", params, &awards, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/awards", params, &awards, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return awards, nil
+	return awards, meta, nil
 }
 
 type PostAwardsParams struct {
@@ -28,22 +29,24 @@ type PostAwardsParams struct {
 	Value       int    `json:"value"`
 }
 
-func (client *Client) PostAwards(params *PostAwardsParams, opts ...Option) (*Award, error) {
+func (client *Client) PostAwards(params *PostAwardsParams, opts ...Option) (*Award, *MetaResponse, error) {
 	award := &Award{}
-	if err := client.Post("/awards", params, &award, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/awards", params, &award, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return award, nil
+	return award, meta, nil
 }
 
-func (client *Client) GetAward(id string, opts ...Option) (*Award, error) {
+func (client *Client) GetAward(id string, opts ...Option) (*Award, *MetaResponse, error) {
 	award := &Award{}
-	if err := client.Get("/awards/"+id, nil, &award, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/awards/"+id, nil, &award, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return award, nil
+	return award, meta, nil
 }
 
-func (client *Client) DeleteAward(id string, opts ...Option) error {
+func (client *Client) DeleteAward(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/awards/"+id, nil, nil, opts...)
 }

@@ -5,10 +5,11 @@ type PostSharesParams struct {
 	Type        string `json:"type"`
 }
 
-func (client *Client) PostShares(params *PostSharesParams, opts ...Option) (*Shares, error) {
+func (client *Client) PostShares(params *PostSharesParams, opts ...Option) (*Shares, *MetaResponse, error) {
 	sh := &Shares{}
-	if err := client.Post("/shares", params, sh, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/shares", params, sh, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return sh, nil
+	return sh, meta, nil
 }

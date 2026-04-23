@@ -4,12 +4,13 @@ import "fmt"
 
 type GetSolutionsParams struct{}
 
-func (client *Client) GetSolutions(challID int, params *GetSolutionsParams, opts ...Option) (*Solution, error) {
+func (client *Client) GetSolutions(challID int, params *GetSolutionsParams, opts ...Option) (*Solution, *MetaResponse, error) {
 	sol := &Solution{}
-	if err := client.Get(fmt.Sprintf("/solutions/%d", challID), params, sol, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/solutions/%d", challID), params, sol, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return sol, nil
+	return sol, meta, nil
 }
 
 type PostSolutionsParams struct {
@@ -18,12 +19,13 @@ type PostSolutionsParams struct {
 	State       string `json:"state"`
 }
 
-func (client *Client) PostSolutions(params *PostSolutionsParams, opts ...Option) (*Solution, error) {
+func (client *Client) PostSolutions(params *PostSolutionsParams, opts ...Option) (*Solution, *MetaResponse, error) {
 	sol := &Solution{}
-	if err := client.Post("/solutions", params, sol, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/solutions", params, sol, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return sol, nil
+	return sol, meta, nil
 }
 
 type PatchSolutionsParams struct {
@@ -31,14 +33,15 @@ type PatchSolutionsParams struct {
 	State   string `json:"state"`
 }
 
-func (client *Client) PatchSolutions(id int, params *PatchSolutionsParams, opts ...Option) (*Solution, error) {
+func (client *Client) PatchSolutions(id int, params *PatchSolutionsParams, opts ...Option) (*Solution, *MetaResponse, error) {
 	sol := &Solution{}
-	if err := client.Patch(fmt.Sprintf("/solutions/%d", id), params, sol, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch(fmt.Sprintf("/solutions/%d", id), params, sol, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return sol, nil
+	return sol, meta, nil
 }
 
-func (client *Client) DeleteSolutions(id int, opts ...Option) error {
+func (client *Client) DeleteSolutions(id int, opts ...Option) (*MetaResponse, error) {
 	return client.Delete(fmt.Sprintf("/solutions/%d", id), nil, nil, opts...)
 }

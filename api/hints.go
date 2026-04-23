@@ -9,12 +9,13 @@ type GetHintsParams struct {
 	Field       *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint, error) {
+func (client *Client) GetHints(params *GetHintsParams, opts ...Option) ([]*Hint, *MetaResponse, error) {
 	hints := []*Hint{}
-	if err := client.Get("/hints", params, &hints, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/hints", params, &hints, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return hints, nil
+	return hints, meta, nil
 }
 
 type PostHintsParams struct {
@@ -25,12 +26,13 @@ type PostHintsParams struct {
 	Requirements Requirements `json:"requirements"`
 }
 
-func (client *Client) PostHints(params *PostHintsParams, opts ...Option) (*Hint, error) {
+func (client *Client) PostHints(params *PostHintsParams, opts ...Option) (*Hint, *MetaResponse, error) {
 	hint := &Hint{}
-	if err := client.Post("/hints", params, &hint, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/hints", params, &hint, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return hint, nil
+	return hint, meta, nil
 }
 
 type GetHintParams struct {
@@ -39,12 +41,13 @@ type GetHintParams struct {
 	Preview *bool `schema:"preview,omitempty"`
 }
 
-func (client *Client) GetHint(id string, params *GetHintParams, opts ...Option) (*Hint, error) {
+func (client *Client) GetHint(id string, params *GetHintParams, opts ...Option) (*Hint, *MetaResponse, error) {
 	hint := &Hint{}
-	if err := client.Get("/hints/"+id, params, &hint, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/hints/"+id, params, &hint, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return hint, nil
+	return hint, meta, nil
 }
 
 type PatchHintsParams struct {
@@ -55,14 +58,15 @@ type PatchHintsParams struct {
 	Requirements Requirements `json:"requirements"`
 }
 
-func (client *Client) PatchHint(id string, params *PatchHintsParams, opts ...Option) (*Hint, error) {
+func (client *Client) PatchHint(id string, params *PatchHintsParams, opts ...Option) (*Hint, *MetaResponse, error) {
 	hint := &Hint{}
-	if err := client.Patch("/hints/"+id, params, &hint, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch("/hints/"+id, params, &hint, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return hint, nil
+	return hint, meta, nil
 }
 
-func (client *Client) DeleteHint(id string, opts ...Option) error {
+func (client *Client) DeleteHint(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/hints/"+id, nil, nil, opts...)
 }

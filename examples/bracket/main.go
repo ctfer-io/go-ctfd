@@ -22,7 +22,7 @@ func main() {
 
 	// Create a user bracket
 	fmt.Println("[+] Creating user bracket")
-	bu, err := cli.PostBrackets(&api.PostBracketsParams{
+	bu, _, err := cli.PostBrackets(&api.PostBracketsParams{
 		Name:        "Juniors",
 		Description: "Brackets for 14-25 years old players.",
 		Type:        "users",
@@ -33,7 +33,7 @@ func main() {
 
 	// Create a user
 	fmt.Println("[+] Creating user")
-	user, err := cli.PostUsers(&api.PostUsersParams{
+	user, _, err := cli.PostUsers(&api.PostUsersParams{
 		Name:      "player1",
 		Email:     "player1@ctfer.io",
 		Password:  "password",
@@ -48,7 +48,7 @@ func main() {
 
 	// Create a team bracket
 	fmt.Println("[+] Creating team bracket")
-	bt, err := cli.PostBrackets(&api.PostBracketsParams{
+	bt, _, err := cli.PostBrackets(&api.PostBracketsParams{
 		Name:        "Students",
 		Description: "Brackets for students",
 		Type:        "teams",
@@ -58,7 +58,7 @@ func main() {
 	}
 
 	// Create a team
-	team, err := cli.PostTeams(&api.PostTeamsParams{
+	team, _, err := cli.PostTeams(&api.PostTeamsParams{
 		Name:      "students",
 		Email:     "students@ctfer.io",
 		Password:  "password",
@@ -70,7 +70,7 @@ func main() {
 	}
 	fmt.Printf("Created team %d\n", team.ID)
 
-	if _, err := cli.PostTeamMembers(team.ID, &api.PostTeamsMembersParams{
+	if _, _, err := cli.PostTeamMembers(team.ID, &api.PostTeamsMembersParams{
 		UserID: user.ID,
 	}); err != nil {
 		log.Fatalf("Adding user %d in team %d: %s", user.ID, team.ID, err)

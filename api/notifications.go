@@ -19,12 +19,13 @@ type GetNotificationsParams struct {
 	SinceID *int    `schema:"since_id,omitempty"`
 }
 
-func (client *Client) GetNotifications(params *GetNotificationsParams, opts ...Option) ([]*Notification, error) {
+func (client *Client) GetNotifications(params *GetNotificationsParams, opts ...Option) ([]*Notification, *MetaResponse, error) {
 	notifs := []*Notification{}
-	if err := client.Get("/notifications", params, &notifs, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/notifications", params, &notifs, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return notifs, nil
+	return notifs, meta, nil
 }
 
 type PostNotificationsParams struct {
@@ -36,12 +37,13 @@ type PostNotificationsParams struct {
 	TeamID  *int   `schema:"team_id,omitempty"`
 }
 
-func (client *Client) PostNotifications(params *PostNotificationsParams, opts ...Option) (*Notification, error) {
+func (client *Client) PostNotifications(params *PostNotificationsParams, opts ...Option) (*Notification, *MetaResponse, error) {
 	notif := &Notification{}
-	if err := client.Post("/notifications", params, &notif, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/notifications", params, &notif, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return notif, nil
+	return notif, meta, nil
 }
 
 type HeadNotificationsParams struct {
@@ -85,14 +87,15 @@ func (client *Client) HeadNotifications(params *HeadNotificationsParams, opts ..
 	return strconv.Atoi(res.Header.Get("Result-Count"))
 }
 
-func (client *Client) GetNotification(id string, opts ...Option) (*Notification, error) {
+func (client *Client) GetNotification(id string, opts ...Option) (*Notification, *MetaResponse, error) {
 	notif := &Notification{}
-	if err := client.Get("/notifications/"+id, nil, &notif, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/notifications/"+id, nil, &notif, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return notif, nil
+	return notif, meta, nil
 }
 
-func (client *Client) DeleteNotification(id string, opts ...Option) error {
+func (client *Client) DeleteNotification(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/notifications/"+id, nil, nil, opts...)
 }

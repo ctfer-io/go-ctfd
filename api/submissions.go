@@ -9,27 +9,31 @@ type GetSubmissionsParams struct {
 	Type        *string `schema:"type,omitempty"`
 	Q           *string `schema:"q,omitempty"`
 	Field       *string `schema:"field,omitempty"`
+
+	Page    *int `schema:"page,omitempty"`
+	PerPage *int `schema:"per_page,omitempty"`
 }
 
-// TODO support pagination ? CTFd does not seem to support parameters for this
-func (client *Client) GetSubmissions(params *GetSubmissionsParams, opts ...Option) ([]*Submission, error) {
+func (client *Client) GetSubmissions(params *GetSubmissionsParams, opts ...Option) ([]*Submission, *MetaResponse, error) {
 	submissions := []*Submission{}
-	if err := client.Get("/submissions", params, &submissions, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/submissions", params, &submissions, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return submissions, nil
+	return submissions, meta, nil
 }
 
 // XXX POST /submissions remains usable ?
 
-func (client *Client) GetSubmission(id string, opts ...Option) (*Submission, error) {
+func (client *Client) GetSubmission(id string, opts ...Option) (*Submission, *MetaResponse, error) {
 	submission := &Submission{}
-	if err := client.Get("/submissions/"+id, nil, &submission, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/submissions/"+id, nil, &submission, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return submission, nil
+	return submission, meta, nil
 }
 
-func (client *Client) DeleteSubmission(id string, opts ...Option) error {
+func (client *Client) DeleteSubmission(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/submissions/"+id, nil, nil, opts...)
 }

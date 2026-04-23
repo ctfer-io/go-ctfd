@@ -1,65 +1,73 @@
 package api
 
-func (client *Client) GetStatisticsChallengesSolves(opts ...Option) ([]*StatChallSubmission, error) {
+func (client *Client) GetStatisticsChallengesSolves(opts ...Option) ([]*StatChallSubmission, *MetaResponse, error) {
 	stats := []*StatChallSubmission{}
-	if err := client.Get("/statistics/challenges/solves", nil, &stats, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/challenges/solves", nil, &stats, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return stats, nil
+	return stats, meta, nil
 }
 
-func (client *Client) GetStatisticsChallengesColumn(column string, opts ...Option) (map[string]int, error) {
+func (client *Client) GetStatisticsChallengesColumn(column string, opts ...Option) (map[string]int, *MetaResponse, error) {
 	stats := map[string]int{}
-	if err := client.Get("/statistics/challenges/"+column, nil, &stats, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/challenges/"+column, nil, &stats, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return stats, nil
+	return stats, meta, nil
 }
 
-func (client *Client) GetStatisticsScoresDistribution(opts ...Option) (*Distribution, error) {
+func (client *Client) GetStatisticsScoresDistribution(opts ...Option) (*Distribution, *MetaResponse, error) {
 	dist := &Distribution{}
-	if err := client.Get("/statistics/scores/distribution", nil, &dist, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/scores/distribution", nil, &dist, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return dist, nil
+	return dist, meta, nil
 }
 
-func (client *Client) GetStatisticsSubmissionsColumn(column string, opts ...Option) (map[string]int, error) {
+func (client *Client) GetStatisticsSubmissionsColumn(column string, opts ...Option) (map[string]int, *MetaResponse, error) {
 	stats := map[string]int{}
-	if err := client.Get("/statistics/submissions/"+column, nil, &stats, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/submissions/"+column, nil, &stats, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return stats, nil
+	return stats, meta, nil
 }
 
-func (client *Client) GetStatisticsTeams(opts ...Option) (*StatTeams, error) {
+func (client *Client) GetStatisticsTeams(opts ...Option) (*StatTeams, *MetaResponse, error) {
 	st := &StatTeams{}
-	if err := client.Get("/statistics/teams", nil, &st, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/teams", nil, &st, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return st, nil
+	return st, meta, nil
 }
 
-func (client *Client) GetStatisticsUsers(opts ...Option) (*StatUsers, error) {
+func (client *Client) GetStatisticsUsers(opts ...Option) (*StatUsers, *MetaResponse, error) {
 	st := &StatUsers{}
-	if err := client.Get("/statistics/users", nil, &st, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/users", nil, &st, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return st, nil
+	return st, meta, nil
 }
 
-func (client *Client) GetStatisticsUsersColumn(column string, opts ...Option) (*StatUsers, error) {
+func (client *Client) GetStatisticsUsersColumn(column string, opts ...Option) (*StatUsers, *MetaResponse, error) {
 	st := &StatUsers{}
-	if err := client.Get("/statistics/users/"+column, nil, &st, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/users/"+column, nil, &st, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return st, nil
+	return st, meta, nil
 }
 
-func (client *Client) GetProgressionMatrix(opts ...Option) (*ProgressionMatrix, error) {
+func (client *Client) GetProgressionMatrix(opts ...Option) (*ProgressionMatrix, *MetaResponse, error) {
 	pm := &ProgressionMatrix{}
-	if err := client.Get("/statistics/progression/matrix", nil, &pm, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/statistics/progression/matrix", nil, &pm, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return pm, nil
+	return pm, meta, nil
 }

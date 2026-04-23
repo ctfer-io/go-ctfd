@@ -46,7 +46,7 @@ func main() {
 
 	// Create API Key
 	fmt.Println("[+] Creating API Token")
-	token, err := client.PostTokens(&ctfd.PostTokensParams{
+	token, _, err := client.PostTokens(&ctfd.PostTokensParams{
 		Expiration:  "2222-02-02",
 		Description: "Example API token.",
 	})
@@ -57,7 +57,7 @@ func main() {
 
 	// Add challenge
 	fmt.Println("[+] Creating challenge")
-	ch, err := client.PostChallenges(&ctfd.PostChallengesParams{
+	ch, _, err := client.PostChallenges(&ctfd.PostChallengesParams{
 		Name:           "Break The License 1/2",
 		Category:       "crypto",
 		Description:    "...",
@@ -77,7 +77,7 @@ func main() {
 	fmt.Printf("    Created challenge %d\n", ch.ID)
 
 	// Add files to it
-	files, err := client.PostFiles(&ctfd.PostFilesParams{
+	files, _, err := client.PostFiles(&ctfd.PostFilesParams{
 		Files: []*ctfd.InputFile{
 			{
 				Name:    "file1",
@@ -96,7 +96,7 @@ func main() {
 
 	// Add a flag to solve it
 	fmt.Println("[~] Updating challenge")
-	f, err := client.PostFlags(&ctfd.PostFlagsParams{
+	f, _, err := client.PostFlags(&ctfd.PostFlagsParams{
 		Challenge: ch.ID,
 		Content:   "24HIUT{content}",
 		Type:      "static",
@@ -107,7 +107,7 @@ func main() {
 
 	// Solve it
 	fmt.Println("[+] Creating attempt")
-	att, err := client.PostChallengesAttempt(&ctfd.PostChallengesAttemptParams{
+	att, _, err := client.PostChallengesAttempt(&ctfd.PostChallengesAttemptParams{
 		ChallengeID: ch.ID,
 		Submission:  f.Content,
 	})
@@ -118,7 +118,7 @@ func main() {
 
 	// Make it loop on itself, deadlock :imp:
 	fmt.Println("[~] Making the challenge require itself...")
-	ch, err = client.PatchChallenge(ch.ID, &ctfd.PatchChallengeParams{
+	ch, _, err = client.PatchChallenge(ch.ID, &ctfd.PatchChallengeParams{
 		Name:           ch.Name,
 		Category:       ch.Category,
 		Description:    ch.Description,
@@ -138,7 +138,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("   Failed: %s", err)
 	}
-	ch.Requirements, err = client.GetChallengeRequirements(ch.ID)
+	ch.Requirements, _, err = client.GetChallengeRequirements(ch.ID)
 	if err != nil {
 		log.Fatalf("    Failed: %s", err)
 	}
