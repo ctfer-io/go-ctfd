@@ -187,7 +187,7 @@ type PutChallengeRatingsParams struct {
 
 func (client *Client) PutChallengeRatings(id int, params *PutChallengeRatingsParams, opts ...Option) (*Rating, error) {
 	rat := &Rating{}
-	if err := client.Put(fmt.Sprintf("/challenges/%c/ratings", id), params, rat, opts...); err != nil {
+	if err := client.Put(fmt.Sprintf("/challenges/%d/ratings", id), params, rat, opts...); err != nil {
 		return nil, err
 	}
 	return rat, nil
