@@ -11,12 +11,13 @@ type GetPagesParams struct {
 	Field        *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetPages(params *GetPagesParams, opts ...Option) ([]*Page, error) {
+func (client *Client) GetPages(params *GetPagesParams, opts ...Option) ([]*Page, *MetaResponse, error) {
 	pages := []*Page{}
-	if err := client.Get("/pages", params, &pages, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/pages", params, &pages, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return pages, nil
+	return pages, meta, nil
 }
 
 type PostPagesParams struct {
@@ -31,23 +32,25 @@ type PostPagesParams struct {
 }
 
 // XXX find if could use constraint error on .route to get a shell using the PIN form on sqlalchemy.exc.IntegrityError
-func (client *Client) PostPages(params *PostPagesParams, opts ...Option) (*Page, error) {
+func (client *Client) PostPages(params *PostPagesParams, opts ...Option) (*Page, *MetaResponse, error) {
 	page := &Page{}
-	if err := client.Post("/pages", params, &page, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/pages", params, &page, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return page, nil
+	return page, meta, nil
 }
 
-func (client *Client) GetPage(id string, opts ...Option) (*Page, error) {
+func (client *Client) GetPage(id string, opts ...Option) (*Page, *MetaResponse, error) {
 	page := &Page{}
-	if err := client.Get("/pages/"+id, nil, &page, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/pages/"+id, nil, &page, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return page, nil
+	return page, meta, nil
 }
 
-func (client *Client) DeletePage(id string, opts ...Option) error {
+func (client *Client) DeletePage(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/pages/"+id, nil, nil, opts...)
 }
 
@@ -62,10 +65,11 @@ type PatchPageParams struct {
 	Hidden       bool   `json:"hidden"`
 }
 
-func (client *Client) PatchPage(id string, params *PatchPageParams, opts ...Option) (*Page, error) {
+func (client *Client) PatchPage(id string, params *PatchPageParams, opts ...Option) (*Page, *MetaResponse, error) {
 	page := &Page{}
-	if err := client.Patch("/pages/"+id, params, &page, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch("/pages/"+id, params, &page, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return page, nil
+	return page, meta, nil
 }

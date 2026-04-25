@@ -25,7 +25,7 @@ func Test_F_CTF(t *testing.T) {
 
 	t.Cleanup(func() {
 		// Due to relicas, forced to unpause the event elseway the test is not reproducible
-		_ = admin.PatchConfigs(&api.PatchConfigsParams{
+		_, _ = admin.PatchConfigs(&api.PatchConfigsParams{
 			Paused: ptr(false),
 		})
 
@@ -63,7 +63,7 @@ func Test_F_CTF(t *testing.T) {
 	require.NoError(t, err)
 
 	// 1c. Create an API Key to avoid session/nonce+cookies dance
-	token, err := admin.PostTokens(&api.PostTokensParams{
+	token, _, err := admin.PostTokens(&api.PostTokensParams{
 		Expiration:  "2222-01-01",
 		Description: "Example API token.",
 	})
@@ -71,7 +71,7 @@ func Test_F_CTF(t *testing.T) {
 	admin.SetAPIKey(*token.Value)
 
 	// 2. Add a page
-	_, err = admin.PostPages(&api.PostPagesParams{
+	_, _, err = admin.PostPages(&api.PostPagesParams{
 		AuthRequired: false,
 		Content:      "# Test",
 		Draft:        false,
@@ -84,7 +84,7 @@ func Test_F_CTF(t *testing.T) {
 	require.NoError(t, err)
 
 	// 3. Add a challenge with a flag
-	chall, err := admin.PostChallenges(&api.PostChallengesParams{
+	chall, _, err := admin.PostChallenges(&api.PostChallengesParams{
 		Name:           "Stealing data",
 		Category:       "network",
 		Description:    "The network administrator just sent you the info that some strange packets where going out of a server.\nAt first glance, it is an internal one.\nCan you tell us what it is ?",
@@ -100,7 +100,7 @@ func Test_F_CTF(t *testing.T) {
 	require.NotNil(t, chall)
 	require.NoError(t, err)
 
-	flag, err := admin.PostFlags(&api.PostFlagsParams{
+	flag, _, err := admin.PostFlags(&api.PostFlagsParams{
 		Challenge: chall.ID,
 		Content:   "24HIUT{IcmpExfiltrationIsEasy}",
 		Data:      "case_sensitive",
@@ -120,11 +120,11 @@ func Test_F_CTF(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	usr, err := user.GetUsersMe()
+	usr, _, err := user.GetUsersMe()
 	require.NoError(t, err)
 
 	// 5a. User failed attempt
-	att, err := user.PostChallengesAttempt(&api.PostChallengesAttemptParams{
+	att, _, err := user.PostChallengesAttempt(&api.PostChallengesAttemptParams{
 		ChallengeID: chall.ID,
 		Submission:  "INVALID-FLAG",
 	})
@@ -132,7 +132,7 @@ func Test_F_CTF(t *testing.T) {
 	require.NoError(t, err)
 
 	// 5b. User successfull attempt
-	att, err = user.PostChallengesAttempt(&api.PostChallengesAttemptParams{
+	att, _, err = user.PostChallengesAttempt(&api.PostChallengesAttemptParams{
 		ChallengeID: chall.ID,
 		Submission:  "24HIUT{IcmpExfiltrationIsEasy}",
 	})
@@ -140,7 +140,7 @@ func Test_F_CTF(t *testing.T) {
 	require.NoError(t, err)
 
 	// 5c. User share its work
-	sh, err := user.PostShares(&api.PostSharesParams{
+	sh, _, err := user.PostShares(&api.PostSharesParams{
 		ChallengeID: chall.ID,
 		Type:        "solve",
 	})
@@ -148,7 +148,7 @@ func Test_F_CTF(t *testing.T) {
 	assert.NotEmpty(t, sh.URL)
 
 	// 6. Admin gives an award for first blood
-	_, err = admin.PostAwards(&api.PostAwardsParams{
+	_, _, err = admin.PostAwards(&api.PostAwardsParams{
 		Name:        "First Blood",
 		Description: "First Blood for \"Stealing data\"",
 		Category:    "first-blood",
@@ -159,16 +159,16 @@ func Test_F_CTF(t *testing.T) {
 	require.NoError(t, err)
 
 	// 7. Admin gets some statistics
-	_, err = admin.GetStatisticsChallengesSolves()
+	_, _, err = admin.GetStatisticsChallengesSolves()
 	require.NoError(t, err)
 
-	_, err = admin.GetStatisticsUsers()
+	_, _, err = admin.GetStatisticsUsers()
 	require.NoError(t, err)
 
 	// ...
 
 	// 8. Admin pause event
-	err = admin.PatchConfigs(&api.PatchConfigsParams{
+	_, err = admin.PatchConfigs(&api.PatchConfigsParams{
 		Paused: ptr(true),
 	})
 	require.NoError(t, err)

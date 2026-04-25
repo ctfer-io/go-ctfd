@@ -7,12 +7,13 @@ type GetConfigsParams struct {
 	Field *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetConfigs(params *GetConfigsParams, opts ...Option) ([]*Config, error) {
+func (client *Client) GetConfigs(params *GetConfigsParams, opts ...Option) ([]*Config, *MetaResponse, error) {
 	configs := []*Config{}
-	if err := client.Get("/configs", params, &configs, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/configs", params, &configs, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return configs, nil
+	return configs, meta, nil
 }
 
 type PatchConfigsParams struct {
@@ -127,7 +128,7 @@ type PatchConfigsParams struct {
 	UserMode *string `json:"user_mode,omitempty"`
 }
 
-func (client *Client) PatchConfigs(params *PatchConfigsParams, opts ...Option) error {
+func (client *Client) PatchConfigs(params *PatchConfigsParams, opts ...Option) (*MetaResponse, error) {
 	return client.Patch("/configs", params, nil, opts...)
 }
 
@@ -136,12 +137,13 @@ type PostConfigsParams struct {
 	Value string `json:"value"`
 }
 
-func (client *Client) PostConfigs(params *PostConfigsParams, opts ...Option) (*Config, error) {
+func (client *Client) PostConfigs(params *PostConfigsParams, opts ...Option) (*Config, *MetaResponse, error) {
 	config := &Config{}
-	if err := client.Post("/configs", params, &config, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/configs", params, &config, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return config, nil
+	return config, meta, nil
 }
 
 type GetConfigsFieldsParams struct {
@@ -150,12 +152,13 @@ type GetConfigsFieldsParams struct {
 	Field *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetConfigsFields(params *GetConfigsParams, opts ...Option) ([]*ConfigField, error) {
+func (client *Client) GetConfigsFields(params *GetConfigsParams, opts ...Option) ([]*ConfigField, *MetaResponse, error) {
 	fields := []*ConfigField{}
-	if err := client.Get("/configs/fields", params, &fields, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/configs/fields", params, &fields, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return fields, nil
+	return fields, meta, nil
 }
 
 type PostConfigFieldsParams struct {
@@ -169,23 +172,25 @@ type PostConfigFieldsParams struct {
 	Type        string  `json:"type"`
 }
 
-func (client *Client) PostConfigFields(params *PostConfigFieldsParams, opts ...Option) (*ConfigField, error) {
+func (client *Client) PostConfigFields(params *PostConfigFieldsParams, opts ...Option) (*ConfigField, *MetaResponse, error) {
 	field := &ConfigField{}
-	if err := client.Post("/configs/fields", params, &field, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/configs/fields", params, &field, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return field, nil
+	return field, meta, nil
 }
 
-func (client *Client) GetConfigsField(id string, opts ...Option) (*ConfigField, error) {
+func (client *Client) GetConfigsField(id string, opts ...Option) (*ConfigField, *MetaResponse, error) {
 	field := &ConfigField{}
-	if err := client.Get("/configs/fields/"+id, nil, &field, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/configs/fields/"+id, nil, &field, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return field, nil
+	return field, meta, nil
 }
 
-func (client *Client) DeleteConfigsField(id string, opts ...Option) error {
+func (client *Client) DeleteConfigsField(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/configs/fields/"+id, nil, nil, opts...)
 }
 
@@ -200,53 +205,58 @@ type PatchConfigsFieldParams struct {
 	Required    bool   `json:"required"`
 }
 
-func (client *Client) PatchConfigsField(id string, params *PatchConfigsFieldParams, opts ...Option) (*ConfigField, error) {
+func (client *Client) PatchConfigsField(id string, params *PatchConfigsFieldParams, opts ...Option) (*ConfigField, *MetaResponse, error) {
 	field := &ConfigField{}
-	if err := client.Patch("/configs/fields/"+id, params, &field, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch("/configs/fields/"+id, params, &field, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return field, nil
+	return field, meta, nil
 }
 
 // TODO find model
-func (client *Client) GetConfigsByKey(key string, opts ...Option) (any, error) {
+func (client *Client) GetConfigsByKey(key string, opts ...Option) (any, *MetaResponse, error) {
 	var config any
-	if err := client.Get("/configs/"+key, nil, &config, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/configs/"+key, nil, &config, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return config, nil
+	return config, meta, nil
 }
 
 // TODO confirm delete does not take parameters and returns anything
-func (client *Client) DeleteConfigsByKey(key string, opts ...Option) error {
+func (client *Client) DeleteConfigsByKey(key string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/configs/"+key, nil, nil, opts...)
 }
 
 // TODO find input model
-func (client *Client) PatchConfigsByKey(key string, params any, opts ...Option) (any, error) {
+func (client *Client) PatchConfigsByKey(key string, params any, opts ...Option) (any, *MetaResponse, error) {
 	var config any
-	if err := client.Patch("/configs/"+key, params, &config, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch("/configs/"+key, params, &config, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return config, nil
+	return config, meta, nil
 }
 
 type PatchConfigsCTFLogo struct {
 	Value *string `json:"value"`
 }
 
-func (client *Client) PatchConfigsCTFLogo(params *PatchConfigsCTFLogo, opts ...Option) (*ThemeImage, error) {
+func (client *Client) PatchConfigsCTFLogo(params *PatchConfigsCTFLogo, opts ...Option) (*ThemeImage, *MetaResponse, error) {
 	var ti *ThemeImage
-	if err := client.Patch("/configs/ctf_logo", params, ti, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch("/configs/ctf_logo", params, ti, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ti, nil
+	return ti, meta, nil
 }
 
-func (client *Client) PatchConfigsCTFSmallIcon(params *PatchConfigsCTFLogo, opts ...Option) (*ThemeImage, error) {
+func (client *Client) PatchConfigsCTFSmallIcon(params *PatchConfigsCTFLogo, opts ...Option) (*ThemeImage, *MetaResponse, error) {
 	var ti *ThemeImage
-	if err := client.Patch("/configs/ctf_small_icon", params, ti, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch("/configs/ctf_small_icon", params, ti, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ti, nil
+	return ti, meta, nil
 }

@@ -9,12 +9,13 @@ type GetBracketsParams struct {
 	Q           *string `schema:"q,omitempty"`
 }
 
-func (client *Client) GetBrackets(params *GetBracketsParams, opts ...Option) ([]*Bracket, error) {
+func (client *Client) GetBrackets(params *GetBracketsParams, opts ...Option) ([]*Bracket, *MetaResponse, error) {
 	bks := []*Bracket{}
-	if err := client.Get("/brackets", params, &bks, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/brackets", params, &bks, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return bks, nil
+	return bks, meta, nil
 }
 
 type PostBracketsParams struct {
@@ -24,12 +25,13 @@ type PostBracketsParams struct {
 	Type        string  `json:"type"`
 }
 
-func (client *Client) PostBrackets(params *PostBracketsParams, opts ...Option) (*Bracket, error) {
+func (client *Client) PostBrackets(params *PostBracketsParams, opts ...Option) (*Bracket, *MetaResponse, error) {
 	bk := &Bracket{}
-	if err := client.Post("/brackets", params, bk, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/brackets", params, bk, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return bk, nil
+	return bk, meta, nil
 }
 
 type PatchBracketsParams struct {
@@ -38,14 +40,15 @@ type PatchBracketsParams struct {
 	Type        *string `json:"type,omitempty"`
 }
 
-func (client *Client) PatchBrackets(id int, params *PatchBracketsParams, opts ...Option) (*Bracket, error) {
+func (client *Client) PatchBrackets(id int, params *PatchBracketsParams, opts ...Option) (*Bracket, *MetaResponse, error) {
 	bk := &Bracket{}
-	if err := client.Patch(fmt.Sprintf("/brackets/%d", id), params, bk, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch(fmt.Sprintf("/brackets/%d", id), params, bk, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return bk, nil
+	return bk, meta, nil
 }
 
-func (client *Client) DeleteBrackets(id int, opts ...Option) error {
+func (client *Client) DeleteBrackets(id int, opts ...Option) (*MetaResponse, error) {
 	return client.Delete(fmt.Sprintf("/brackets/%d", id), nil, nil, opts...)
 }

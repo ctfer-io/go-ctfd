@@ -18,12 +18,13 @@ type GetFilesParams struct {
 	Field    *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File, error) {
+func (client *Client) GetFiles(params *GetFilesParams, opts ...Option) ([]*File, *MetaResponse, error) {
 	files := []*File{}
-	if err := client.Get("/files", params, &files, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/files", params, &files, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return files, nil
+	return files, meta, nil
 }
 
 type PostFilesParams struct {
@@ -32,7 +33,7 @@ type PostFilesParams struct {
 	Location  *string
 }
 
-func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, error) {
+func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*File, *MetaResponse, error) {
 	// Maps parameters to values
 	mp := map[string]any{
 		"file":  params.Files,
@@ -48,7 +49,7 @@ func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*Fil
 	}
 	b, ct, err := encodeMultipart(mp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	files := []*File{}
@@ -56,21 +57,23 @@ func (client *Client) PostFiles(params *PostFilesParams, opts ...Option) ([]*Fil
 	// Process request directly, as it does not use the REST flow
 	req, _ := http.NewRequest(http.MethodPost, "/files", b)
 	req.Header.Set("Content-Type", ct)
-	if err := client.Call(req, &files, opts...); err != nil {
-		return nil, err
+	meta, err := client.Call(req, &files, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return files, nil
+	return files, meta, nil
 }
 
-func (client *Client) GetFile(id string, opts ...Option) (*File, error) {
+func (client *Client) GetFile(id string, opts ...Option) (*File, *MetaResponse, error) {
 	file := &File{}
-	if err := client.Get("/files/"+id, nil, &file, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/files/"+id, nil, &file, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return file, nil
+	return file, meta, nil
 }
 
-func (client *Client) DeleteFile(id string, opts ...Option) error {
+func (client *Client) DeleteFile(id string, opts ...Option) (*MetaResponse, error) {
 	return client.Delete("/files/"+id, nil, nil, opts...)
 }
 

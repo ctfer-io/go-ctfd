@@ -88,7 +88,7 @@ func main() {
 
 	// Create an API key
 	fmt.Println("[+] Creating API Token")
-	token, err := func(ctx context.Context) (*api.Token, error) {
+	token, _, err := func(ctx context.Context) (*api.Token, *api.MetaResponse, error) {
 		ctx, span := tr.Start(ctx, "create-api-token")
 		defer span.End()
 
@@ -108,7 +108,7 @@ func main() {
 		ctx, span := tr.Start(ctx, "create-challenge")
 		defer span.End()
 
-		_, err := cli.PostChallenges(&api.PostChallengesParams{
+		_, _, err := cli.PostChallenges(&api.PostChallengesParams{
 			Name:           "Break The License 1/2",
 			Category:       "crypto",
 			Description:    "...",

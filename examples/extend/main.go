@@ -62,7 +62,7 @@ func PostChallenges(client *api.Client, params *PluginPostChallengesParams, opts
 	// ... default any value if required, check values (e.g. integer boundaries)
 
 	chall := &MyPluginChallenge{}
-	if err := client.Post("/plugins/my_plugin/challenges", params, chall, opts...); err != nil {
+	if _, err := client.Post("/plugins/my_plugin/challenges", params, chall, opts...); err != nil {
 		return nil, err
 	}
 	return chall, nil

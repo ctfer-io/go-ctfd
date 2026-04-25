@@ -9,12 +9,13 @@ type GetUnlocksParams struct {
 	Field  *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetUnlocks(params *GetUnlocksParams, opts ...Option) ([]*Unlock, error) {
+func (client *Client) GetUnlocks(params *GetUnlocksParams, opts ...Option) ([]*Unlock, *MetaResponse, error) {
 	unlocks := []*Unlock{}
-	if err := client.Get("/unlocks", params, &unlocks, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/unlocks", params, &unlocks, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return unlocks, nil
+	return unlocks, meta, nil
 }
 
 type PostUnlocksParams struct {
@@ -22,10 +23,11 @@ type PostUnlocksParams struct {
 	Type   string `json:"type"`
 }
 
-func (client *Client) PostUnlocks(params *PostUnlocksParams, opts ...Option) (*Unlock, error) {
+func (client *Client) PostUnlocks(params *PostUnlocksParams, opts ...Option) (*Unlock, *MetaResponse, error) {
 	unlock := &Unlock{}
-	if err := client.Post("/unlocks", params, &unlock, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/unlocks", params, &unlock, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return unlock, nil
+	return unlock, meta, nil
 }

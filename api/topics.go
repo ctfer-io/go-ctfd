@@ -13,12 +13,13 @@ type GetTopicsParams struct {
 	Field *string `schema:"field,omitempty"`
 }
 
-func (client *Client) GetTopics(params *GetTopicsParams, opts ...Option) ([]*Topic, error) {
+func (client *Client) GetTopics(params *GetTopicsParams, opts ...Option) ([]*Topic, *MetaResponse, error) {
 	topics := []*Topic{}
-	if err := client.Get("/topics", params, &topics, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/topics", params, &topics, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return topics, nil
+	return topics, meta, nil
 }
 
 type PostTopicsParams struct {
@@ -27,20 +28,22 @@ type PostTopicsParams struct {
 	Value     string `json:"value"`
 }
 
-func (client *Client) PostTopics(params *PostTopicsParams, opts ...Option) (*Topic, error) {
+func (client *Client) PostTopics(params *PostTopicsParams, opts ...Option) (*Topic, *MetaResponse, error) {
 	topic := &Topic{}
-	if err := client.Post("/topics", params, &topic, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/topics", params, &topic, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return topic, nil
+	return topic, meta, nil
 }
 
-func (client *Client) GetTopic(id string, opts ...Option) (*Topic, error) {
+func (client *Client) GetTopic(id string, opts ...Option) (*Topic, *MetaResponse, error) {
 	topic := &Topic{}
-	if err := client.Get("/topics/"+id, nil, &topic, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/topics/"+id, nil, &topic, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return topic, nil
+	return topic, meta, nil
 }
 
 type DeleteTopicArgs struct {
@@ -49,7 +52,7 @@ type DeleteTopicArgs struct {
 }
 
 // TODO fix this endpoint API instability, should reconsider using a DELETE method with a JSON body rather that URL-encoded parameters as for all other endpoints
-func (client *Client) DeleteTopic(params *DeleteTopicArgs, opts ...Option) error {
+func (client *Client) DeleteTopic(params *DeleteTopicArgs, opts ...Option) (*MetaResponse, error) {
 	// Build request
 	req, _ := http.NewRequest(http.MethodDelete, "/topics", nil)
 	req, client.sub.Transport = applyOpts(req, opts...)
@@ -57,7 +60,7 @@ func (client *Client) DeleteTopic(params *DeleteTopicArgs, opts ...Option) error
 	// Encode parameters
 	val := url.Values{}
 	if err := schema.NewEncoder().Encode(params, val); err != nil {
-		return err
+		return nil, err
 	}
 	req.URL.RawQuery = val.Encode()
 

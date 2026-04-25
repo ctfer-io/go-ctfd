@@ -14,12 +14,13 @@ type GetChallengesParams struct {
 	View *string `schema:"view,omitempty"`
 }
 
-func (client *Client) GetChallenges(params *GetChallengesParams, opts ...Option) ([]*Challenge, error) {
+func (client *Client) GetChallenges(params *GetChallengesParams, opts ...Option) ([]*Challenge, *MetaResponse, error) {
 	challs := []*Challenge{}
-	if err := client.Get("/challenges", params, &challs, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/challenges", params, &challs, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return challs, nil
+	return challs, meta, nil
 }
 
 type PostChallengesParams struct {
@@ -42,12 +43,13 @@ type PostChallengesParams struct {
 	Type           string        `json:"type"`
 }
 
-func (client *Client) PostChallenges(params *PostChallengesParams, opts ...Option) (*Challenge, error) {
+func (client *Client) PostChallenges(params *PostChallengesParams, opts ...Option) (*Challenge, *MetaResponse, error) {
 	chall := &Challenge{}
-	if err := client.Post("/challenges", params, &chall, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/challenges", params, &chall, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return chall, nil
+	return chall, meta, nil
 }
 
 type PostChallengesAttemptParams struct {
@@ -56,28 +58,31 @@ type PostChallengesAttemptParams struct {
 	Submission  string `json:"submission"`
 }
 
-func (client *Client) PostChallengesAttempt(params *PostChallengesAttemptParams, opts ...Option) (*Attempt, error) {
+func (client *Client) PostChallengesAttempt(params *PostChallengesAttemptParams, opts ...Option) (*Attempt, *MetaResponse, error) {
 	attempt := &Attempt{}
-	if err := client.Post("/challenges/attempt", params, &attempt, opts...); err != nil {
-		return nil, err
+	meta, err := client.Post("/challenges/attempt", params, &attempt, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return attempt, nil
+	return attempt, meta, nil
 }
 
-func (client *Client) GetChallengesTypes(opts ...Option) (map[string]*Type, error) {
+func (client *Client) GetChallengesTypes(opts ...Option) (map[string]*Type, *MetaResponse, error) {
 	types := map[string]*Type{}
-	if err := client.Get("/challenges/types", nil, &types, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get("/challenges/types", nil, &types, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return types, nil
+	return types, meta, nil
 }
 
-func (client *Client) GetChallenge(id int, opts ...Option) (*Challenge, error) {
+func (client *Client) GetChallenge(id int, opts ...Option) (*Challenge, *MetaResponse, error) {
 	chall := &Challenge{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d", id), nil, &chall, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d", id), nil, &chall, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return chall, nil
+	return chall, meta, nil
 }
 
 type PatchChallengeParams struct {
@@ -103,81 +108,90 @@ type PatchChallengeParams struct {
 	State        string        `json:"state"`
 }
 
-func (client *Client) DeleteChallenge(id int, opts ...Option) error {
+func (client *Client) DeleteChallenge(id int, opts ...Option) (*MetaResponse, error) {
 	return client.Delete(fmt.Sprintf("/challenges/%d", id), nil, nil, opts...)
 }
 
-func (client *Client) PatchChallenge(id int, params *PatchChallengeParams, opts ...Option) (*Challenge, error) {
+func (client *Client) PatchChallenge(id int, params *PatchChallengeParams, opts ...Option) (*Challenge, *MetaResponse, error) {
 	ch := &Challenge{}
-	if err := client.Patch(fmt.Sprintf("/challenges/%d", id), params, &ch, opts...); err != nil {
-		return nil, err
+	meta, err := client.Patch(fmt.Sprintf("/challenges/%d", id), params, &ch, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ch, nil
+	return ch, meta, nil
 }
 
-func (client *Client) GetChallengeFiles(id int, opts ...Option) ([]*File, error) {
+func (client *Client) GetChallengeFiles(id int, opts ...Option) ([]*File, *MetaResponse, error) {
 	cf := []*File{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/files", id), nil, &cf, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/files", id), nil, &cf, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return cf, nil
+	return cf, meta, nil
 }
 
-func (client *Client) GetChallengeFlags(id int, opts ...Option) ([]*Flag, error) {
+func (client *Client) GetChallengeFlags(id int, opts ...Option) ([]*Flag, *MetaResponse, error) {
 	cf := []*Flag{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/flags", id), nil, &cf, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/flags", id), nil, &cf, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return cf, nil
+	return cf, meta, nil
 }
 
-func (client *Client) GetChallengeHints(id int, opts ...Option) ([]*Hint, error) {
+func (client *Client) GetChallengeHints(id int, opts ...Option) ([]*Hint, *MetaResponse, error) {
 	ch := []*Hint{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/hints", id), nil, &ch, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/hints", id), nil, &ch, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ch, nil
+	return ch, meta, nil
 }
 
-func (client *Client) GetChallengeRequirements(id int, opts ...Option) (*Requirements, error) {
+func (client *Client) GetChallengeRequirements(id int, opts ...Option) (*Requirements, *MetaResponse, error) {
 	req := &Requirements{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/requirements", id), nil, &req, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/requirements", id), nil, &req, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return req, nil
+	return req, meta, nil
 }
 
 // TODO find content to determine model
-func (client *Client) GetChallengeSolves(id int, opts ...Option) (*Challenge, error) {
+func (client *Client) GetChallengeSolves(id int, opts ...Option) (*Challenge, *MetaResponse, error) {
 	chall := &Challenge{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/solves", id), nil, &chall, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/solves", id), nil, &chall, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return chall, nil
+	return chall, meta, nil
 }
 
-func (client *Client) GetChallengeTags(id int, opts ...Option) ([]*Tag, error) {
+func (client *Client) GetChallengeTags(id int, opts ...Option) ([]*Tag, *MetaResponse, error) {
 	ct := []*Tag{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/tags", id), nil, &ct, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/tags", id), nil, &ct, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ct, nil
+	return ct, meta, nil
 }
 
-func (client *Client) GetChallengeTopics(id int, opts ...Option) ([]*Topic, error) {
+func (client *Client) GetChallengeTopics(id int, opts ...Option) ([]*Topic, *MetaResponse, error) {
 	ct := []*Topic{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/topics", id), nil, &ct, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/topics", id), nil, &ct, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ct, nil
+	return ct, meta, nil
 }
 
-func (client *Client) GetChallengeRatings(id int, opts ...Option) ([]*Rating, error) {
+func (client *Client) GetChallengeRatings(id int, opts ...Option) ([]*Rating, *MetaResponse, error) {
 	ratings := []*Rating{}
-	if err := client.Get(fmt.Sprintf("/challenges/%d/ratings", id), nil, &ratings, opts...); err != nil {
-		return nil, err
+	meta, err := client.Get(fmt.Sprintf("/challenges/%d/ratings", id), nil, &ratings, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return ratings, nil
+	return ratings, meta, nil
 }
 
 type PutChallengeRatingsParams struct {
@@ -185,10 +199,11 @@ type PutChallengeRatingsParams struct {
 	Review string `json:"review"`
 }
 
-func (client *Client) PutChallengeRatings(id int, params *PutChallengeRatingsParams, opts ...Option) (*Rating, error) {
+func (client *Client) PutChallengeRatings(id int, params *PutChallengeRatingsParams, opts ...Option) (*Rating, *MetaResponse, error) {
 	rat := &Rating{}
-	if err := client.Put(fmt.Sprintf("/challenges/%d/ratings", id), params, rat, opts...); err != nil {
-		return nil, err
+	meta, err := client.Put(fmt.Sprintf("/challenges/%d/ratings", id), params, rat, opts...)
+	if err != nil {
+		return nil, meta, err
 	}
-	return rat, nil
+	return rat, meta, nil
 }
